@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { login } from '../services/authService';
+
 import InputMask from 'react-input-mask';
 
 const LoginForm = () => {
@@ -30,6 +31,7 @@ const LoginForm = () => {
       localStorage.setItem('token', response.token);
       localStorage.setItem('cpf', cleanedCPF);
       router.push('/auth/dashboard');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError('CPF ou senha incorretos.');
     }
