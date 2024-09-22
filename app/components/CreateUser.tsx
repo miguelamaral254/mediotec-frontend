@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createUser } from '../services/userService'; // Ajuste o caminho conforme necessário
+import Swal from 'sweetalert2';
 
 const CreateUser = () => {
   const [userType, setUserType] = useState('STUDENT');
@@ -27,9 +28,34 @@ const CreateUser = () => {
     e.preventDefault();
     try {
       await createUser(userType, formData);
-      alert('Usuário criado com sucesso!');
+      await Swal.fire({
+        icon: 'success',
+        title: 'Usuário criado com sucesso!',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      // Limpa os campos do formulário
+      setFormData({
+        name: '',
+        cpf: '',
+        password: '',
+        active: true,
+        email: '',
+        birthDate: '',
+        address: '',
+        phone: '',
+        registration: '',
+        studentCpf: '',
+        expertiseArea: '',
+        academicTitle: '',
+      });
     } catch (error) {
-      alert('Erro ao criar usuário');
+      console.error("Erro ao criar usuário:", error); // Para depuração
+      await Swal.fire({
+        icon: 'error',
+        title: 'Erro ao criar usuário',
+        text: 'Por favor, tente novamente.',
+      });
     }
   };
 
