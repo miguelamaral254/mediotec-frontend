@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserData } from '../../services/authService';
+import Navbar from '@/app/components/Navbar';
 
 export default function Dashboard() {
   const [userData, setUserData] = useState<any>(null);
@@ -48,7 +49,11 @@ export default function Dashboard() {
 
   return (
     <div className="p-8 text-black">
+       
+      <Navbar />
+      
       <h1 className="text-2xl font-bold mb-4 text-white">Dashboard</h1>
+      
       <button 
         onClick={handleLogout} 
         className="mb-4 p-2 bg-red-500 text-white rounded"
