@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import InputMask from 'react-input-mask'; // Adicione este pacote
+import InputMask from 'react-input-mask';
 import { createUser } from '../services/userService'; // Ajuste o caminho conforme necessário
 import Swal from 'sweetalert2';
 
@@ -20,11 +20,6 @@ const CreateUser = () => {
     academicTitle: '',
   });
 
-  // Remove caracteres especiais do CPF e telefone
-  const sanitizeInput = (value: string) => {
-    return value.replace(/\D/g, '');
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -32,10 +27,14 @@ const CreateUser = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Remover caracteres especiais antes de enviar
     const sanitizedData = {
       ...formData,
-      cpf: sanitizeInput(formData.cpf),
-      phone: sanitizeInput(formData.phone),
+      cpf: formData.cpf.replace(/[^\d]/g, ''),
+      phone: formData.phone.replace(/[^\d]/g, ''),
+      studentCpf: formData.studentCpf.replace(/[^\d]/g, ''),
+      registration: formData.registration.replace(/[^\d]/g, ''),
     };
 
     try {
@@ -84,16 +83,10 @@ const CreateUser = () => {
         <option value="PARENT">Pai</option>
       </select>
       <form onSubmit={handleSubmit}>
+        {/* Campos do formulário com base no tipo de usuário */}
         <div className="mb-4">
           <label className="block mb-1">Nome:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="border border-gray-300 p-2 rounded w-full"
-            required
-          />
+          <input type="text" name="name" value={formData.name} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
         </div>
         <div className="mb-4">
           <label className="block mb-1">CPF:</label>
@@ -108,49 +101,22 @@ const CreateUser = () => {
         </div>
         <div className="mb-4">
           <label className="block mb-1">Senha:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="border border-gray-300 p-2 rounded w-full"
-            required
-          />
+          <input type="password" name="password" value={formData.password} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
         </div>
         <div className="mb-4">
           <label className="block mb-1">Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="border border-gray-300 p-2 rounded w-full"
-            required
-          />
+          <input type="email" name="email" value={formData.email} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
         </div>
+        {/* Campos específicos baseados no tipo de usuário */}
         {userType === 'STUDENT' && (
           <>
             <div className="mb-4">
               <label className="block mb-1">Data de Nascimento:</label>
-              <input
-                type="date"
-                name="birthDate"
-                value={formData.birthDate}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded w-full"
-                required
-              />
+              <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
             </div>
             <div className="mb-4">
               <label className="block mb-1">Endereço:</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded w-full"
-                required
-              />
+              <input type="text" name="address" value={formData.address} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
             </div>
             <div className="mb-4">
               <label className="block mb-1">Telefone:</label>
@@ -165,8 +131,8 @@ const CreateUser = () => {
             </div>
             <div className="mb-4">
               <label className="block mb-1">Matrícula:</label>
-              <input
-                type="text"
+              <InputMask
+                mask="999999999"
                 name="registration"
                 value={formData.registration}
                 onChange={handleChange}
@@ -176,13 +142,83 @@ const CreateUser = () => {
             </div>
           </>
         )}
-        {/* Mesma lógica para outros tipos de usuário */}
-        <button
-          type="submit"
-          className="w-full mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
-        >
-          Criar Usuário
-        </button>
+        {userType === 'PARENT' && (
+          <>
+            <div className="mb-4">
+              <label className="block mb-1">Data de Nascimento:</label>
+              <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">Endereço:</label>
+              <input type="text" name="address" value={formData.address} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">Telefone:</label>
+              <InputMask
+                mask="(99) 99999-9999"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded w-full"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">CPF do Aluno:</label>
+              <InputMask
+                mask="999.999.999-99"
+                name="studentCpf"
+                value={formData.studentCpf}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded w-full"
+                required
+              />
+            </div>
+          </>
+        )}
+        {userType === 'PROFESSOR' && (
+          <>
+            <div className="mb-4">
+              <label className="block mb-1">Data de Nascimento:</label>
+              <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">Endereço:</label>
+              <input type="text" name="address" value={formData.address} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">Telefone:</label>
+              <InputMask
+                mask="(99) 99999-9999"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded w-full"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">Matrícula:</label>
+              <InputMask
+                mask="999999999"
+                name="registration"
+                value={formData.registration}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded w-full"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">Área de Expertise:</label>
+              <input type="text" name="expertiseArea" value={formData.expertiseArea} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-1">Título Acadêmico:</label>
+              <input type="text" name="academicTitle" value={formData.academicTitle} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
+            </div>
+          </>
+        )}
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded">Criar Usuário</button>
       </form>
     </div>
   );

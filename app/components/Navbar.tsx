@@ -19,6 +19,9 @@ const Navbar = () => {
           <Link href="/auth/dashboard">Home</Link>
         </div>
         <div className="relative">
+
+
+
           {user ? (
             <>
               <button 
@@ -27,7 +30,7 @@ const Navbar = () => {
               >
                 {isDropdownOpen ? '✖' : '☰'}
               </button>
-              <ul className={`absolute right-0 mt-2 bg-gray-700 rounded shadow-md ${isDropdownOpen ? 'block' : 'hidden'} md:hidden`}>
+              <ul className={`absolute right-0 mt-2  bg-gray-700 rounded shadow-md ${isDropdownOpen ? 'block' : 'hidden'} md:hidden`}>
                 {user?.role === 'ADMIN' && (
                   <li>
                     <Link href="/auth/dashboard/manage-users" className="text-gray-300 hover:text-white block px-4 py-2">Gerenciar Usuários</Link>
