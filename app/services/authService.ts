@@ -1,14 +1,5 @@
 import api from '../api/api';
-
-interface LoginRequest {
-  cpf: string;
-  password: string;
-}
-
-interface LoginResponse {
-  message: string;
-  token: string;
-}
+import { LoginResponse } from '../interfaces/IAuth';
 
 // Função para fazer login
 export const login = async (cpf: string, password: string): Promise<LoginResponse> => {
@@ -18,6 +9,8 @@ export const login = async (cpf: string, password: string): Promise<LoginRespons
 
 // Função para buscar os dados do usuário logado
 export const getUserData = async (cpf: string) => {
-  const response = await api.get(`/student/${cpf}`); // Não é necessário passar o token manualmente
-  return response.data; // Retorna os dados do usuário
+  const role = localStorage.getItem('role'); 
+  const response = await api.get(`/${role}/${cpf}`); 
+  return response.data; 
 };
+

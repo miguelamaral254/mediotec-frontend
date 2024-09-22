@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserData } from './interfaces/UserData'; // Importa a interface
+import { UserData } from '../interfaces/UserData'; // Importa a interface
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 

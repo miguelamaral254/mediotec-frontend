@@ -1,12 +1,13 @@
+// app/dashboard.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserData } from '../../services/authService';
-import Navbar from '@/app/components/Navbar';
+import { useAuth } from '@/app/context/AuthContext';
 
 export default function Dashboard() {
-  const [userData, setUserData] = useState<any>(null);
+  const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function Dashboard() {
 
       try {
         const data = await getUserData(cpf);
-        setUserData(data);
+        setUser(data);
         setLoading(false);
       } catch (err) {
         setError('Erro ao carregar dados do usuário.');
@@ -31,13 +32,7 @@ export default function Dashboard() {
     };
 
     fetchUserData();
-  }, [router]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('cpf');
-    router.push('/auth/login');
-  };
+  }, [router, setUser]);
 
   if (loading) {
     return <div>Carregando...</div>;
@@ -48,34 +43,24 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-8 text-black">
-       
-      <Navbar />
-      
-      <h1 className="text-2xl font-bold mb-4 text-white">Dashboard</h1>
-      
-      <button 
-        onClick={handleLogout} 
-        className="mb-4 p-2 bg-red-500 text-white rounded"
-      >
-        Logoff
-      </button>
-      {userData ? (
+    <div className="p-8 text-black bg-gray-100 min-h-screen">
+      <h1 className="text-2xl font-bold mb-4 text-gray-800">Dashboard</h1>
+      {user ? (
         <div className="bg-white p-6 rounded shadow">
-          {userData.role === 'ADMIN' && <AdminSection />}
-          {userData.role === 'PROFESSOR' && <ProfessorSection />}
-          {userData.role === 'PARENT' && <ParentSection />}
-          {userData.role === 'STUDENT' && <StudentSection />}
+          {user.role === 'ADMIN' && <AdminSection />}
+          {user.role === 'PROFESSOR' && <ProfessorSection />}
+          {user.role === 'PARENT' && <ParentSection />}
+          {user.role === 'STUDENT' && <StudentSection />}
           <h2 className="text-xl font-bold">Dados do Usuário:</h2>
-          <p><strong>Nome:</strong> {userData.name}</p>
-          <p><strong>CPF:</strong> {userData.cpf}</p>
-          <p><strong>Email:</strong> {userData.email}</p>
-          <p><strong>Role:</strong> {userData.role}</p>
-          <p><strong>Active:</strong> <span className={userData.active ? 'text-green-500' : 'text-red-500'}>{userData.active ? 'Sim' : 'Não'}</span></p>
-          <p><strong>Birth:</strong> {userData.birthDate}</p>
-          <p><strong>Phone:</strong> {userData.phone}</p>
-          <p><strong>Registration:</strong> {userData.registration}</p>
-          <p><strong>Address:</strong> {userData.address}</p>
+          <p><strong>Nome:</strong> {user.name}</p>
+          <p><strong>CPF:</strong> {user.cpf}</p>
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Role:</strong> {user.role}</p>
+          <p><strong>Active:</strong> <span className={user.active ? 'text-green-500' : 'text-red-500'}>{user.active ? 'Sim' : 'Não'}</span></p>
+          <p><strong>Birth:</strong> {user.birthDate}</p>
+          <p><strong>Phone:</strong> {user.phone}</p>
+          <p><strong>Registration:</strong> {user.registration}</p>
+          <p><strong>Address:</strong> {user.address}</p>
           <p><strong>Token:</strong> {localStorage.getItem('token')}</p>
         </div>
       ) : (

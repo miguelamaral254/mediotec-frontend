@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { getUserByCpf, updateUser } from '../services/updateUserService';
-import { UserData } from '../services/interfaces/UserData';
+import { UserData } from '../interfaces/UserData';
 
 const UpdateUser = () => {
   const [cpf, setCpf] = useState('');

@@ -4,14 +4,12 @@ import { useState } from 'react';
 import CreateUser from '../../../components/CreateUser';
 import UpdateUser from '../../../components/UpdateUser';
 import ConsultUser from '../../../components/ConsultUser';
-import Navbar from '@/app/components/Navbar';
 
 const ManageUsers = () => {
   const [action, setAction] = useState<'create' | 'update' | 'consult' | null>(null);
 
   return (
     <div className="p-8">
-        <Navbar/>
       <h1 className="text-2xl font-bold mb-4">Gerenciar Usuários</h1>
       <div className="flex space-x-4 mb-4">
         <button onClick={() => setAction('create')} className="p-2 bg-blue-500 text-white rounded">Criar Usuário</button>
