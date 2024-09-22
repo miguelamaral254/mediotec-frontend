@@ -8,12 +8,8 @@ export default function Home() {
       <nav>
         <ul>
           <li>
-            <Link href="/login">Login</Link>
+            <Link href="/auth/login">Login</Link>
           </li>
-          <li>
-            <Link href="/register">Registrar</Link>
-          </li>
-          {/* Adicione outros links conforme necessário */}
         </ul>
       </nav>
     </>
