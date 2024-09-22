@@ -27,10 +27,21 @@ const Navbar = () => {
               >
                 {isDropdownOpen ? '✖' : '☰'}
               </button>
-              <ul className={`absolute right-0 mt-2 bg-gray-700 rounded shadow-md ${isDropdownOpen ? 'block' : 'hidden'} md:flex md:space-x-4`}>
+              <ul className={`absolute right-0 mt-2 bg-gray-700 rounded shadow-md ${isDropdownOpen ? 'block' : 'hidden'} md:hidden`}>
                 {user?.role === 'ADMIN' && (
                   <li>
                     <Link href="/auth/dashboard/manage-users" className="text-gray-300 hover:text-white block px-4 py-2">Gerenciar Usuários</Link>
+                  </li>
+                )}
+                <li>
+                  <LogoutButton />
+                </li>
+              </ul>
+              {/* Menu horizontal para telas grandes */}
+              <ul className="hidden md:flex md:space-x-4">
+                {user?.role === 'ADMIN' && (
+                  <li>
+                    <Link href="/auth/dashboard/manage-users" className="text-gray-300 hover:text-white">Gerenciar Usuários</Link>
                   </li>
                 )}
                 <li>

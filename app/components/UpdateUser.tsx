@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import Swal from 'sweetalert2';
+import InputMask from 'react-input-mask';
 import { getUserByCpf, updateUser } from '../services/updateUserService';
 import { UserData } from '../interfaces/UserData';
 
@@ -14,7 +15,8 @@ const UpdateUser = () => {
     setUserData(null);
 
     try {
-      const data = await getUserByCpf(cpf, userType);
+      const cleanedCpf = cpf.replace(/\D/g, ''); // Limpa os caracteres não numéricos
+      const data = await getUserByCpf(cleanedCpf, userType);
       setUserData(data);
     } catch (err) {
       if (err instanceof Error) {
@@ -28,7 +30,11 @@ const UpdateUser = () => {
   const handleUpdate = async () => {
     if (userData) {
       try {
-        await updateUser(cpf, userData);
+        const cleanedCpf = cpf.replace(/\D/g, ''); // Limpa os caracteres não numéricos do CPF
+        const cleanedPhone = userData.phone.replace(/\D/g, ''); // Limpa os caracteres não numéricos do telefone
+        const updatedData = { ...userData, phone: cleanedPhone }; // Atualiza o telefone com o valor limpo
+        
+        await updateUser(cleanedCpf, updatedData);
         // Sucesso na atualização
         Swal.fire({
           icon: 'success',
@@ -39,7 +45,7 @@ const UpdateUser = () => {
         // Limpa o formulário após a atualização
         setCpf('');
         setUserData(null);
-        setUserType('STUDENT'); // Reseta o tipo de usuário para o padrão
+        setUserType('STUDENT');
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
@@ -78,11 +84,11 @@ const UpdateUser = () => {
       </div>
       <div className="mb-4 text-black">
         <label className="block text-sm font-medium text-black">CPF:</label>
-        <input
-          type="text"
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-yellow-500 focus:border-yellow-500"
+        <InputMask
+          mask="999.999.999-99"
           value={cpf}
-          onChange={(e) => setCpf(e.target.value)}
+          onChange={(e: { target: { value: SetStateAction<string>; }; }) => setCpf(e.target.value)}
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-yellow-500 focus:border-yellow-500"
           required
         />
       </div>
@@ -129,51 +135,15 @@ const UpdateUser = () => {
           />
 
           <label className="block text-sm font-medium text-black mt-4">Telefone:</label>
-          <input
-            type="text"
+          <InputMask
+            mask="(99) 99999-9999"
             name="phone"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
             value={userData.phone}
             onChange={handleChange}
           />
 
-          {/* Campos opcionais baseados no tipo de usuário */}
-          {userType === 'PROFESSOR' && (
-            <>
-              <label className="block text-sm font-medium text-black mt-4">Área de Especialização:</label>
-              <input
-                type="text"
-                name="expertiseArea"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                value={userData.expertiseArea || ''}
-                onChange={handleChange}
-              />
-
-              <label className="block text-sm font-medium text-black mt-4">Título Acadêmico:</label>
-              <input
-                type="text"
-                name="academicTitle"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                value={userData.academicTitle || ''}
-                onChange={handleChange}
-              />
-            </>
-          )}
-
-          {userType === 'STUDENT' && (
-            <>
-              <label className="block text-sm font-medium text-black mt-4">CPF do Estudante:</label>
-              <input
-                type="text"
-                name="studentCpf"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                value={userData.studentCpf || ''}
-                onChange={handleChange}
-              />
-            </>
-          )}
-
-          <button onClick={handleUpdate} className="w-full mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
+          <button onClick={handleUpdate} className="w-full mt-4 p-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-200">
             Atualizar Usuário
           </button>
         </div>
