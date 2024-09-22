@@ -39,6 +39,8 @@ const LoginForm = () => {
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
         <label htmlFor="role" className="block mb-2 font-medium">Tipo de Usuário</label>
+       {/*
+       
         <select
           id="role"
           name="role"
@@ -52,6 +54,9 @@ const LoginForm = () => {
           <option value="professor">Professor</option>
           <option value="parent">Pai</option>
         </select>
+       
+       */}
+       
       </div>
       <div className="mb-4">
         <label htmlFor="cpf" className="block mb-2 font-medium">CPF</label>
