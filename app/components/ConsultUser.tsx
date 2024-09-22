@@ -4,6 +4,7 @@ import { getParentByCpf, getProfessorByCpf, getStudentByCpf } from '../services/
 const ConsultUser = () => {
   const [cpf, setCpf] = useState('');
   const [userType, setUserType] = useState('STUDENT'); // Tipo de usuário
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [userData, setUserData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
