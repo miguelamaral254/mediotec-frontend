@@ -65,3 +65,35 @@ export const getUserByCpf = async (cpf: string, userType: string) => {
     throw new Error('Erro desconhecido');
   }
 };
+export const getCurrentUserByCpf = async (cpf: string) => {
+  try {
+    const url = `${API_BASE_URL}/user/${cpf}`; // Supondo que a rota seja /user/current/{cpf}
+    const response = await axios.get(url);
+
+    // Verifique se o usuário foi encontrado
+    if (!response.data) {
+      throw new Error('Usuário não encontrado.');
+    }
+
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || 'Erro ao buscar usuário');
+    }
+    throw new Error('Erro desconhecido');
+  }
+};
+export const updateCurrentUserInfo = async (cpf: string, userData: UserData) => {
+  try {
+    const url = `${API_BASE_URL}/${userData.role.toLowerCase()}/update/${cpf}`; // Endpoint genérico
+
+    // Faz a requisição de atualização
+    const response = await axios.put(url, userData);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || 'Erro ao atualizar usuário');
+    }
+    throw new Error('Erro desconhecido');
+  }
+};

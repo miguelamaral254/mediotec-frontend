@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { getUserData } from '../../services/authService';
 import { useAuth } from '@/app/context/AuthContext';
 import { AdminSection } from '../../components/AdminSection';
-import { ProfessorSection } from '../../components/ProfessorSection.tsx';
+import { ProfessorSection } from '../../components/ProfessorSection';
 import { ParentSection } from '../../components/ParentSection';
 import { StudentSection } from '../../components/StudentSection';
 import { UserInfo } from '../../components/UserInfo';
