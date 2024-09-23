@@ -1,9 +1,10 @@
 'use client';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image'; 
 import { login } from '../services/authService';
 import InputMask from 'react-input-mask';
+import logo from '../../public/images/logo_mediotec.png'
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ cpf: '', password: '' });
@@ -27,38 +28,26 @@ const LoginForm = () => {
       const response = await login(cleanedCPF, formData.password);
       localStorage.setItem('token', response.token);
       localStorage.setItem('cpf', cleanedCPF);
-      //localStorage.setItem('role', formData.role);
       router.push('/auth/dashboard');
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
+      console.log(err)
       setError('CPF ou senha incorretos.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        {/*
-        <label htmlFor="role" className="block mb-2 font-medium">Tipo de Usuário</label>
-       
-        <select
-          id="role"
-          name="role"
-          
-          onChange={handleInputChange}
-          className="w-full p-2 border border-gray-300 rounded"
-          required
-          >
-          <option value="student">Aluno</option>
-          <option value="coordination">Coordenação</option>
-          <option value="professor">Professor</option>
-          <option value="parent">Pai</option>
-        </select>
-       
-       */}
-       
+    <form onSubmit={handleSubmit} className="flex flex-col items-center rounded-lg">
+      <div className="mb-6">
+        <Image 
+          src={logo} 
+          alt="Login Image"
+          width={200} 
+          height={200} 
+        />
       </div>
-      <div className="mb-4">
+      <h1 className="text-2xl font-bold mb-4">Login</h1>
+
+      <div className="mb-4 w-full">
         <label htmlFor="cpf" className="block mb-2 font-medium">CPF</label>
         <InputMask
           mask="999.999.999-99"
@@ -70,7 +59,7 @@ const LoginForm = () => {
           required
         />
       </div>
-      <div className="mb-4">
+      <div className="mb-4 w-full">
         <label htmlFor="password" className="block mb-2 font-medium">Senha</label>
         <input
           type="password"
@@ -82,7 +71,7 @@ const LoginForm = () => {
           required
         />
       </div>
-      
+
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
         Entrar
