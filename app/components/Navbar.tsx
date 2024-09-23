@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/app/context/AuthContext';
@@ -55,7 +55,9 @@ const Navbar = () => {
                 </li>
               </ul>
             </>
-          ) : null}
+          ) : (
+           null
+          )}
         </div>
       </div>
     </nav>

@@ -1,12 +1,21 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserData } from '../services/authService';
+import { UserData } from '../interfaces/UserData'; // Importar a interface User
 
-const AuthContext = createContext(null);
+// Definir a interface do contexto de autenticação
+interface AuthContextType {
+  user: UserData | null;  // O usuário pode ser 'null' inicialmente
+  setUser: (user: UserData | null) => void;
+  logout: () => void;
+}
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+// Criar o contexto com o tipo adequado
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<UserData | null>(null);  // Estado de user pode ser 'null'
   const router = useRouter();
 
   useEffect(() => {
@@ -44,5 +53,9 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+  }
+  return context;
 };

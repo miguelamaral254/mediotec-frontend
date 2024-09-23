@@ -1,4 +1,4 @@
-// types/User.ts
+
 export interface User {
     cpf: string;
     name: string;

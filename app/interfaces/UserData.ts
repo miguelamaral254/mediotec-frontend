@@ -1,5 +1,5 @@
 export interface UserData {
-  user: {
+  
     name: string;
     cpf: string;
     active: boolean;
@@ -7,10 +7,10 @@ export interface UserData {
     birthDate: string;
     address: string;
     phone: string;
-    role: 'PARENT' | 'PROFESSOR' | 'STUDENT';
+    role: 'PARENT' | 'PROFESSOR' | 'STUDENT' | 'ADMIN';
     studentCPF?: string; 
     expertiseArea?: string; 
     academicTitle?: string; 
     registration?: string;
   }
-};
+;

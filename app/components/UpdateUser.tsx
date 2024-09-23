@@ -13,20 +13,17 @@ const UpdateUser = () => {
   const handleSearch = async () => {
     setError(null);
     setUserData(null);
-
+  
     try {
       const cleanedCpf = cpf.replace(/\D/g, ''); // Limpa os caracteres não numéricos
       const data = await getUserByCpf(cleanedCpf, userType);
       setUserData(data);
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Erro desconhecido');
-      }
+      console.log(err)
+      setError('Erro ao buscar usuário: Usuário não encontrado ou não corresponde ao tipo selecionado');
     }
   };
-
+  
   const handleUpdate = async () => {
     if (userData) {
       try {

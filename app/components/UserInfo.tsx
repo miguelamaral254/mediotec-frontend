@@ -1,10 +1,13 @@
 import React from 'react';
 import InputMask from 'react-input-mask';
-//import { UserInfoProps } from "../interfaces/UserInfoProps";
-import { mapRoleToPortuguese } from '../utils/roleMapper';  // Importando o mapper
+import { mapRoleToPortuguese } from '../utils/roleMapper';
 import { UserData } from '../interfaces/UserData';
 
-export const UserInfo = ({ user }: UserData) => {
+interface UserInfoProps {
+  user: UserData;
+}
+
+export const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-6">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Dados do Usuário</h2>
@@ -34,9 +37,11 @@ export const UserInfo = ({ user }: UserData) => {
         </div>
 
         {/* Telefone formatado */}
-        <div><strong>Telefone:</strong> 
-          <InputMask mask="(99) 99999-9999" value={user.phone} disabled />
-        </div>
+        {user.phone && (
+          <div><strong>Telefone:</strong> 
+            <InputMask mask="(99) 99999-9999" value={user.phone} disabled />
+          </div>
+        )}
 
         <div><strong>Matrícula:</strong> {user.registration}</div>
         <div><strong>Endereço:</strong> {user.address}</div>

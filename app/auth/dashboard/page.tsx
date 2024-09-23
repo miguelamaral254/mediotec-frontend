@@ -30,6 +30,7 @@ export default function Dashboard() {
         setUser(data);
         setLoading(false);
       } catch (err) {
+        console.log(err)
         setError('Erro ao carregar dados do usuário.');
         setLoading(false);
       }
