@@ -1,9 +1,10 @@
 import React from 'react';
 import InputMask from 'react-input-mask';
-import { UserInfoProps } from "../interfaces/UserInfoProps";
+//import { UserInfoProps } from "../interfaces/UserInfoProps";
 import { mapRoleToPortuguese } from '../utils/roleMapper';  // Importando o mapper
+import { UserData } from '../interfaces/UserData';
 
-export const UserInfo = ({ user }: UserInfoProps) => {
+export const UserInfo = ({ user }: UserData) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-6">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Dados do Usuário</h2>
@@ -39,6 +40,20 @@ export const UserInfo = ({ user }: UserInfoProps) => {
 
         <div><strong>Matrícula:</strong> {user.registration}</div>
         <div><strong>Endereço:</strong> {user.address}</div>
+
+        {/* Campos adicionais com base no role */}
+        {user.role === 'PROFESSOR' && (
+          <>
+            <div><strong>Área de Especialização:</strong> {user.expertiseArea}</div>
+            <div><strong>Título Acadêmico:</strong> {user.academicTitle}</div>
+          </>
+        )}
+
+        {user.role === 'PARENT' && (
+          <div><strong>CPF do Estudante:</strong> 
+            <InputMask mask="999.999.999-99" value={user.studentCPF} disabled />
+          </div>
+        )}
       </div>
     </div>
   );
