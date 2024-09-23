@@ -1,10 +1,13 @@
-// app/dashboard.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserData } from '../../services/authService';
 import { useAuth } from '@/app/context/AuthContext';
+import { AdminSection } from '../../components/AdminSection';
+import { ProfessorSection } from '../../components/ProfessorSection';
+import { ParentSection } from '../../components/ParentSection';
+import { StudentSection } from '../../components/StudentSection';
 
 export default function Dashboard() {
   const { user, setUser } = useAuth();
@@ -69,32 +72,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-// Componentes para cada tipo de usuário
-const AdminSection = () => (
-  <div>
-    <h2 className="text-xl font-bold">Admin Dashboard</h2>
-    <p>Bem-vindo à área do administrador!</p>
-  </div>
-);
-
-const ProfessorSection = () => (
-  <div>
-    <h2 className="text-xl font-bold">Professor Dashboard</h2>
-    <p>Bem-vindo à área do professor!</p>
-  </div>
-);
-
-const ParentSection = () => (
-  <div>
-    <h2 className="text-xl font-bold">Parent Dashboard</h2>
-    <p>Bem-vindo à área dos pais!</p>
-  </div>
-);
-
-const StudentSection = () => (
-  <div>
-    <h2 className="text-xl font-bold">Student Dashboard</h2>
-    <p>Bem-vindo à área do estudante!</p>
-  </div>
-);
