@@ -7,6 +7,15 @@ interface UserInfoProps {
   user: UserData;
 }
 
+// Função para formatar a data de nascimento
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0'); // Dia
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês (0-indexado)
+  const year = date.getFullYear(); // Ano
+  return `${day}/${month}/${year}`; // Retorna a data formatada
+};
+
 export const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-6">
@@ -33,7 +42,7 @@ export const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
 
         {/* Data de nascimento formatada */}
         <div><strong>Data de Nascimento:</strong> 
-          <InputMask mask="99/99/9999" value={user.birthDate} disabled />
+          <InputMask mask="99/99/9999" value={formatDate(user.birthDate)} disabled />
         </div>
 
         {/* Telefone formatado */}
