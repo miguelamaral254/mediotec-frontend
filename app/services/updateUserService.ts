@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { UserData } from '../interfaces/UserData'; // Importa a interface
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const updateUser = async (cpf: string, userData: UserData) => {
   try {

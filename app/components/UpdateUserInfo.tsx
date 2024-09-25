@@ -10,15 +10,15 @@ import { useRouter } from 'next/navigation';
 const UpdateUserInfo = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const cpf = localStorage.getItem('cpf'); // Obtém o CPF do localStorage
-  const router = useRouter(); // Usando useRouter para redirecionamento
+  const cpf = localStorage.getItem('cpf');
+  const router = useRouter(); 
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (cpf) {
         try {
-          const cleanedCpf = cpf.replace(/\D/g, ''); // Limpa os caracteres não numéricos
-          const data = await getCurrentUserByCpf(cleanedCpf); // Chama a nova função
+          const cleanedCpf = cpf.replace(/\D/g, '');
+          const data = await getCurrentUserByCpf(cleanedCpf); 
           setUserData(data);
         } catch (err) {
           if (err instanceof Error) {
@@ -36,17 +36,17 @@ const UpdateUserInfo = () => {
   const handleUpdate = async () => {
     if (userData) {
       try {
-        const cleanedPhone = userData.phone.replace(/\D/g, ''); // Limpa o telefone
-        const updatedData = { ...userData, phone: cleanedPhone }; // Atualiza os dados
+        const cleanedPhone = userData.phone.replace(/\D/g, ''); 
+        const updatedData = { ...userData, phone: cleanedPhone }; 
         
-        await updateUser(cpf!.replace(/\D/g, ''), updatedData); // Chama a função apenas com cleanedCpf
+        await updateUser(cpf!.replace(/\D/g, ''), updatedData); 
         Swal.fire({
           icon: 'success',
           title: 'Usuário Atualizado!',
           text: 'Os dados do usuário foram atualizados com sucesso.',
         });
 
-        // Redireciona para o dashboard após a atualização
+      
         router.push('/auth/dashboard');
       } catch (err) {
         if (err instanceof Error) {
