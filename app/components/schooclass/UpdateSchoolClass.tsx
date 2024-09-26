@@ -1,25 +1,28 @@
-import { useEffect, useState } from 'react';
+"use client";
+import { useState } from 'react';
 import Swal from 'sweetalert2';
-import { getSchoolClass, updateClass } from '@/app/services/schoolClassService'; // Ajuste o caminho conforme necessário
+import { getSchoolClass, updateClass, addStudentToClass, removeStudentFromClass } from '@/app/services/schoolClassService'; 
 import { SchoolClass } from '../../interfaces/SchoolClass';
-import { User } from '../../interfaces/User';
+import StudentList from './StudentList'; // Importando o componente StudentList
+import AddStudent from './AddStudent'; // Importando o componente AddStudent
+import { User } from '@/app/interfaces/User';
 
 const UpdateSchoolClass = () => {
   const [schoolClass, setSchoolClass] = useState<SchoolClass | null>(null);
   const [name, setName] = useState<string>('');
   const [code, setCode] = useState<string>('');
-  const [students, setStudents] = useState<User[]>([]); // Para armazenar os alunos
+  const [students, setStudents] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [classId, setClassId] = useState<string>(''); // Armazena o ID da turma digitado
+  const [classId, setClassId] = useState<string>('');
 
   const fetchSchoolClass = async (id: number) => {
     try {
       setLoading(true);
-      const schoolClassData = await getSchoolClass(id);
+      const schoolClassData: SchoolClass = await getSchoolClass(id);
       setSchoolClass(schoolClassData);
       setName(schoolClassData.name);
       setCode(schoolClassData.code);
-      setStudents(schoolClassData.students || []); // Popula a lista de estudantes
+      setStudents(schoolClassData.students || []); 
     } catch (error) {
       console.log(error);
       Swal.fire({
@@ -46,28 +49,74 @@ const UpdateSchoolClass = () => {
   };
 
   const handleUpdate = async () => {
+    const result = await Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Você deseja salvar as alterações na turma?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, salvar!',
+      cancelButtonText: 'Cancelar',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        if (!schoolClass) return;
+
+        const updatedSchoolClass = {
+          ...schoolClass,
+          name,
+          code,
+          students,
+        };
+
+        await updateClass(schoolClass.id, updatedSchoolClass);
+        Swal.fire({
+          icon: 'success',
+          title: 'Sucesso',
+          text: 'Turma atualizada com sucesso!',
+        });
+      } catch (error) {
+        console.log(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: 'Erro ao atualizar a turma.',
+        });
+      }
+    }
+  };
+
+  const handleRemoveStudent = async (cpf: string) => {
     try {
-      if (!schoolClass) return;
-
-      const updatedSchoolClass = {
-        ...schoolClass,
-        name,
-        code,
-        students, // Incluímos a lista de estudantes, caso precise ser atualizada
-      };
-
-      await updateClass(schoolClass.id, updatedSchoolClass);
+      await removeStudentFromClass(Number(classId), cpf);
+      fetchSchoolClass(Number(classId));
       Swal.fire({
         icon: 'success',
         title: 'Sucesso',
-        text: 'Turma atualizada com sucesso!',
+        text: 'Estudante removido da turma!',
       });
     } catch (error) {
       console.log(error);
       Swal.fire({
         icon: 'error',
         title: 'Erro',
-        text: 'Erro ao atualizar a turma.',
+        text: 'Erro ao remover o estudante.',
+      });
+    }
+  };
+
+  const handleAddStudent = async (student: User) => {
+    try {
+      await addStudentToClass(Number(classId), student.cpf);
+      fetchSchoolClass(Number(classId));
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'Erro ao adicionar o estudante.',
       });
     }
   };
@@ -120,22 +169,18 @@ const UpdateSchoolClass = () => {
               />
             </div>
 
-            <h4 className="text-lg font-semibold mt-4">Estudantes na Turma:</h4>
-            {students.length > 0 ? (
-              <ul className="list-disc list-inside mb-4">
-                {students.map((student) => (
-                  <li key={student.cpf}>
-                    {student.name} - {student.email}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>Nenhum estudante cadastrado para esta turma.</p>
-            )}
+            <StudentList 
+              students={students} 
+              onRemoveStudent={handleRemoveStudent} 
+            />
+
+            <AddStudent 
+              onAddStudent={handleAddStudent} 
+            />
 
             <button
               onClick={handleUpdate}
-              className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
+              className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
             >
               Atualizar Turma
             </button>

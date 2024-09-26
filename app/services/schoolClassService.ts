@@ -14,21 +14,16 @@ export const createClass = async (classData: Omit<SchoolClass, 'id'>): Promise<S
   }
 };
 
-
-
 export const updateClass = async (classId: number, updatedData: Partial<SchoolClass>): Promise<SchoolClass> => {
   try {
-    // Primeiro, busca a turma existente pelo ID
     const currentClassResponse = await axios.get<SchoolClass>(`${API_BASE_URL}/schoolclasses/${classId}`);
     const currentClassData = currentClassResponse.data;
 
-    // Atualiza apenas os campos fornecidos no updatedData e mantém os outros campos intactos
     const updatedClassData: SchoolClass = {
-      ...currentClassData, // Mantém os dados atuais
-      ...updatedData, // Sobrescreve apenas os campos que foram passados para atualização
+      ...currentClassData,
+      ...updatedData,
     };
 
-    // Envia a turma atualizada para o servidor
     const response = await axios.put<SchoolClass>(`${API_BASE_URL}/schoolclasses/${classId}`, updatedClassData);
 
     return response.data;
@@ -48,14 +43,20 @@ export const getSchoolClass = async (id: number): Promise<SchoolClass> => {
   }
 };
 
+// Atualizado: adição de estudante utilizando a rota correta `/schoolclasses/addstudent`
 export const addStudentToClass = async (classId: number, studentCpf: string): Promise<void> => {
   try {
-    await axios.post(`${API_BASE_URL}/schoolclasses/${classId}/students`, { cpf: studentCpf });
+    // Enviando um objeto com classId e cpf
+    await axios.post(`${API_BASE_URL}/schoolclasses/addstudent`, {
+      classId: classId,
+      cpf: studentCpf, // Mudança aqui para corresponder ao que foi especificado
+    });
   } catch (error) {
     console.error('Error adding student to class:', error);
     throw error;
   }
 };
+
 export const removeStudentFromClass = async (classId: number, studentCpf: string): Promise<void> => {
   try {
     await axios.delete(`${API_BASE_URL}/schoolclasses/${classId}/students/${studentCpf}`);
