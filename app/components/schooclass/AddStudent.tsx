@@ -24,7 +24,6 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
     }
 
     try {
-      // Strip special characters for the request
       const cleanCpf = studentCpf.replace(/\D/g, '');
       const foundStudent: User = await getStudentByCpf(cleanCpf);
       if (foundStudent.role !== 'STUDENT') {
@@ -70,17 +69,19 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
     } catch (error) {
       console.log('Erro ao adicionar estudante:', error);
       if (error instanceof AxiosError) {
+        // Check for specific error codes
         if (error.response?.status === 409) {
           Swal.fire({
             icon: 'error',
             title: 'Erro',
-            text: 'Este estudante já está na turma.',
+            text: `Erro ao adicionar estudante: ${error.response?.data?.message || 'Este estudante já está na turma.'}`,
           });
         } else {
+          // For other error statuses, provide a general error message
           Swal.fire({
             icon: 'error',
             title: 'Erro',
-            text: 'Erro ao adicionar o estudante: ' + error.message,
+            text: `Erro ao adicionar estudante: ${error.response?.data?.message || error.message}`,
           });
         }
       } else {

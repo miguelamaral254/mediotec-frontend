@@ -48,7 +48,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
+    <div className="container p-8 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Dashboard</h1>
       {user ? (
         <div>

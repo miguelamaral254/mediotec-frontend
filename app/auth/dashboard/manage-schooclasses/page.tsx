@@ -11,7 +11,7 @@ const ManageSchoolClasses = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Gerenciar Usuários</h1>
+      <h1 className="text-2xl font-bold mb-4">Gerenciar Turmas</h1>
       <div className="flex space-x-4 mb-4">
         <button onClick={() => setAction('create')} className="p-2 bg-blue-500 text-white rounded">Criar Turmas</button>
         <button onClick={() => setAction('consult')} className="p-2 bg-green-500 text-white rounded">Consultar Turmas</button>
