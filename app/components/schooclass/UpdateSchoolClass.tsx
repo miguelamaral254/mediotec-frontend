@@ -1,4 +1,5 @@
-"use client";
+'use client';
+
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { getSchoolClass, updateClass, addStudentToClass, removeStudentFromClass } from '@/app/services/schoolClassService'; 
@@ -67,7 +68,7 @@ const UpdateSchoolClass = () => {
         const updatedSchoolClass = {
           ...schoolClass,
           name,
-          code,
+          code: code.replace(/[^\w]/g, ''), // Remove special characters from code
           students,
         };
 
@@ -157,7 +158,7 @@ const UpdateSchoolClass = () => {
             <input
               type="text"
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => setCode(e.target.value.replace(/[^\w]/g, ''))} 
               placeholder="Código da Turma"
               className="border rounded-md p-2 w-full text-gray-700"
             />

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { getSchoolClass } from '@/app/services/schoolClassService';
 import { SchoolClass } from '../../interfaces/SchoolClass';
 import Swal from 'sweetalert2';
+import StudentList from './StudentList'; // Adjust the import path as necessary
 
 const ConsultSchoolClass = () => {
   const [id, setId] = useState<string>('');
@@ -70,17 +71,10 @@ const ConsultSchoolClass = () => {
           </p>
 
           <h4 className="text-lg font-semibold mt-4">Estudantes:</h4>
-          {schoolClass.students && schoolClass.students.length > 0 ? (
-            <ul className="list-disc list-inside">
-              {schoolClass.students.map((student) => (
-                <li key={student.cpf}>
-                  {student.name} - {student.email} - {student.cpf}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>Nenhum estudante cadastrado para esta turma.</p>
-          )}
+          <StudentList 
+            students={schoolClass.students || []} // Provide a default empty array
+            showRemoveButton={false} // Hide the remove button for this component
+          />
         </div>
       )}
     </div>

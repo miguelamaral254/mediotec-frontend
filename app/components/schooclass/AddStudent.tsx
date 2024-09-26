@@ -3,6 +3,7 @@ import { User } from '../../interfaces/User';
 import Swal from 'sweetalert2';
 import { getStudentByCpf } from '@/app/services/userConsultService';
 import { AxiosError } from 'axios';
+import InputMask from 'react-input-mask';
 
 interface AddStudentProps {
   onAddStudent: (student: User) => Promise<void>;
@@ -23,7 +24,9 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
     }
 
     try {
-      const foundStudent: User = await getStudentByCpf(studentCpf);
+      // Strip special characters for the request
+      const cleanCpf = studentCpf.replace(/\D/g, '');
+      const foundStudent: User = await getStudentByCpf(cleanCpf);
       if (foundStudent.role !== 'STUDENT') {
         Swal.fire({
           icon: 'error',
@@ -57,7 +60,6 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
 
     try {
       await onAddStudent(studentData);
-      // Se a adição for bem-sucedida, reseta os campos e exibe a mensagem de sucesso
       setStudentData(null);
       setStudentCpf('');
       Swal.fire({
@@ -67,10 +69,7 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
       });
     } catch (error) {
       console.log('Erro ao adicionar estudante:', error);
-
-      // Verifica se o erro é do Axios
       if (error instanceof AxiosError) {
-        // Verifica o status de resposta
         if (error.response?.status === 409) {
           Swal.fire({
             icon: 'error',
@@ -97,12 +96,13 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
   return (
     <div className="mt-4">
       <label className="block text-sm font-medium text-gray-700">CPF do Estudante:</label>
-      <input
-        type="text"
-        value={studentCpf}
-        onChange={(e) => setStudentCpf(e.target.value)}
+      <InputMask 
+        mask="999.999.999-99" 
+        value={studentCpf} 
+        onChange={(e) => setStudentCpf(e.target.value)} 
         placeholder="Digite o CPF do estudante"
         className="border rounded-md p-2 w-full text-gray-700"
+        disabled={!!studentData}  // Disable input when student data is found
       />
       <button
         onClick={handleStudentSearch}
@@ -116,6 +116,7 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
           <h5 className="font-semibold">Estudante Encontrado:</h5>
           <p>Nome: {studentData.name}</p>
           <p>Email: {studentData.email}</p>
+          <p>CPF: {studentCpf}</p>  {/* Display CPF here */}
           <button
             onClick={handleAddStudent}
             className="mt-2 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"

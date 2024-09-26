@@ -2,13 +2,15 @@ import React from 'react';
 import { User } from '../../interfaces/User';
 import { FaTrash } from 'react-icons/fa'; 
 import Swal from 'sweetalert2';
+import { formatCpf } from '@/app/utils/formatCpf '; 
 
 interface StudentListProps {
   students: User[];
-  onRemoveStudent: (cpf: string) => Promise<void>;
+  showRemoveButton?: boolean; // Optional prop to show/hide the remove button
+  onRemoveStudent?: (cpf: string) => Promise<void>; // Optional callback for removing a student
 }
 
-const StudentList: React.FC<StudentListProps> = ({ students, onRemoveStudent }) => {
+const StudentList: React.FC<StudentListProps> = ({ students, onRemoveStudent, showRemoveButton = true }) => {
   const handleRemoveStudent = async (cpf: string) => {
     const result = await Swal.fire({
       title: 'Tem certeza?',
@@ -22,7 +24,7 @@ const StudentList: React.FC<StudentListProps> = ({ students, onRemoveStudent }) 
     });
 
     if (result.isConfirmed) {
-      await onRemoveStudent(cpf);
+      await onRemoveStudent?.(cpf); // Call the remove function if defined
     }
   };
 
@@ -33,13 +35,17 @@ const StudentList: React.FC<StudentListProps> = ({ students, onRemoveStudent }) 
         <ul className="list-disc list-inside mb-4">
           {students.map((student) => (
             <li key={student.cpf} className="flex items-center justify-between">
-              <span>{student.name} - {student.email}</span>
-              <button
-                onClick={() => handleRemoveStudent(student.cpf)}
-                className="text-red-500 ml-4 flex items-center"
-              >
-                <FaTrash className="mr-1" />
-              </button>
+              <span>
+                {student.name} - {student.email} - {formatCpf(student.cpf)} {/* Format CPF here */}
+              </span>
+              {showRemoveButton && onRemoveStudent && (
+                <button
+                  onClick={() => handleRemoveStudent(student.cpf)}
+                  className="text-red-500 ml-4 flex items-center"
+                >
+                  <FaTrash className="mr-1" />
+                </button>
+              )}
             </li>
           ))}
         </ul>
