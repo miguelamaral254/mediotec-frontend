@@ -22,16 +22,17 @@ const Navbar: React.FC = () => {
   const { user, setUser } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isManageDropdownOpen, setIsManageDropdownOpen] = useState(false);
-  const sidebarRef = useRef<HTMLDivElement>(null); 
-  const manageDropdownRef = useRef<HTMLDivElement>(null); 
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const manageDropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
   const toggleManageDropdown = () => {
     setIsManageDropdownOpen((prev) => !prev);
   };
-
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -40,24 +41,20 @@ const Navbar: React.FC = () => {
     router.push('/auth/login');
   };
 
-  // Lógica para fechar o sidebar ao clicar fora dele
+  // Close sidebar on outside click
   useEffect(() => {
     const handleClickOutsideSidebar = (event: MouseEvent) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-        setIsSidebarOpen(false); // Fecha a Sidebar se o clique for fora
+        setIsSidebarOpen(false);
       }
     };
-
-    // Adiciona o evento de clique no document
     document.addEventListener('mousedown', handleClickOutsideSidebar);
-
-    // Remove o evento de clique ao desmontar o componente
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideSidebar);
     };
   }, [sidebarRef]);
 
-  // Lógica para fechar o submenu ao clicar fora dele
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutsideDropdown = (event: MouseEvent) => {
       if (
@@ -65,12 +62,10 @@ const Navbar: React.FC = () => {
         !manageDropdownRef.current.contains(event.target as Node) &&
         !event.target.closest('.toggle-manage-dropdown')
       ) {
-        setIsManageDropdownOpen(false); 
+        setIsManageDropdownOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutsideDropdown);
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideDropdown);
     };
@@ -80,15 +75,13 @@ const Navbar: React.FC = () => {
     <>
       {user && (
         <>
-          {/* Sidebar */}
           <div
-            ref={sidebarRef} // Adiciona o ref à div da Sidebar
+            ref={sidebarRef}
             className={`fixed top-0 left-0 h-full w-[20rem] text-white bg-blue-700 shadow-xl z-40 flex flex-col justify-between transform transition-transform duration-300 ${
               isSidebarOpen ? 'translate-x-0' : '-translate-x-[18rem]'
             }`}
           >
             <div>
-              {/* Logo e Imagem Circular */}
               <div className="p-4 mb-4">
                 <div className="relative block w-full mb-4">
                   <Link href="/auth/dashboard">
@@ -97,28 +90,25 @@ const Navbar: React.FC = () => {
                 </div>
               </div>
 
-              {/* Imagem circular abaixo da logo */}
               <div className="flex justify-center mb-4">
                 <Image
-                  src="/caminho/da/imagem.jpg" // Coloque o caminho da imagem aqui
+                  src="/caminho/da/imagem.jpg" // Update the path accordingly
                   alt="Imagem Circular"
-                  width={100} // Ajuste o tamanho conforme necessário
+                  width={100}
                   height={100}
                   className="rounded-full bg-white"
                 />
               </div>
 
-              {/* Componente NavbarHeader para exibir informações do usuário */}
               <NavbarHeader />
 
-              {/* Links principais */}
               <nav className="flex flex-col gap-1 p-2 text-base font-normal text-white">
                 <Link href="/auth/dashboard" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
                   <FaHome className="mr-2" />
                   Home
                 </Link>
 
-                {/* Dropdown Gerenciar */}
+                {/* Gerenciar Dropdown */}
                 {user?.role === 'ADMIN' && (
                   <>
                     <button
@@ -131,9 +121,8 @@ const Navbar: React.FC = () => {
                       </div>
                     </button>
 
-                    {/* Container do submenu com ref */}
                     <div
-                      ref={manageDropdownRef} // Adiciona o ref ao dropdown de gerenciamento
+                      ref={manageDropdownRef}
                       className={`overflow-hidden transition-max-height duration-300 ease-in-out ${
                         isManageDropdownOpen ? 'max-h-80' : 'max-h-0'
                       }`}
@@ -153,6 +142,12 @@ const Navbar: React.FC = () => {
                           <FaBook className="mr-2" />
                           Disciplinas
                         </Link>
+
+                        {/* New Link for Manage Lessons following the same logic */}
+                        <Link href="/auth/dashboard/manage-lessons" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
+                          <FaBook className="mr-2" />
+                          Aulas
+                        </Link>
                       </div>
                     </div>
                   </>
@@ -160,7 +155,6 @@ const Navbar: React.FC = () => {
               </nav>
             </div>
 
-            {/* Links para Configurações e Sair no final */}
             <div className="flex flex-col gap-2 p-4">
               <Link href="/auth/dashboard/settings" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
                 <FaCog className="mr-2" />
@@ -174,11 +168,10 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Botão para abrir/fechar o menu lateral */}
           <button
             onClick={toggleSidebar}
             className={`fixed top-1/2 transform -translate-y-1/2 p-4 bg-blue-600 text-white rounded-full z-50 transition-all duration-300`}
-            style={{ left: isSidebarOpen ? '18rem' : '0.5rem' }} // Mantém a posição em relação à sidebar
+            style={{ left: isSidebarOpen ? '18rem' : '0.5rem' }}
           >
             {isSidebarOpen ? <FaChevronLeft size={20} /> : <FaChevronRight size={20} />}
           </button>
