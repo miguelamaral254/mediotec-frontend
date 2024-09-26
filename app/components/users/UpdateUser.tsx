@@ -2,12 +2,12 @@ import { SetStateAction, useState } from 'react';
 import Swal from 'sweetalert2';
 import InputMask from 'react-input-mask';
 import { getUserByCpf, updateUser } from '@/app/services/updateUserService';
-import { UserData } from '@/app/interfaces/UserData';
+import { User } from '@/app/interfaces/User'; // Certifique-se de que User está corretamente importado
 
 const UpdateUser = () => {
   const [cpf, setCpf] = useState('');
   const [userType, setUserType] = useState('STUDENT');
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<User | null>(null); // Alterado para User
   const [error, setError] = useState<string | null>(null);
 
   const handleSearch = async () => {
@@ -28,7 +28,7 @@ const UpdateUser = () => {
     if (userData) {
       try {
         const cleanedCpf = cpf.replace(/\D/g, '');
-        const cleanedPhone = userData.phone.replace(/\D/g, ''); 
+        const cleanedPhone = (userData.phone ?? '').replace(/\D/g, ''); // Usando coalescência nula
         const updatedData = { ...userData, phone: cleanedPhone };
         
         await updateUser(cleanedCpf, updatedData);

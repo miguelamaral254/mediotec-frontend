@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react';
 import InputMask from 'react-input-mask';
 import Swal from 'sweetalert2';
 import { getCurrentUserByCpf, updateUser } from '@/app/services/updateUserService';
-import { UserData } from '@/app/interfaces/UserData';
+import { User } from '@/app/interfaces/User';
 import { useRouter } from 'next/navigation';
 
 const UpdateUserInfo = () => {
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const cpf = localStorage.getItem('cpf');
   const router = useRouter(); 
@@ -19,7 +19,7 @@ const UpdateUserInfo = () => {
         try {
           const cleanedCpf = cpf.replace(/\D/g, '');
           const data = await getCurrentUserByCpf(cleanedCpf); 
-          setUserData(data);
+          setUser(data);
         } catch (err) {
           if (err instanceof Error) {
             setError(err.message);
@@ -34,10 +34,11 @@ const UpdateUserInfo = () => {
   }, [cpf]);
 
   const handleUpdate = async () => {
-    if (userData) {
+    if (user) {
       try {
-        const cleanedPhone = userData.phone.replace(/\D/g, ''); 
-        const updatedData = { ...userData, phone: cleanedPhone }; 
+        // Adicionando verificação para evitar undefined
+        const cleanedPhone = (user.phone ?? '').replace(/\D/g, ''); 
+        const updatedData = { ...user, phone: cleanedPhone }; 
         
         await updateUser(cpf!.replace(/\D/g, ''), updatedData); 
         Swal.fire({
@@ -46,7 +47,6 @@ const UpdateUserInfo = () => {
           text: 'Os dados do usuário foram atualizados com sucesso.',
         });
 
-      
         router.push('/auth/dashboard');
       } catch (err) {
         if (err instanceof Error) {
@@ -64,8 +64,8 @@ const UpdateUserInfo = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (userData) {
-      setUserData({ ...userData, [e.target.name]: e.target.value });
+    if (user) {
+      setUser({ ...user, [e.target.name]: e.target.value });
     }
   };
 
@@ -73,14 +73,14 @@ const UpdateUserInfo = () => {
     <div className="max-w-md mx-auto bg-gray-100 rounded-lg p-6 shadow-lg text-black">
       <h2 className="text-2xl font-bold mb-4">Atualizar Informações</h2>
       {error && <p className="text-red-500">{error}</p>}
-      {userData && (
+      {user && (
         <div>
           <label className="block text-sm font-medium">Nome:</label>
           <input
             type="text"
             name="name"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={userData.name}
+            value={user.name}
             onChange={handleChange}
           />
           
@@ -89,7 +89,7 @@ const UpdateUserInfo = () => {
             type="email"
             name="email"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={userData.email}
+            value={user.email}
             onChange={handleChange}
           />
 
@@ -98,7 +98,7 @@ const UpdateUserInfo = () => {
             type="date"
             name="birthDate"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={userData.birthDate}
+            value={user.birthDate}
             onChange={handleChange}
           />
 
@@ -107,7 +107,7 @@ const UpdateUserInfo = () => {
             type="text"
             name="address"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={userData.address}
+            value={user.address}
             onChange={handleChange}
           />
 
@@ -116,7 +116,7 @@ const UpdateUserInfo = () => {
             mask="(99) 99999-9999"
             name="phone"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={userData.phone}
+            value={user.phone}
             onChange={handleChange}
           />
 

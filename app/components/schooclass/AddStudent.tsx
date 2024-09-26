@@ -1,8 +1,8 @@
-// components/AddStudent.tsx
-import React, { useState } from 'react'; // Não esqueça de importar useState
+import React, { useState } from 'react';
 import { User } from '../../interfaces/User';
 import Swal from 'sweetalert2';
 import { getStudentByCpf } from '@/app/services/userConsultService';
+import { AxiosError } from 'axios';
 
 interface AddStudentProps {
   onAddStudent: (student: User) => Promise<void>;
@@ -36,7 +36,7 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
 
       setStudentData(foundStudent);
     } catch (error) {
-      console.log(error);
+      console.log('Erro ao buscar estudante:', error);
       Swal.fire({
         icon: 'error',
         title: 'Erro',
@@ -57,6 +57,7 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
 
     try {
       await onAddStudent(studentData);
+      // Se a adição for bem-sucedida, reseta os campos e exibe a mensagem de sucesso
       setStudentData(null);
       setStudentCpf('');
       Swal.fire({
@@ -65,12 +66,31 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
         text: 'Estudante adicionado à turma!',
       });
     } catch (error) {
-      console.log(error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro',
-        text: 'Erro ao adicionar o estudante.',
-      });
+      console.log('Erro ao adicionar estudante:', error);
+
+      // Verifica se o erro é do Axios
+      if (error instanceof AxiosError) {
+        // Verifica o status de resposta
+        if (error.response?.status === 409) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Este estudante já está na turma.',
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao adicionar o estudante: ' + error.message,
+          });
+        }
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: 'Erro desconhecido ao adicionar o estudante.',
+        });
+      }
     }
   };
 

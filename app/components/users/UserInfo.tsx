@@ -1,12 +1,7 @@
 import React from 'react';
 import InputMask from 'react-input-mask';
 import { mapRoleToPortuguese } from '@/app/utils/roleMapper';
-import { UserData } from '@/app/interfaces/UserData';
-
-interface UserInfoProps {
-  user: UserData;
-}
-
+import { User } from '@/app/interfaces/User';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -16,22 +11,20 @@ const formatDate = (dateString: string) => {
   return `${day}/${month}/${year}`; 
 };
 
-export const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
+export const UserInfo: React.FC<{ user: User }> = ({ user }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-6">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Dados do Usuário</h2>
       <div className="grid grid-cols-2 gap-4 text-lg text-black">
         <div><strong>Nome:</strong> {user.name}</div>
 
-        
         <div><strong>CPF:</strong> 
           <InputMask mask="999.999.999-99" value={user.cpf} disabled />
         </div>
 
         <div><strong>Email:</strong> {user.email}</div>
         
-        
-        <div><strong>Perfil:</strong> {mapRoleToPortuguese(user.role)}</div>
+        <div><strong>Perfil:</strong> {mapRoleToPortuguese(user.role || '')}</div>
 
         <div>
           <strong>Ativo:</strong> 
@@ -40,12 +33,10 @@ export const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
           </span>
         </div>
 
-        
         <div><strong>Data de Nascimento:</strong> 
-          <InputMask mask="99/99/9999" value={formatDate(user.birthDate)} disabled />
+          <InputMask mask="99/99/9999" value={formatDate(user.birthDate || "")} disabled />
         </div>
 
-        
         {user.phone && (
           <div><strong>Telefone:</strong> 
             <InputMask mask="(99) 99999-9999" value={user.phone} disabled />
@@ -55,7 +46,6 @@ export const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
         <div><strong>Matrícula:</strong> {user.registration}</div>
         <div><strong>Endereço:</strong> {user.address}</div>
 
-        
         {user.role === 'PROFESSOR' && (
           <>
             <div><strong>Área de Especialização:</strong> {user.expertiseArea}</div>

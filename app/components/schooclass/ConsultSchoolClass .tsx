@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getSchoolClass } from '@/app/services/schoolClassService'; // Ajuste o caminho conforme necessário
+import { getSchoolClass } from '@/app/services/schoolClassService';
 import { SchoolClass } from '../../interfaces/SchoolClass';
 import Swal from 'sweetalert2';
 
@@ -74,7 +74,7 @@ const ConsultSchoolClass = () => {
             <ul className="list-disc list-inside">
               {schoolClass.students.map((student) => (
                 <li key={student.cpf}>
-                  {student.name} - {student.email} {/* Exibir nome e e-mail do estudante */}
+                  {student.name} - {student.email} - {student.cpf}
                 </li>
               ))}
             </ul>

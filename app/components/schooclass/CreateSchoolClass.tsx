@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { createClass } from '@/app/services/schoolClassService'; // Ajuste o caminho conforme necessário
+import { createClass } from '@/app/services/schoolClassService'; 
 import { SchoolClass } from '../../interfaces/SchoolClass';
 import Swal from 'sweetalert2';
 
@@ -12,8 +12,6 @@ const CreateClass = () => {
 
   const handleCreate = async () => {
     setError(null);
-    
-    // Validação básica para garantir que os campos não estejam vazios
     if (!name || !code) {
       setError('Por favor, preencha todos os campos.');
       Swal.fire({
@@ -26,10 +24,10 @@ const CreateClass = () => {
 
     try {
       const newClass: SchoolClass = { 
-        id: 0, // ID gerado automaticamente
+        id: 0, 
         name, 
         code, 
-        date: new Date().toISOString() // Define a data atual no formato ISO
+        date: new Date().toISOString() 
       };
       await createClass(newClass);
       Swal.fire({
@@ -63,7 +61,7 @@ const CreateClass = () => {
           onChange={(e) => setName(e.target.value)}
           placeholder="Digite o nome da turma"
           className="border rounded-md p-2 w-full text-gray-700"
-          required // Adicionando required para validação
+          required 
         />
       </div>
 
@@ -75,7 +73,7 @@ const CreateClass = () => {
           onChange={(e) => setCode(e.target.value)}
           placeholder="Digite o código da turma"
           className="border rounded-md p-2 w-full text-gray-700"
-          required // Adicionando required para validação
+          required 
         />
       </div>
 

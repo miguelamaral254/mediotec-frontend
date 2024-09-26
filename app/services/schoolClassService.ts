@@ -10,7 +10,7 @@ export const createClass = async (classData: Omit<SchoolClass, 'id'>): Promise<S
     return response.data;
   } catch (error) {
     console.error('Error creating class:', error);
-    throw error;
+    throw error; // Aqui, você pode optar por lançar erros personalizados se quiser
   }
 };
 
@@ -25,7 +25,6 @@ export const updateClass = async (classId: number, updatedData: Partial<SchoolCl
     };
 
     const response = await axios.put<SchoolClass>(`${API_BASE_URL}/schoolclasses/${classId}`, updatedClassData);
-
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar turma:', error);
@@ -44,16 +43,22 @@ export const getSchoolClass = async (id: number): Promise<SchoolClass> => {
 };
 
 // Atualizado: adição de estudante utilizando a rota correta `/schoolclasses/addstudent`
+
 export const addStudentToClass = async (classId: number, studentCpf: string): Promise<void> => {
   try {
-    // Enviando um objeto com classId e cpf
     await axios.post(`${API_BASE_URL}/schoolclasses/addstudent`, {
-      classId: classId,
-      cpf: studentCpf, // Mudança aqui para corresponder ao que foi especificado
+      classId,
+      cpf: studentCpf,
     });
   } catch (error) {
     console.error('Error adding student to class:', error);
-    throw error;
+
+    // Verifica se o erro é do Axios
+    if (axios.isAxiosError(error) && error.response?.status === 409) {
+      throw new Error('Este estudante já está na turma.'); // Lança um erro específico
+    } else {
+      throw new Error('Erro ao adicionar o estudante.');
+    }
   }
 };
 

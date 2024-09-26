@@ -1,13 +1,11 @@
 import axios from 'axios';
-import { UserData } from '../interfaces/UserData'; // Importa a interface
+import { User } from '../interfaces/User'; 
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ;
 
-export const updateUser = async (cpf: string, userData: UserData) => {
+export const updateUser = async (cpf: string, userData: User) => {
   try {
     let url = '';
-
-    // Define a URL com base no tipo de usuário
     switch (userData.role) {
       case 'PARENT':
         url = `${API_BASE_URL}/parent/update/${cpf}`;
@@ -21,8 +19,6 @@ export const updateUser = async (cpf: string, userData: UserData) => {
       default:
         throw new Error('Tipo de usuário inválido');
     }
-
-    // Faz a requisição de atualização
     const response = await axios.put(url, userData);
     return response.data;
   } catch (error) {
@@ -51,8 +47,6 @@ export const getUserByCpf = async (cpf: string, userType: string) => {
     }
 
     const response = await axios.get(url);
-
-    // Verifique se o tipo de usuário corresponde ao que foi retornado
     if (!response.data || response.data.role !== userType) {
       throw new Error('Usuário não encontrado ou não corresponde ao tipo selecionado.');
     }
@@ -67,14 +61,11 @@ export const getUserByCpf = async (cpf: string, userType: string) => {
 };
 export const getCurrentUserByCpf = async (cpf: string) => {
   try {
-    const url = `${API_BASE_URL}/user/${cpf}`; // Supondo que a rota seja /user/current/{cpf}
+    const url = `${API_BASE_URL}/user/${cpf}`; 
     const response = await axios.get(url);
-
-    // Verifique se o usuário foi encontrado
     if (!response.data) {
       throw new Error('Usuário não encontrado.');
     }
-
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -83,11 +74,10 @@ export const getCurrentUserByCpf = async (cpf: string) => {
     throw new Error('Erro desconhecido');
   }
 };
-export const updateCurrentUserInfo = async (cpf: string, userData: UserData) => {
+export const updateCurrentUserInfo = async (cpf: string, userData: User) => {
   try {
-    const url = `${API_BASE_URL}/${userData.role.toLowerCase()}/update/${cpf}`; // Endpoint genérico
+    const url = `${API_BASE_URL}/${userData.role?.toLowerCase()}/update/${cpf}`;
 
-    // Faz a requisição de atualização
     const response = await axios.put(url, userData);
     return response.data;
   } catch (error) {

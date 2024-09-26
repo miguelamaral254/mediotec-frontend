@@ -1,7 +1,6 @@
-// components/StudentList.tsx
 import React from 'react';
 import { User } from '../../interfaces/User';
-import { FaTrash } from 'react-icons/fa'; // Importando o ícone de lixeira
+import { FaTrash } from 'react-icons/fa'; 
 import Swal from 'sweetalert2';
 
 interface StudentListProps {
@@ -39,7 +38,7 @@ const StudentList: React.FC<StudentListProps> = ({ students, onRemoveStudent }) 
                 onClick={() => handleRemoveStudent(student.cpf)}
                 className="text-red-500 ml-4 flex items-center"
               >
-                <FaTrash className="mr-1" /> {/* Ícone de lixeira */}
+                <FaTrash className="mr-1" />
               </button>
             </li>
           ))}

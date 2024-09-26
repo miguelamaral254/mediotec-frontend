@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import InputMask from 'react-input-mask';
 import { getParentByCpf, getProfessorByCpf, getStudentByCpf } from '@/app/services/userConsultService';
+import { User } from '@/app/interfaces/User'; // Importe sua interface User
 
 const ConsultUser = () => {
   const [cpf, setCpf] = useState('');
   const [userType, setUserType] = useState('STUDENT');
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<User | null>(null); // Utilize a interface User aqui
   const [error, setError] = useState<string | null>(null);
 
   const handleConsult = async () => {
@@ -16,7 +17,7 @@ const ConsultUser = () => {
     const cleanedCpf = cpf.replace(/\D/g, '');
 
     try {
-      let data;
+      let data: User | null; // Especifica que data será do tipo User ou null
       if (userType === 'PARENT') {
         data = await getParentByCpf(cleanedCpf);
       } else if (userType === 'PROFESSOR') {
@@ -104,7 +105,7 @@ const ConsultUser = () => {
             <strong>Email:</strong> {userData.email}
           </p>
           <p>
-            <strong>Role:</strong> {translateRole(userData.role)}
+            <strong>Role:</strong> {translateRole(userData.role || '')}
           </p>
           <p>
             <strong>Ativo:</strong>{' '}
@@ -113,7 +114,7 @@ const ConsultUser = () => {
             </span>
           </p>
           <p>
-            <strong>Data de Nascimento:</strong> {formatDate(userData.birthDate)}
+            <strong>Data de Nascimento:</strong> {formatDate(userData.birthDate || '')}
           </p>
           <p>
             <strong>Endereço:</strong> {userData.address}

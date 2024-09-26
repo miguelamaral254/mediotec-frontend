@@ -3,8 +3,8 @@ import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { getSchoolClass, updateClass, addStudentToClass, removeStudentFromClass } from '@/app/services/schoolClassService'; 
 import { SchoolClass } from '../../interfaces/SchoolClass';
-import StudentList from './StudentList'; // Importando o componente StudentList
-import AddStudent from './AddStudent'; // Importando o componente AddStudent
+import StudentList from './StudentList'; 
+import AddStudent from './AddStudent'; 
 import { User } from '@/app/interfaces/User';
 
 const UpdateSchoolClass = () => {
@@ -102,7 +102,7 @@ const UpdateSchoolClass = () => {
       Swal.fire({
         icon: 'error',
         title: 'Erro',
-        text: 'Erro ao remover o estudante.',
+        text: 'Erro ao remover o estudante da turma.',
       });
     }
   };
@@ -113,18 +113,14 @@ const UpdateSchoolClass = () => {
       fetchSchoolClass(Number(classId));
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro',
-        text: 'Erro ao adicionar o estudante.',
-      });
+      throw error; // Para ser capturado no AddStudent.tsx
     }
   };
 
   return (
     <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
       <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Atualizar Turma</h2>
-
+      
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">ID da Turma:</label>
         <input
@@ -136,56 +132,47 @@ const UpdateSchoolClass = () => {
         />
         <button
           onClick={handleSearch}
-          className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
+          className="mt-2 bg-green-500 hover:bg-green-600 text-white p-2 rounded-md w-full"
         >
           Buscar Turma
         </button>
       </div>
 
-      {loading ? (
-        <p>Carregando...</p>
-      ) : (
-        schoolClass && (
-          <>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Nome da Turma:</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Nome da turma"
-                className="border rounded-md p-2 w-full text-gray-700"
-              />
-            </div>
+      {loading && <p>Carregando...</p>}
 
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Código da Turma:</label>
-              <input
-                type="text"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                placeholder="Código da turma"
-                className="border rounded-md p-2 w-full text-gray-700"
-              />
-            </div>
-
-            <StudentList 
-              students={students} 
-              onRemoveStudent={handleRemoveStudent} 
+      {schoolClass && (
+        <>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Nome da Turma:</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Nome da Turma"
+              className="border rounded-md p-2 w-full text-gray-700"
             />
-
-            <AddStudent 
-              onAddStudent={handleAddStudent} 
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Código da Turma:</label>
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="Código da Turma"
+              className="border rounded-md p-2 w-full text-gray-700"
             />
+          </div>
 
-            <button
-              onClick={handleUpdate}
-              className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
-            >
-              Atualizar Turma
-            </button>
-          </>
-        )
+          <button
+            onClick={handleUpdate}
+            className="mt-2 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md w-full"
+          >
+            Atualizar Turma
+          </button>
+
+          <StudentList students={students} onRemoveStudent={handleRemoveStudent} />
+          <AddStudent onAddStudent={handleAddStudent} />
+        </>
       )}
     </div>
   );

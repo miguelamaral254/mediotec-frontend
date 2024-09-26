@@ -2,12 +2,12 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserData } from '../services/authService';
-import { UserData } from '../interfaces/UserData'; // Importar a interface User
+import { User } from '../interfaces/User'; // Importar a interface User
 
 // Definir a interface do contexto de autenticação
 interface AuthContextType {
-  user: UserData | null;  // O usuário pode ser 'null' inicialmente
-  setUser: (user: UserData | null) => void;
+  user: User | null;  // O usuário pode ser 'null' inicialmente
+  setUser: (user: User | null) => void;
   logout: () => void;
 }
 
@@ -15,7 +15,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<UserData | null>(null);  // Estado de user pode ser 'null'
+  const [user, setUser] = useState<User | null>(null);  // Estado de user pode ser 'null'
   const router = useRouter();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const cpf = localStorage.getItem('cpf');
 
     if (!token || !cpf) {
-      router.push('/auth/login'); // Redireciona para o login se não estiver logado
+      router.push('/auth/login'); 
     } else {
       const fetchUserData = async () => {
         try {
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUser(data);
         } catch (error) {
           console.error('Erro ao carregar dados do usuário:', error);
-          router.push('/auth/login'); // Redireciona em caso de erro
+          router.push('/auth/login');
         }
       };
       fetchUserData();
