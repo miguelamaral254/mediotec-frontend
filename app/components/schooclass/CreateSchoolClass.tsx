@@ -79,7 +79,7 @@ const CreateClass = () => {
 
       <button
         onClick={handleCreate}
-        className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
+        className="mt-4 w-full bg-blue-500 hover:bg-green-600 text-white p-2 rounded-md"
       >
         Criar
       </button>

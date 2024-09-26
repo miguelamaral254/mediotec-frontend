@@ -218,7 +218,7 @@ const CreateUser = () => {
             </div>
           </>
         )}
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">Criar Usuário</button>
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">Criar Usuário</button>
       </form>
     </div>
   );

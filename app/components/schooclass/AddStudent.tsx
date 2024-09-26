@@ -107,7 +107,7 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
       />
       <button
         onClick={handleStudentSearch}
-        className="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
+        className="mt-2 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
       >
         Buscar Estudante
       </button>
@@ -120,7 +120,7 @@ const AddStudent: React.FC<AddStudentProps> = ({ onAddStudent }) => {
           <p>CPF: {studentCpf}</p>  {/* Display CPF here */}
           <button
             onClick={handleAddStudent}
-            className="mt-2 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
+            className="mt-2 w-full bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-md"
           >
             Adicionar Estudante à Turma
           </button>

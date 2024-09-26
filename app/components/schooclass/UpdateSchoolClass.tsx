@@ -133,7 +133,7 @@ const UpdateSchoolClass = () => {
         />
         <button
           onClick={handleSearch}
-          className="mt-2 bg-green-500 hover:bg-green-600 text-white p-2 rounded-md w-full"
+          className="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-md w-full"
         >
           Buscar Turma
         </button>
@@ -166,7 +166,7 @@ const UpdateSchoolClass = () => {
 
           <button
             onClick={handleUpdate}
-            className="mt-2 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md w-full"
+            className="mt-2 bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-md w-full"
           >
             Atualizar Turma
           </button>

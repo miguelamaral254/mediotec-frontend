@@ -1,4 +1,3 @@
-// components/navbar/Navbar.tsx
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -23,21 +22,17 @@ const Navbar: React.FC = () => {
   const { user, setUser } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isManageDropdownOpen, setIsManageDropdownOpen] = useState(false);
-  const sidebarRef = useRef<HTMLDivElement>(null); // Criação do ref para a Sidebar
-  const manageDropdownRef = useRef<HTMLDivElement>(null); // Criação do ref para o submenu
+  const sidebarRef = useRef<HTMLDivElement>(null); 
+  const manageDropdownRef = useRef<HTMLDivElement>(null); 
   const router = useRouter();
-
-  // Função para alternar a visibilidade da Sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  // Função para alternar a visibilidade do dropdown de gerenciamento
   const toggleManageDropdown = () => {
     setIsManageDropdownOpen((prev) => !prev);
   };
 
-  // Função para realizar o logout do usuário
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('cpf');
@@ -70,14 +65,12 @@ const Navbar: React.FC = () => {
         !manageDropdownRef.current.contains(event.target as Node) &&
         !event.target.closest('.toggle-manage-dropdown')
       ) {
-        setIsManageDropdownOpen(false); // Fecha o submenu se o clique for fora
+        setIsManageDropdownOpen(false); 
       }
     };
 
-    // Adiciona o evento de clique no document para monitorar o submenu
     document.addEventListener('mousedown', handleClickOutsideDropdown);
 
-    // Remove o evento de clique ao desmontar o componente
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideDropdown);
     };

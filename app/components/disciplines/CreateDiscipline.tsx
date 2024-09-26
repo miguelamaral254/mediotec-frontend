@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { createDiscipline } from '../../services/disciplineService'; // Ajuste o caminho conforme necessário
 import Swal from 'sweetalert2';
 
-const CreateDiscipline = () => {
+const   CreateDiscipline = () => {
   const [formData, setFormData] = useState({
     name: '',
     workload: '',
