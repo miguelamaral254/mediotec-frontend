@@ -1,8 +1,8 @@
 import { SetStateAction, useState } from 'react';
 import Swal from 'sweetalert2';
 import InputMask from 'react-input-mask';
-import { getUserByCpf, updateUser } from '../services/updateUserService';
-import { UserData } from '../interfaces/UserData';
+import { getUserByCpf, updateUser } from '@/app/services/updateUserService';
+import { UserData } from '@/app/interfaces/UserData';
 
 const UpdateUser = () => {
   const [cpf, setCpf] = useState('');
@@ -15,7 +15,7 @@ const UpdateUser = () => {
     setUserData(null);
   
     try {
-      const cleanedCpf = cpf.replace(/\D/g, ''); // Limpa os caracteres não numéricos
+      const cleanedCpf = cpf.replace(/\D/g, ''); 
       const data = await getUserByCpf(cleanedCpf, userType);
       setUserData(data);
     } catch (err) {
@@ -27,19 +27,17 @@ const UpdateUser = () => {
   const handleUpdate = async () => {
     if (userData) {
       try {
-        const cleanedCpf = cpf.replace(/\D/g, ''); // Limpa os caracteres não numéricos do CPF
-        const cleanedPhone = userData.phone.replace(/\D/g, ''); // Limpa os caracteres não numéricos do telefone
-        const updatedData = { ...userData, phone: cleanedPhone }; // Atualiza o telefone com o valor limpo
+        const cleanedCpf = cpf.replace(/\D/g, '');
+        const cleanedPhone = userData.phone.replace(/\D/g, ''); 
+        const updatedData = { ...userData, phone: cleanedPhone };
         
         await updateUser(cleanedCpf, updatedData);
-        // Sucesso na atualização
         Swal.fire({
           icon: 'success',
           title: 'Usuário Atualizado!',
           text: 'Os dados do usuário foram atualizados com sucesso.',
         });
 
-        // Limpa o formulário após a atualização
         setCpf('');
         setUserData(null);
         setUserType('STUDENT');

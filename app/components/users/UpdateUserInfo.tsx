@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import InputMask from 'react-input-mask';
 import Swal from 'sweetalert2';
-import { getCurrentUserByCpf, updateUser } from '../services/updateUserService';
-import { UserData } from '../interfaces/UserData';
+import { getCurrentUserByCpf, updateUser } from '@/app/services/updateUserService';
+import { UserData } from '@/app/interfaces/UserData';
 import { useRouter } from 'next/navigation';
 
 const UpdateUserInfo = () => {

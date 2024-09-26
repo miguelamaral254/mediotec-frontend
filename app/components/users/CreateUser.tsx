@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import InputMask from 'react-input-mask';
-import { createUser } from '../services/userService'; // Ajuste o caminho conforme necessário
+import { createUser } from '@/app/services/userService'; // Ajuste o caminho conforme necessário
 import Swal from 'sweetalert2';
 
 const CreateUser = () => {

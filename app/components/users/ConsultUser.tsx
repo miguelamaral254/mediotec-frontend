@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import InputMask from 'react-input-mask';
-import { getParentByCpf, getProfessorByCpf, getStudentByCpf } from '../services/userConsultService';
+import { getParentByCpf, getProfessorByCpf, getStudentByCpf } from '@/app/services/userConsultService';
 
 const ConsultUser = () => {
   const [cpf, setCpf] = useState('');

@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserData } from '../../services/authService';
 import { useAuth } from '@/app/context/AuthContext';
-import { AdminSection } from '../../components/AdminSection';
-import { ProfessorSection } from '../../components/ProfessorSection';
-import { ParentSection } from '../../components/ParentSection';
-import { StudentSection } from '../../components/StudentSection';
-import { UserInfo } from '../../components/UserInfo';
+import { AdminSection } from '../../components/users/AdminSection';
+import { ProfessorSection } from '../../components/users/ProfessorSection';
+import { ParentSection } from '../../components/users/ParentSection';
+import { StudentSection } from '../../components/users/StudentSection';
+import { UserInfo } from '../../components/users/UserInfo';
 
 export default function Dashboard() {
   const { user, setUser } = useAuth();

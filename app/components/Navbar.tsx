@@ -100,6 +100,13 @@ const Navbar = () => {
                     </Link>
                   </li>
                 )}
+                 {user?.role === 'ADMIN' && (
+                  <li>
+                    <Link href="/auth/dashboard/manage-schooclasses" className="text-gray-300 hover:text-white">
+                      <FaUsers className="inline-block mr-2" /> Gerenciar Turmas
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link href="/auth/dashboard/settings" className="text-gray-300 hover:text-white">
                     <FaCog className="inline-block mr-2" /> Configurações

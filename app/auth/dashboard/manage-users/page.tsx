@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import CreateUser from '../../../components/CreateUser';
-import UpdateUser from '../../../components/UpdateUser';
-import ConsultUser from '../../../components/ConsultUser';
+import CreateUser from '../../../components/users/CreateUser';
+import UpdateUser from '../../../components/users/UpdateUser';
+import ConsultUser from '../../../components/users/ConsultUser';
 
 const ManageUsers = () => {
   const [action, setAction] = useState<'create' | 'update' | 'consult' | null>(null);
