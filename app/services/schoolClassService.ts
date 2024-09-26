@@ -14,17 +14,30 @@ export const createClass = async (classData: Omit<SchoolClass, 'id'>): Promise<S
   }
 };
 
-export const updateClass = async (classId: number, classData: Omit<SchoolClass, 'id'>): Promise<SchoolClass> => {
+
+
+export const updateClass = async (classId: number, updatedData: Partial<SchoolClass>): Promise<SchoolClass> => {
   try {
-    const response = await axios.put<SchoolClass>(`${API_BASE_URL}/schoolclasses/${classId}`, classData);
+    // Primeiro, busca a turma existente pelo ID
+    const currentClassResponse = await axios.get<SchoolClass>(`${API_BASE_URL}/schoolclasses/${classId}`);
+    const currentClassData = currentClassResponse.data;
+
+    // Atualiza apenas os campos fornecidos no updatedData e mantém os outros campos intactos
+    const updatedClassData: SchoolClass = {
+      ...currentClassData, // Mantém os dados atuais
+      ...updatedData, // Sobrescreve apenas os campos que foram passados para atualização
+    };
+
+    // Envia a turma atualizada para o servidor
+    const response = await axios.put<SchoolClass>(`${API_BASE_URL}/schoolclasses/${classId}`, updatedClassData);
+
     return response.data;
   } catch (error) {
-    console.error('Error updating class:', error);
+    console.error('Erro ao atualizar turma:', error);
     throw error;
   }
 };
 
-// Adicione a função getSchoolClass aqui
 export const getSchoolClass = async (id: number): Promise<SchoolClass> => {
   try {
     const response = await axios.get<SchoolClass>(`${API_BASE_URL}/schoolclasses/${id}`);
