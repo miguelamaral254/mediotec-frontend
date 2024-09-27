@@ -83,19 +83,16 @@ const ConsultSchoolClass = () => {
         <div className="mt-6 bg-white p-4 rounded-lg shadow-lg text-gray-700">
           <h3 className="text-xl font-bold mb-2">Dados da Turma:</h3>
           <p>
-            <strong>Nome:</strong> {schoolClass.name}
-          </p>
-          <p>
-            <strong>Código:</strong> {schoolClass.code}
-          </p>
-          <p>
-            <strong>Ano:</strong> {translateEnum(schoolClass.year, 'year')} {/* Exibir ano traduzido */}
+            <strong>Ano:</strong> {translateEnum(schoolClass.year, 'year')} {schoolClass.letter} {/* Exibir ano traduzido */}
           </p>
           <p>
             <strong>Turno:</strong> {translateEnum(schoolClass.shift, 'shift')} {/* Exibir turno traduzido */}
           </p>
           <p>
             <strong>Curso Técnico:</strong> {translateEnum(schoolClass.technicalCourse, 'technicalCourse')} {/* Exibir curso técnico traduzido */}
+          </p>
+          <p>
+            <strong>Código:</strong> {schoolClass.code}
           </p>
           <p>
             <strong>Data de Criação:</strong> {new Date(schoolClass.date).toLocaleDateString('pt-BR')} {/* Exibir data */}

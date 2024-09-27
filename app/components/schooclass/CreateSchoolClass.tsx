@@ -2,20 +2,20 @@
 
 import { useState } from 'react';
 import { createClass } from '@/app/services/schoolClassService'; 
-import { SchoolClass } from '../../interfaces/SchoolClass';
+import { SchoolClass, LetterEnum } from '../../interfaces/SchoolClass'; // Importando o enum LetterEnum
 import Swal from 'sweetalert2';
 
 const CreateClass = () => {
-  const [name, setName] = useState('');
   const [code, setCode] = useState('');
   const [shift, setShift] = useState<'MORNING' | 'AFTERNOON' | 'EVENING'>('MORNING'); 
   const [technicalCourse, setTechnicalCourse] = useState<'TDS' | 'TLS' >('TDS'); 
-  const [year, setYear] = useState<'FIRST' | 'SECOND' | 'THIRD'>('FIRST'); 
+  const [year, setYear] = useState<'FIRST' | 'SECOND' | 'THIRD'>('FIRST');
+  const [letter, setLetter] = useState<LetterEnum>(LetterEnum.A); // Novo estado para a letra
   const [error, setError] = useState<string | null>(null);
 
   const handleCreate = async () => {
     setError(null);
-    if (!name || !code) {
+    if (!code) {
       setError('Por favor, preencha todos os campos.');
       Swal.fire({
         icon: 'warning',
@@ -26,14 +26,15 @@ const CreateClass = () => {
     }
 
     try {
-      const newClass: SchoolClass = { 
-        id: 0, 
-        name, 
-        code, 
+      const newClass: SchoolClass = {
+        id: 0,
+        code,
         date: new Date().toISOString(),
-        shift, // Incluindo novo atributo
-        technicalCourse, // Incluindo novo atributo
-        year // Incluindo novo atributo
+        shift,
+        technicalCourse,
+        year,
+        letter,
+        createdAt: ''
       };
       await createClass(newClass);
       Swal.fire({
@@ -41,12 +42,12 @@ const CreateClass = () => {
         title: 'Sucesso',
         text: 'Turma criada com sucesso!',
       });
-      
-      setName('');
+
       setCode('');
       setShift('MORNING');
       setTechnicalCourse('TDS');
       setYear('FIRST');
+      setLetter(LetterEnum.A); // Resetando a letra para A
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro ao criar turma';
       setError(errorMessage);
@@ -63,18 +64,6 @@ const CreateClass = () => {
       <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Criar Turma</h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Nome da Turma:</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Digite o nome da turma"
-          className="border rounded-md p-2 w-full text-gray-700"
-          required 
-        />
-      </div>
-
-      <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">Código:</label>
         <input
           type="text"
@@ -84,6 +73,35 @@ const CreateClass = () => {
           className="border rounded-md p-2 w-full text-gray-700"
           required 
         />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Ano:</label>
+        <select 
+          value={year} 
+          onChange={(e) => setYear(e.target.value as 'FIRST' | 'SECOND' | 'THIRD')}
+          className="border rounded-md p-2 w-full text-gray-700"
+        >
+          <option value="FIRST">1º Ano</option>
+          <option value="SECOND">2º Ano</option>
+          <option value="THIRD">3º Ano</option>
+        </select>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Letra da Turma:</label>
+        <select 
+          value={letter} 
+          onChange={(e) => setLetter(e.target.value as LetterEnum)} // Atualiza o estado da letra
+          className="border rounded-md p-2 w-full text-gray-700"
+        >
+          <option value={LetterEnum.A}>A</option>
+          <option value={LetterEnum.B}>B</option>
+          <option value={LetterEnum.C}>C</option>
+          <option value={LetterEnum.D}>D</option>
+          <option value={LetterEnum.E}>E</option>
+          <option value={LetterEnum.F}>F</option>
+        </select>
       </div>
 
       <div className="mb-4">
@@ -103,25 +121,11 @@ const CreateClass = () => {
         <label className="block text-sm font-medium text-gray-700">Curso Técnico:</label>
         <select 
           value={technicalCourse} 
-          onChange={(e) => setTechnicalCourse(e.target.value as 'TDS' | 'TLS' )}
+          onChange={(e) => setTechnicalCourse(e.target.value as 'TDS' | 'TLS')}
           className="border rounded-md p-2 w-full text-gray-700"
         >
-          <option value="TDS">Técnico em desenvolvimento de sistemas</option>
+          <option value="TDS">Técnico em Desenvolvimento de Sistemas</option>
           <option value="TLS">Técnico em Logística</option>
-          
-        </select>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Ano:</label>
-        <select 
-          value={year} 
-          onChange={(e) => setYear(e.target.value as 'FIRST' | 'SECOND' | 'THIRD')}
-          className="border rounded-md p-2 w-full text-gray-700"
-        >
-          <option value="FIRST">1º Ano</option>
-          <option value="SECOND">2º Ano</option>
-          <option value="THIRD">3º Ano</option>
         </select>
       </div>
 

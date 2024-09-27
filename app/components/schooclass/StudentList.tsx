@@ -7,7 +7,7 @@ import { formatCpf } from '@/app/utils/formatCpf ';
 interface StudentListProps {
   students: User[];
   showRemoveButton?: boolean; // Optional prop to show/hide the remove button
-  onRemoveStudent?: (cpf: string) => Promise<void>; // Optional callback for removing a student
+  onRemoveStudent?: (cpf: string) => Promise<void>; // Callback for removing a student
 }
 
 const StudentList: React.FC<StudentListProps> = ({ students, onRemoveStudent, showRemoveButton = true }) => {
@@ -30,13 +30,13 @@ const StudentList: React.FC<StudentListProps> = ({ students, onRemoveStudent, sh
 
   return (
     <>
-      <h4 className="text-lg font-semibold mt-4">Estudantes na Turma:</h4>
+      
       {students.length > 0 ? (
         <ul className="list-disc list-inside mb-4">
           {students.map((student) => (
-            <li key={student.cpf} className="flex items-center justify-between">
+            <li key={student.cpf} className="flex pb-1 items-center justify-between">
               <span>
-                {student.name} - {student.email} - {formatCpf(student.cpf)} {/* Format CPF here */}
+                {student.email} - {formatCpf(student.cpf)} 
               </span>
               {showRemoveButton && onRemoveStudent && (
                 <button
