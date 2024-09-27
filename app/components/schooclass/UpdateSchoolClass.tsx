@@ -7,6 +7,7 @@ import { SchoolClass } from '../../interfaces/SchoolClass';
 import StudentList from './StudentList'; 
 import AddStudent from './AddStudent'; 
 import { User } from '@/app/interfaces/User';
+import { translateEnum } from '@/app/utils/translateEnum'; // Importando a função translateEnum
 
 const UpdateSchoolClass = () => {
   const [schoolClass, setSchoolClass] = useState<SchoolClass | null>(null);
@@ -15,6 +16,9 @@ const UpdateSchoolClass = () => {
   const [students, setStudents] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [classId, setClassId] = useState<string>('');
+  const [shift, setShift] = useState<'MORNING' | 'AFTERNOON' | 'EVENING'>('MORNING'); 
+  const [technicalCourse, setTechnicalCourse] = useState<'TDS' | 'TLS'>('TDS'); 
+  const [year, setYear] = useState<'FIRST' | 'SECOND' | 'THIRD'>('FIRST'); 
 
   const fetchSchoolClass = async (id: number) => {
     try {
@@ -24,6 +28,9 @@ const UpdateSchoolClass = () => {
       setName(schoolClassData.name);
       setCode(schoolClassData.code);
       setStudents(schoolClassData.students || []); 
+      setShift(schoolClassData.shift);
+      setTechnicalCourse(schoolClassData.technicalCourse);
+      setYear(schoolClassData.year);
     } catch (error) {
       console.log(error);
       Swal.fire({
@@ -70,6 +77,9 @@ const UpdateSchoolClass = () => {
           name,
           code: code.replace(/[^\w]/g, ''), // Remove special characters from code
           students,
+          shift,
+          technicalCourse,
+          year,
         };
 
         await updateClass(schoolClass.id, updatedSchoolClass);
@@ -163,6 +173,44 @@ const UpdateSchoolClass = () => {
               className="border rounded-md p-2 w-full text-gray-700"
             />
           </div>
+          
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Turno:</label>
+            <select 
+              value={shift} 
+              onChange={(e) => setShift(e.target.value as 'MORNING' | 'AFTERNOON' | 'EVENING')}
+              className="border rounded-md p-2 w-full text-gray-700"
+            >
+              <option value="MORNING">Manhã</option>
+              <option value="AFTERNOON">Tarde</option>
+              <option value="EVENING">Noite</option>
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Curso Técnico:</label>
+            <select 
+              value={technicalCourse} 
+              onChange={(e) => setTechnicalCourse(e.target.value as 'TDS' | 'TLS')}
+              className="border rounded-md p-2 w-full text-gray-700"
+            >
+              <option value="TDS">Técnico em Desenvolvimento de Sistemas</option>
+              <option value="TLS">Técnico em Logística</option>
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Ano:</label>
+            <select 
+              value={year} 
+              onChange={(e) => setYear(e.target.value as 'FIRST' | 'SECOND' | 'THIRD')}
+              className="border rounded-md p-2 w-full text-gray-700"
+            >
+              <option value="FIRST">1º Ano</option>
+              <option value="SECOND">2º Ano</option>
+              <option value="THIRD">3º Ano</option>
+            </select>
+          </div>
 
           <button
             onClick={handleUpdate}
@@ -171,6 +219,30 @@ const UpdateSchoolClass = () => {
             Atualizar Turma
           </button>
 
+          <div className="mt-4 bg-white p-4 rounded-lg shadow-lg text-gray-700">
+            <h4 className="text-lg font-semibold mt-4">Dados da Turma:</h4>
+            <p>
+              <strong>Nome:</strong> {schoolClass.name}
+            </p>
+            <p>
+              <strong>Código:</strong> {schoolClass.code}
+            </p>
+            <p>
+              <strong>Ano:</strong> {translateEnum(schoolClass.year, 'year')} {/* Exibir ano traduzido */}
+            </p>
+            <p>
+              <strong>Turno:</strong> {translateEnum(schoolClass.shift, 'shift')} {/* Exibir turno traduzido */}
+            </p>
+            
+            <p>
+              <strong>Curso Técnico:</strong> {translateEnum(schoolClass.technicalCourse, 'technicalCourse')} {/* Exibir curso técnico traduzido */}
+            </p>
+            <p>
+              <strong>Data de Criação:</strong> {new Date(schoolClass.date).toLocaleDateString('pt-BR')} {/* Exibir data */}
+            </p>
+          </div>
+
+          <h4 className="text-lg font-semibold mt-4">Estudantes na Turma:</h4>
           <StudentList students={students} onRemoveStudent={handleRemoveStudent} />
           <AddStudent onAddStudent={handleAddStudent} />
         </>

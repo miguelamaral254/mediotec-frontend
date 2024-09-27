@@ -8,6 +8,9 @@ import Swal from 'sweetalert2';
 const CreateClass = () => {
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
+  const [shift, setShift] = useState<'MORNING' | 'AFTERNOON' | 'EVENING'>('MORNING'); 
+  const [technicalCourse, setTechnicalCourse] = useState<'TDS' | 'TLS' >('TDS'); 
+  const [year, setYear] = useState<'FIRST' | 'SECOND' | 'THIRD'>('FIRST'); 
   const [error, setError] = useState<string | null>(null);
 
   const handleCreate = async () => {
@@ -27,7 +30,10 @@ const CreateClass = () => {
         id: 0, 
         name, 
         code, 
-        date: new Date().toISOString() 
+        date: new Date().toISOString(),
+        shift, // Incluindo novo atributo
+        technicalCourse, // Incluindo novo atributo
+        year // Incluindo novo atributo
       };
       await createClass(newClass);
       Swal.fire({
@@ -35,9 +41,12 @@ const CreateClass = () => {
         title: 'Sucesso',
         text: 'Turma criada com sucesso!',
       });
-      // Resetar os campos após sucesso
+      
       setName('');
       setCode('');
+      setShift('MORNING');
+      setTechnicalCourse('TDS');
+      setYear('FIRST');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro ao criar turma';
       setError(errorMessage);
@@ -75,6 +84,45 @@ const CreateClass = () => {
           className="border rounded-md p-2 w-full text-gray-700"
           required 
         />
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Turno:</label>
+        <select 
+          value={shift} 
+          onChange={(e) => setShift(e.target.value as 'MORNING' | 'AFTERNOON' | 'EVENING')}
+          className="border rounded-md p-2 w-full text-gray-700"
+        >
+          <option value="MORNING">Manhã</option>
+          <option value="AFTERNOON">Tarde</option>
+          <option value="EVENING">Noite</option>
+        </select>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Curso Técnico:</label>
+        <select 
+          value={technicalCourse} 
+          onChange={(e) => setTechnicalCourse(e.target.value as 'TDS' | 'TLS' )}
+          className="border rounded-md p-2 w-full text-gray-700"
+        >
+          <option value="TDS">Técnico em desenvolvimento de sistemas</option>
+          <option value="TLS">Técnico em Logística</option>
+          
+        </select>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Ano:</label>
+        <select 
+          value={year} 
+          onChange={(e) => setYear(e.target.value as 'FIRST' | 'SECOND' | 'THIRD')}
+          className="border rounded-md p-2 w-full text-gray-700"
+        >
+          <option value="FIRST">1º Ano</option>
+          <option value="SECOND">2º Ano</option>
+          <option value="THIRD">3º Ano</option>
+        </select>
       </div>
 
       <button

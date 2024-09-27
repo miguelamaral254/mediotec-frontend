@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { getSchoolClass } from '@/app/services/schoolClassService';
 import { SchoolClass } from '../../interfaces/SchoolClass';
 import Swal from 'sweetalert2';
-import StudentList from './StudentList'; // Adjust the import path as necessary
+import StudentList from './StudentList'; // Ajuste o caminho conforme necessário
 
 const ConsultSchoolClass = () => {
   const [id, setId] = useState<string>('');
@@ -33,6 +33,28 @@ const ConsultSchoolClass = () => {
         text: error || 'Turma não encontrada.',
       });
     }
+  };
+
+  // Função para traduzir os enums
+  const translateEnum = (value: string, type: 'shift' | 'year' | 'technicalCourse') => {
+    const translations: { [key: string]: string } = {
+      // Traduções para shift
+      MORNING: 'Manhã',
+      AFTERNOON: 'Tarde',
+      EVENING: 'Noite',
+      // Traduções para year
+      FIRST: '1°',
+      SECOND: '2°',
+      THIRD: '3°',
+      // Traduções para technicalCourse
+      TDS: 'Técnico em Desenvolvimento de Sistemas',
+      TLS: 'Técnico em Logística',
+    };
+
+    if (type === 'shift' || type === 'year' || type === 'technicalCourse') {
+      return translations[value] || value;
+    }
+    return value;
   };
 
   return (
@@ -67,13 +89,22 @@ const ConsultSchoolClass = () => {
             <strong>Código:</strong> {schoolClass.code}
           </p>
           <p>
-            <strong>Ano:</strong> {new Date(schoolClass.date).toLocaleDateString('pt-BR')}
+            <strong>Ano:</strong> {translateEnum(schoolClass.year, 'year')} {/* Exibir ano traduzido */}
+          </p>
+          <p>
+            <strong>Turno:</strong> {translateEnum(schoolClass.shift, 'shift')} {/* Exibir turno traduzido */}
+          </p>
+          <p>
+            <strong>Curso Técnico:</strong> {translateEnum(schoolClass.technicalCourse, 'technicalCourse')} {/* Exibir curso técnico traduzido */}
+          </p>
+          <p>
+            <strong>Data de Criação:</strong> {new Date(schoolClass.date).toLocaleDateString('pt-BR')} {/* Exibir data */}
           </p>
 
           <h4 className="text-lg font-semibold mt-4">Estudantes:</h4>
           <StudentList 
-            students={schoolClass.students || []} // Provide a default empty array
-            showRemoveButton={false} // Hide the remove button for this component
+            students={schoolClass.students || []} // Fornecer um array vazio por padrão
+            showRemoveButton={false} // Ocultar o botão de remoção para este componente
           />
         </div>
       )}
