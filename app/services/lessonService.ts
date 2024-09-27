@@ -10,7 +10,7 @@ export const createLesson = async (lesson: Omit<Lesson, 'id'>) => {
 
 export const getLessonById = async (id: number) => {
   const response = await axios.get(`${API_BASE_URL}/lessons/${id}`);
-  return response.data;
+  return response.data; // Certifique-se de que isso retorne o objeto esperado
 };
 
 export const getAllLessons = async () => {

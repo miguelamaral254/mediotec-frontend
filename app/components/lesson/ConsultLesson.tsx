@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { getLesson } from '@/app/services/lessonService'; // Adjust the import path as necessary
-import { Lesson } from '@/app/interfaces/LessonDTO'; // Adjust the import path as necessary
+import { getLessonById } from '@/app/services/lessonService'; 
 import Swal from 'sweetalert2';
+import { Lesson } from '@/app/interfaces/Lesson'; // Ajuste o caminho de importação conforme necessário
 
 const ConsultLesson = () => {
   const [id, setId] = useState<string>('');
-  const [lesson, setLesson] = useState<Lesson | null>(null); // Adjusted type to use Lesson interface
+  const [lesson, setLesson] = useState<Lesson | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSearch = async () => {
@@ -19,17 +19,19 @@ const ConsultLesson = () => {
       if (isNaN(numericId)) {
         throw new Error('ID deve ser um número.');
       }
-      const data = await getLesson(numericId); // Assuming getLesson returns the lesson
+
+      const data = await getLessonById(numericId);
       if (!data) {
         throw new Error('Aula não encontrada.');
       }
       setLesson(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao buscar aula');
+      const errorMessage = err instanceof Error ? err.message : 'Erro ao buscar aula';
+      setError(errorMessage);
       Swal.fire({
         icon: 'error',
         title: 'Erro',
-        text: error || 'Aula não encontrada.',
+        text: errorMessage,
       });
     }
   };
@@ -60,27 +62,31 @@ const ConsultLesson = () => {
         <div className="mt-6 bg-white p-4 rounded-lg shadow-lg text-gray-700">
           <h3 className="text-xl font-bold mb-2">Dados da Aula:</h3>
           <p>
-            <strong>Nome:</strong> {lesson.name}
+            <strong>Nome da Aula:</strong> {lesson.name}
           </p>
           <p>
-            <strong>Código da Turma:</strong> {lesson.schoolClass.id} {/* Displaying only the ID for schoolClass */}
+            <strong>Nome do Professor:</strong> {lesson.professor.name}
           </p>
           <p>
-            <strong>Disciplina:</strong> {lesson.discipline.id} {/* Displaying only the ID for discipline */}
+            <strong>Disciplina:</strong> {lesson.discipline.id} {/* Aqui você pode ajustar para mostrar o nome, se disponível */}
           </p>
           <p>
-            <strong>Professor CPF:</strong> {lesson.professor.cpf} {/* Displaying CPF for professor */}
+            <strong>Código da Turma:</strong> {lesson.schoolClass.id}
           </p>
           <p>
-            <strong>Início:</strong> {new Date(lesson.startTime).toLocaleString('pt-BR')} {/* Formatting the date */}
+            <strong>Início:</strong> {new Date(lesson.startTime).toLocaleTimeString('pt-BR')}
           </p>
           <p>
-            <strong>Término:</strong> {new Date(lesson.endTime).toLocaleString('pt-BR')} {/* Formatting the date */}
+            <strong>Término:</strong> {new Date(lesson.endTime).toLocaleTimeString('pt-BR')}
           </p>
           <p>
             <strong>Sala:</strong> {lesson.room}
           </p>
         </div>
+      )}
+
+      {error && (
+        <div className="mt-4 text-red-500">{error}</div>
       )}
     </div>
   );
