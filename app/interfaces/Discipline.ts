@@ -1,5 +1,5 @@
 export type Discipline = {
-    id?: string;
+    id?: number;
     name: string;
     workload: number;
     description: string;

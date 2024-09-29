@@ -1,4 +1,5 @@
 import api from '../api/api';
+
 import { LoginResponse } from '../interfaces/IAuth';
 
 // Função para fazer login
@@ -13,3 +14,4 @@ export const getUserData = async (cpf: string) => {
   const response = await api.get(`/user/${cpf}`); 
   return response.data; 
 };
+

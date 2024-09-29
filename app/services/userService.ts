@@ -23,3 +23,4 @@ export const createUser = async (userType: string, userData: User) => {
   const response = await axios.post(`${API_URL}${endpoint}`, userData);
   return response.data;
 };
+
