@@ -1,80 +1,60 @@
-// Importações necessárias
-import { createAssessmentWithGrades } from '@/app/services/assessmentService';
+"use client"
 import React, { useState } from 'react';
-import Swal from 'sweetalert2';
-import { GradeDTO } from '@/app/interfaces/GradeDTO';
+import { GradeDTO } from '../../interfaces/GradeDTO';
+import { Discipline } from '../../interfaces/Discipline';
+import { createAssessmentWithGrades } from '../../services/gradeService'; // Ajuste o caminho conforme necessário
 
-// Props do componente CreateGrade
 interface CreateGradeProps {
-    discipline: {
-        id: number; // ou string, dependendo do tipo do ID
-        name: string;
-    };
-    cpf: string; // Recebendo o CPF como prop
-    onClose: () => void;
+    discipline: Discipline;
+    studentCpf: string; // CPF do estudante
+    onClose: () => void; // Função para fechar o componente
 }
 
-// Componente CreateGrade
-const CreateGrade: React.FC<CreateGradeProps> = ({ discipline, cpf, onClose }) => {
-    const [grades, setGrades] = useState<{ av1: number; av2: number; av3: number; av4: number }>({
+const CreateGrade: React.FC<CreateGradeProps> = ({ discipline, studentCpf, onClose }) => {
+    const [grades, setGrades] = useState({
         av1: 0,
         av2: 0,
         av3: 0,
         av4: 0,
     });
 
-    // Função para calcular a média final
-    const calculateFinalGrade = () => {
-        const total = grades.av1 + grades.av2 + grades.av3 + grades.av4;
-        return total / 4; // ou a lógica que você preferir
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setGrades((prevGrades) => ({
+            ...prevGrades,
+            [name]: Number(value),
+        }));
     };
 
-    // Função para salvar a nota
-    const handleSaveGrade = async () => {
-        const finalGrade = calculateFinalGrade();
+    const handleSaveGrade = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-        // Estrutura de dados a ser enviada
-        const gradeData: GradeDTO = {
-            studentCpf: { cpf },
-            disciplineId: { id: discipline.id },
-            grades: {
+        const gradeDTO: GradeDTO = {
+            studentCpf,  // CPF como objeto
+            disciplineId,
+            grades: { // Um único objeto em vez de um array
                 av1: grades.av1,
                 av2: grades.av2,
                 av3: grades.av3,
-                av4: grades.av4
+                av4: grades.av4,
             },
-            finalGrade,
-            evaluationDate: new Date().toISOString(), // Exemplo de data atual
-            situation: finalGrade < 7 ? 'recovery' : 'approved', // Lógica para a situação
+            finalGrade: (grades.av1 + grades.av2 + grades.av3 + grades.av4) / 4,
+            evaluationDate: new Date().toISOString(),
+            situation: (grades.av1 + grades.av2 + grades.av3 + grades.av4) / 4 < 7 ? 'recovery' : 'approved', // Lógica para a situação
         };
 
-        try {
-            console.log('Dados da nota a serem salvos:', gradeData);
-            const response = await createAssessmentWithGrades(gradeData); 
-            console.log('Resposta do servidor:', response);
+        // Log do objeto gradeDTO antes de enviar
+        console.log("Enviando JSON para criar a nota:", JSON.stringify(gradeDTO, null, 2));
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Nota Criada',
-                text: `Nota para ${discipline.name} criada com sucesso! Média final: ${finalGrade}`,
-            });
-            onClose();
+        try {
+            await createAssessmentWithGrades(gradeDTO); // Chama a função para salvar a nota
+            onClose(); // Fecha o componente após salvar
         } catch (error) {
-            console.error('Erro ao salvar nota:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro',
-                text: 'Erro ao criar a nota. Tente novamente.',
-            });
+            console.error("Erro ao salvar a nota:", error);
+            // Você pode adicionar um alerta aqui, se necessário
         }
     };
 
-    // Função para atualizar a nota
-    const handleGradeChange = (av: keyof typeof grades, value: number) => {
-        setGrades((prev) => ({ ...prev, [av]: value }));
-    };
-
-    // Renderização do componente
     return (
         <div className="p-4 bg-white rounded shadow-md">
             <h1 className="text-xl font-bold mb-4">Criar Nota para {discipline.name}</h1>
@@ -93,9 +73,12 @@ const CreateGrade: React.FC<CreateGradeProps> = ({ discipline, cpf, onClose }) =
                             <td className="border border-gray-300 p-2">
                                 <input
                                     type="number"
+                                    name={av} // Adicionando o nome ao input
                                     value={grades[av as keyof typeof grades]}
-                                    onChange={(e) => handleGradeChange(av as keyof typeof grades, Number(e.target.value))}
+                                    onChange={handleChange} // Usando handleChange
                                     className="border rounded p-1 w-full"
+                                    min="0"
+                                    max="10"
                                 />
                             </td>
                         </tr>
@@ -105,13 +88,13 @@ const CreateGrade: React.FC<CreateGradeProps> = ({ discipline, cpf, onClose }) =
 
             <div className="flex justify-end space-x-2">
                 <button 
-                    onClick={handleSaveGrade} 
+                    onClick={handleSaveGrade} // Chamando handleSaveGrade
                     className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
                 >
                     Salvar Nota
                 </button>
                 <button 
-                    onClick={onClose} 
+                    onClick={onClose} // Chamando onClose corretamente
                     className="bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded hover:bg-gray-400 transition duration-200"
                 >
                     Cancelar
@@ -121,5 +104,4 @@ const CreateGrade: React.FC<CreateGradeProps> = ({ discipline, cpf, onClose }) =
     );
 };
 
-// Exportando o componente
 export default CreateGrade;

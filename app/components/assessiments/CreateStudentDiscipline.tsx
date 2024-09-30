@@ -5,7 +5,7 @@ import { User } from '../../interfaces/User';
 import { Discipline } from '../../interfaces/Discipline';
 import CreateGrade from './CreateGrade';
 
-const CreateAssessment = () => {
+const CreateStudentDiscipline = () => {
     const [cpf, setCpf] = useState('');
     const [student, setStudent] = useState<User | null>(null);
     const [disciplines, setDisciplines] = useState<Discipline[]>([]);
@@ -26,7 +26,7 @@ const CreateAssessment = () => {
             const disciplinesData = await getDisciplinesByStudentCpf(cpf);
             setDisciplines(disciplinesData);
         } catch (err) {
-            console.log(err);
+            console.error(err);
             setError('Erro ao buscar informações do aluno. Verifique o CPF e tente novamente.');
             Swal.fire({
                 icon: 'error',
@@ -38,13 +38,13 @@ const CreateAssessment = () => {
 
     const handleDisciplineClick = (discipline: Discipline) => {
         setSelectedDiscipline(prev => (prev && prev.id === discipline.id ? null : discipline));
-        setShowCreateGrade(!showCreateGrade);
+        setShowCreateGrade(prev => !prev);
     };
 
     const handleClickOutside = (event: MouseEvent) => {
         if (detailsRef.current && !detailsRef.current.contains(event.target as Node)) {
             setShowCreateGrade(false);
-            setSelectedDiscipline(null); // Opcional: para fechar também a seleção de disciplina
+            setSelectedDiscipline(null);
         }
     };
 
@@ -100,10 +100,10 @@ const CreateAssessment = () => {
                                             <div className="mt-4">
                                                 <CreateGrade 
                                                     discipline={discipline} 
-                                                    cpf={cpf} 
+                                                    studentCpf={cpf} 
                                                     onClose={() => {
                                                         setShowCreateGrade(false);
-                                                        setSelectedDiscipline(null); // Reset selected discipline on close
+                                                        setSelectedDiscipline(null);
                                                     }} 
                                                 />
                                             </div>
@@ -112,7 +112,7 @@ const CreateAssessment = () => {
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-gray-600">Nenhuma disciplina encontrada para este aluno.</p>
+                            <p className="text-gray-600">Nenhuma disciplina encontrada.</p>
                         )}
                     </div>
                 </div>
@@ -121,4 +121,4 @@ const CreateAssessment = () => {
     );
 };
 
-export default CreateAssessment;
+export default CreateStudentDiscipline;

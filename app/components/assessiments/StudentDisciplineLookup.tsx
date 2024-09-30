@@ -62,7 +62,7 @@ const StudentDisciplineLookup = () => {
       {student && (
         <div className="mt-6 bg-white p-4 rounded-lg shadow-lg text-gray-700">
           <h3 className="text-xl font-bold mb-2">Aluno: {student.name}</h3>
-          <Disciplines disciplines={disciplines} /> {/* Integrando o componente Disciplines */}
+          <Disciplines disciplines={disciplines} cpf={cpf} /> {/* Passando o CPF como prop */}
         </div>
       )}
     </div>

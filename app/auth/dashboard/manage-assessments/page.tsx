@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import CreateAssessment from '@/app/components/assessiments/CreateAssessment';
+
 //import ConsultAssessment from '@/app/components/assessiments/ConsultAssessment';
 import StudentDisciplineLookup from '@/app/components/assessiments/StudentDisciplineLookup';
+import CreateStudentAssessment from '@/app/components/assessiments/CreateStudentDiscipline';
 //import UpdateAssessment from '@/app/components/assessments/'; // Ajuste o caminho conforme necessário
 
 const ManageAssessments = () => {
@@ -19,7 +20,7 @@ const ManageAssessments = () => {
           <button onClick={() => setAction('update')} className="p-2 bg-yellow-500 text-white rounded">Atualizar Avaliação</button>
         </div>
         
-        {action === 'create' && <CreateAssessment />}
+        {action === 'create' && <CreateStudentAssessment />}
         {action === 'consult' && <StudentDisciplineLookup />}
         {/*action === 'update' && <UpdateAssessment />} {/* Certifique-se de ter o componente UpdateAssessment */}
       </div>

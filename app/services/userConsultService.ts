@@ -33,7 +33,7 @@ export const getStudentByCpf = async (cpf: string) => {
 };
 export const getDisciplinesByStudentCpf = async (cpf: string) => {
   try {
-      const response = await axios.get(`${BASE_URL}/student/${cpf}/disciplines`);
+      const response = await axios.get(`${BASE_URL}/disciplines/student/${cpf}`);
       return response.data; // Retorna a lista de disciplinas
   } catch (error) {
       console.error('Error fetching disciplines:', error);

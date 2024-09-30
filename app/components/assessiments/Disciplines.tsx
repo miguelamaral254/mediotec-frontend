@@ -1,30 +1,19 @@
+"use client";
 import React, { useState, useRef, useEffect } from 'react';
 import { Discipline } from '../../interfaces/Discipline';
-import { Assessment } from '../../interfaces/Assessments'; // Ajuste o caminho conforme necessário
-import { getAssessmentsByStudentCpf } from '../../services/assessmentService'; // Ajuste o caminho conforme necessário
-
+import { GradeDTO } from '../../interfaces/GradeDTO'; // Ajuste o caminho se necessário
+import { getAssessmentsByStudentCpf } from '../../services/gradeService'; // Ajuste o caminho se necessário
 
 interface DisciplinesProps {
   disciplines: Discipline[];
+  cpf: string; // Adicionar cpf como uma prop
   onCreateGrade?: boolean;
 }
 
-const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, onCreateGrade }) => {
+const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, cpf }) => {
   const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
-  const [assessments, setAssessments] = useState<Assessment[]>([]);
-  const [grades, setGrades] = useState({
-    AV1: 0,
-    AV2: 0,
-    AV3: 0,
-    AV4: 0,
-  });
+  const [GradeDTOs, setGradeDTOs] = useState<GradeDTO[]>([]);
   const detailsRef = useRef<HTMLDivElement | null>(null);
-
-  const calculateFinalGrade = () => {
-    const { AV1, AV2, AV3, AV4 } = grades;
-    const finalGrade = (AV1 + AV2 + AV3 + AV4) / 4;
-    return finalGrade.toFixed(2);
-  };
 
   const handleDisciplineClick = async (discipline: Discipline) => {
     setSelectedDiscipline((prev) => (prev && prev.id === discipline.id ? null : discipline));
@@ -32,11 +21,12 @@ const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, onCreateGrade })
     if (!discipline || !discipline.id) return;
 
     try {
-      // Chamada ao serviço para obter as avaliações
-      const assessmentsData = await getAssessmentsByStudentCpf(discipline.id.toString());
+      // Passar o cpf como o primeiro parâmetro e discipline.id como o segundo
+      const GradeDTOsData = await getAssessmentsByStudentCpf(cpf, discipline.id);
+      console.log('Dados de avaliações recebidos:', GradeDTOsData);
 
-      console.log('Dados de avaliações recebidos:', assessmentsData);
-      setAssessments(assessmentsData);
+      // Certifique-se de que GradeDTOsData é um array
+      setGradeDTOs(Array.isArray(GradeDTOsData) ? GradeDTOsData : [GradeDTOsData]);
     } catch (err) {
       console.error('Erro ao buscar as avaliações:', err);
     }
@@ -79,68 +69,29 @@ const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, onCreateGrade })
       )}
 
       {selectedDiscipline && (
-        <div
-          ref={detailsRef}
-          className="mt-4 overflow-hidden transition-all duration-300 ease-in-out"
-        >
+        <div ref={detailsRef} className="mt-4 overflow-hidden transition-all duration-300 ease-in-out">
           <div className="p-4 bg-white rounded-lg shadow-md">
             <h5 className="text-xl font-bold">{selectedDiscipline.name}</h5>
 
-            {/* Exibir as avaliações e notas do backend */}
-            {assessments.length > 0 ? (
-              assessments.map((assessment) => (
-                <div key={assessment.assessmentsId} className="mt-4">
-                  <p><strong>CPF do Estudante:</strong> {assessment.studentCpf.cpf}</p>
-                  <p><strong>ID da Disciplina:</strong> {assessment.disciplineId.id}</p>
-                  <p><strong>Nota Final:</strong> {assessment.finalGrade}</p>
-                  <p><strong>Data da Avaliação:</strong> {new Date(assessment.evaluationDate).toLocaleDateString()}</p>
-                  <p><strong>Situação:</strong> {assessment.situation}</p>
-
-                  <div className="grid grid-cols-2 gap-4 mt-4">
-                    {assessment.grades.map((grade, index) => (
-                      <div key={index} className="p-4 bg-gray-100 rounded-lg">
-                        <p><strong>Avaliação {index + 1}:</strong></p>
-                        <p>AV1: {grade.av1}</p>
-                        <p>AV2: {grade.av2}</p>
-                        <p>AV3: {grade.av3}</p>
-                        <p>AV4: {grade.av4}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>Nenhuma avaliação encontrada.</p>
-            )}
-
-            {/* Mostrar formulário de notas se onCreateGrade for true */}
-            {onCreateGrade && (
-              <div className="mt-4 grid grid-cols-2 gap-4">
-                {['AV1', 'AV2', 'AV3', 'AV4'].map((gradeKey) => (
-                  <div key={gradeKey} className="p-4 bg-gray-100 rounded-lg">
-                    <label className="block text-sm font-medium text-gray-700">{gradeKey}:</label>
-                    <input
-                      type="number"
-                      value={grades[gradeKey as keyof typeof grades]}
-                      onChange={(e) =>
-                        setGrades((prev) => ({
-                          ...prev,
-                          [gradeKey]: parseFloat(e.target.value),
-                        }))
-                      }
-                      className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                    />
+            {GradeDTOs.length > 0 ? (
+              <div className="grid grid-cols-1 gap-4 mt-4">
+                {GradeDTOs.map((GradeDTO) => (
+                  <div key={GradeDTO.gradeId} className="p-4 bg-gray-100 rounded-lg shadow-md">
+                    <div className="flex justify-between items-center">
+                      <h6 className="text-lg font-semibold">Disciplina: {GradeDTO.disciplineName}</h6>
+                      <p className="text-sm text-gray-500">{new Date(GradeDTO.evaluationDate).toLocaleDateString()}</p>
+                    </div>
+                    <p className="mt-2"><strong>Nota AV1:</strong> {GradeDTO.av1}</p>
+                    <p className="mt-2"><strong>Nota AV2:</strong> {GradeDTO.av2}</p>
+                    <p className="mt-2"><strong>Nota AV3:</strong> {GradeDTO.av3}</p>
+                    <p className="mt-2"><strong>Nota AV4:</strong> {GradeDTO.av4}</p>
+                    <p className="mt-2"><strong>Nota Final:</strong> {GradeDTO.finalGrade}</p>
+                    <p className="mt-2"><strong>Carga Horária:</strong> {GradeDTO.disciplineWorkload}</p>
                   </div>
                 ))}
-
-                <div className="col-span-2 p-4 bg-blue-100 rounded-lg">
-                  <p className="font-semibold"><strong>Média Final:</strong> {calculateFinalGrade()}</p>
-                </div>
-
-                <button className="col-span-2 bg-green-500 text-white p-2 rounded-md">
-                  Salvar Nota
-                </button>
               </div>
+            ) : (
+              <p>Nenhuma avaliação encontrada.</p>
             )}
 
             <button
