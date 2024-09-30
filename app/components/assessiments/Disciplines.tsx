@@ -1,36 +1,53 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
 import { Discipline } from '../../interfaces/Discipline';
-import { GradeDTO } from '../../interfaces/GradeDTO'; // Ajuste o caminho se necessário
-import { getAssessmentsByStudentCpf } from '../../services/gradeService'; // Ajuste o caminho se necessário
+import { ResponseGradeDTO } from '../../interfaces/ResponseGradeDTO'; 
+import { getAssessmentsByStudentCpf } from '../../services/gradeService'; 
+import Swal from 'sweetalert2';
 
 interface DisciplinesProps {
   disciplines: Discipline[];
-  cpf: string; // Adicionar cpf como uma prop
+  cpf: string; 
   onCreateGrade?: boolean;
 }
 
 const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, cpf }) => {
   const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
-  const [GradeDTOs, setGradeDTOs] = useState<GradeDTO[]>([]);
+  const [ResponseGradeDTOs, setResponseGradeDTOs] = useState<ResponseGradeDTO[]>([]);
   const detailsRef = useRef<HTMLDivElement | null>(null);
 
   const handleDisciplineClick = async (discipline: Discipline) => {
     setSelectedDiscipline((prev) => (prev && prev.id === discipline.id ? null : discipline));
 
+    // Se não houver disciplina ou ID, retorne
     if (!discipline || !discipline.id) return;
 
-    try {
-      // Passar o cpf como o primeiro parâmetro e discipline.id como o segundo
-      const GradeDTOsData = await getAssessmentsByStudentCpf(cpf, discipline.id);
-      console.log('Dados de avaliações recebidos:', GradeDTOsData);
+    // Limpa as notas antes de buscar novas
+    setResponseGradeDTOs([]);
 
-      // Certifique-se de que GradeDTOsData é um array
-      setGradeDTOs(Array.isArray(GradeDTOsData) ? GradeDTOsData : [GradeDTOsData]);
+    try {
+        const ResponseGradeDTOsData = await getAssessmentsByStudentCpf(cpf, discipline.id);
+        console.log('Dados de avaliações recebidos:', ResponseGradeDTOsData);
+
+        // Verifica se a resposta é um array
+        if (Array.isArray(ResponseGradeDTOsData)) {
+            setResponseGradeDTOs(ResponseGradeDTOsData);
+        } else if (ResponseGradeDTOsData) {
+            // Se a resposta não for um array, mas não for null
+            setResponseGradeDTOs([ResponseGradeDTOsData]); // Adiciona o objeto a um array
+        } else {
+            console.log('Nenhuma nota encontrada para esta disciplina.');
+            setResponseGradeDTOs([]); // Limpa os dados se não houver notas
+        }
     } catch (err) {
-      console.error('Erro ao buscar as avaliações:', err);
+        console.error('Erro ao buscar as avaliações:', err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao buscar as avaliações. Tente novamente mais tarde.',
+        });
     }
-  };
+};
 
   const handleClose = () => {
     setSelectedDiscipline(null);
@@ -73,25 +90,25 @@ const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, cpf }) => {
           <div className="p-4 bg-white rounded-lg shadow-md">
             <h5 className="text-xl font-bold">{selectedDiscipline.name}</h5>
 
-            {GradeDTOs.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 mt-4">
-                {GradeDTOs.map((GradeDTO) => (
-                  <div key={GradeDTO.gradeId} className="p-4 bg-gray-100 rounded-lg shadow-md">
-                    <div className="flex justify-between items-center">
-                      <h6 className="text-lg font-semibold">Disciplina: {GradeDTO.disciplineName}</h6>
-                      <p className="text-sm text-gray-500">{new Date(GradeDTO.evaluationDate).toLocaleDateString()}</p>
-                    </div>
-                    <p className="mt-2"><strong>Nota AV1:</strong> {GradeDTO.av1}</p>
-                    <p className="mt-2"><strong>Nota AV2:</strong> {GradeDTO.av2}</p>
-                    <p className="mt-2"><strong>Nota AV3:</strong> {GradeDTO.av3}</p>
-                    <p className="mt-2"><strong>Nota AV4:</strong> {GradeDTO.av4}</p>
-                    <p className="mt-2"><strong>Nota Final:</strong> {GradeDTO.finalGrade}</p>
-                    <p className="mt-2"><strong>Carga Horária:</strong> {GradeDTO.disciplineWorkload}</p>
-                  </div>
-                ))}
-              </div>
+            {ResponseGradeDTOs.length > 0 ? (
+                <div className="grid grid-cols-1 gap-4 mt-4">
+                    {ResponseGradeDTOs.map((ResponseGradeDTO) => (
+                        <div key={ResponseGradeDTO.gradeId} className="p-4 bg-gray-100 rounded-lg shadow-md">
+                            <div className="flex justify-between items-center">
+                                <h6 className="text-lg font-semibold">Disciplina: {ResponseGradeDTO.disciplineName}</h6>
+                                <p className="text-sm text-gray-500">{new Date(ResponseGradeDTO.evaluationDate).toLocaleDateString()}</p>
+                            </div>
+                            <p className="mt-2"><strong>Nota AV1:</strong> {ResponseGradeDTO.av1}</p>
+                            <p className="mt-2"><strong>Nota AV2:</strong> {ResponseGradeDTO.av2}</p>
+                            <p className="mt-2"><strong>Nota AV3:</strong> {ResponseGradeDTO.av3}</p>
+                            <p className="mt-2"><strong>Nota AV4:</strong> {ResponseGradeDTO.av4}</p>
+                            <p className="mt-2"><strong>Nota Final:</strong> {ResponseGradeDTO.finalGrade}</p>
+                            <p className="mt-2"><strong>Carga Horária:</strong> {ResponseGradeDTO.disciplineWorkload}</p>
+                        </div>
+                    ))}
+                </div>
             ) : (
-              <p>Nenhuma avaliação encontrada.</p>
+                <p>Nenhuma avaliação encontrada.</p>
             )}
 
             <button

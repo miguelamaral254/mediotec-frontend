@@ -108,7 +108,7 @@ const Navbar: React.FC = () => {
                   Home
                 </Link>
 
-                {/* Gerenciar Dropdown */}
+                
                 {user?.role === 'ADMIN' && (
                   <>
                     <button
@@ -143,13 +143,13 @@ const Navbar: React.FC = () => {
                           Disciplinas
                         </Link>
 
-                        {/* New Link for Manage Lessons following the same logic */}
+                        
                         <Link href="/auth/dashboard/manage-lessons" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
                           <FaBook className="mr-2" />
                           Aulas
                         </Link>
 
-                        {/* New Link for Manage Assessments */}
+                        
                         <Link href="/auth/dashboard/manage-assessments" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
                           <FaBook className="mr-2" />
                           Avaliações
