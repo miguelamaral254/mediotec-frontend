@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import CreateSchoolClass from '@/app/components/schooclass/CreateSchoolClass';
-import ConsultSchoolClass from '@/app/components/schooclass/ConsultSchoolClass ';
+import SchoolClassLookUp from '@/app/components/schooclass/SchoolClassLookUp ';
 
 const ManageSchoolClasses = () => {
   const [action, setAction] = useState<'create' | 'update' | 'consult' | null>(null);
@@ -28,7 +28,7 @@ const ManageSchoolClasses = () => {
         </div>
 
         {action === 'create' && <CreateSchoolClass />}
-        {action === 'consult' && <ConsultSchoolClass />}
+        {action === 'consult' && <SchoolClassLookUp  />}
       </div>
     </div>
   );

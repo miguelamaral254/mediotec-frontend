@@ -7,7 +7,7 @@ import { SchoolClass, LetterEnum } from '../../interfaces/SchoolClass';
 import { User } from '@/app/interfaces/User';
 import StudentGrid from './StudentGrid';
 import AddStudent from './AddStudent';
-import { translateEnum } from '@/app/utils/translateEnum'; // Importa a função de tradução
+import { translateEnum } from '@/app/utils/translateEnum'; 
 
 interface SchoolClassEditModalProps {
   isOpen: boolean;

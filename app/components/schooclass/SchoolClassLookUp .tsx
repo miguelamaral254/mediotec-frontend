@@ -5,7 +5,7 @@ import SchoolClassEditModal from './SchoolClassEditModal';
 import { FaEye, FaEdit } from 'react-icons/fa';
 import { SchoolClass } from '@/app/interfaces/SchoolClass';
 
-const ConsultSchoolClass = () => {
+const SchoolClassLookUp  = () => {
   const [filter, setFilter] = useState<string>('');
   const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
   const [filteredClasses, setFilteredClasses] = useState<SchoolClass[]>([]);
@@ -131,4 +131,4 @@ const ConsultSchoolClass = () => {
   );
 };
 
-export default ConsultSchoolClass;
+export default SchoolClassLookUp ;

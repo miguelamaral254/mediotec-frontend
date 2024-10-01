@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import InputMask from 'react-input-mask';
-import { createUser } from '@/app/services/userService'; // Ajuste o caminho conforme necessário
+import { createUser } from '@/app/services/userService'; 
 import Swal from 'sweetalert2';
 
 const CreateUser = () => {
   const [userType, setUserType] = useState('STUDENT');
   const [formData, setFormData] = useState({
+    id: '', 
+    parentCPF: '', 
     name: '',
     cpf: '',
     password: '',
@@ -37,6 +39,21 @@ const CreateUser = () => {
       registration: formData.registration.replace(/[^\d]/g, ''),
     };
 
+    // Validação dos campos obrigatórios
+    const isCpfValid = sanitizedData.cpf.length === 11; // CPF deve ter 11 dígitos
+    const isPhoneValid = sanitizedData.phone.length >= 11; // Telefone deve ter pelo menos 10 dígitos (incluindo DDD)
+    const isRegistrationValid = sanitizedData.registration.length > 0; // Matrícula deve estar preenchida
+    const isStudentCpfValid = userType === 'PARENT' ? sanitizedData.studentCpf.length === 11 : true; // CPF do aluno deve ter 11 dígitos se o usuário for pai
+
+    if (!isCpfValid || !isPhoneValid || !isRegistrationValid || !isStudentCpfValid) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Erro na validação',
+        text: 'Por favor, verifique se todos os campos estão completos e corretos.',
+      });
+      return; // Impede o envio do formulário se a validação falhar
+    }
+
     try {
       await createUser(userType, sanitizedData);
       await Swal.fire({
@@ -45,8 +62,10 @@ const CreateUser = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      // Limpa os campos do formulário
+      
       setFormData({
+        id: '', 
+        parentCPF: '', 
         name: '',
         cpf: '',
         password: '',
@@ -61,7 +80,7 @@ const CreateUser = () => {
         academicTitle: '',
       });
     } catch (error) {
-      console.error("Erro ao criar usuário:", error); // Para depuração
+      console.error("Erro ao criar usuário:", error); 
       await Swal.fire({
         icon: 'error',
         title: 'Erro ao criar usuário',
@@ -199,27 +218,18 @@ const CreateUser = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-1">Matrícula:</label>
-              <InputMask
-                mask="999999999"
-                name="registration"
-                value={formData.registration}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded w-full"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1">Área de Especialização:</label>
-              <input type="text" name="expertiseArea" value={formData.expertiseArea} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" />
+              <label className="block mb-1">Área de Expertise:</label>
+              <input type="text" name="expertiseArea" value={formData.expertiseArea} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
             </div>
             <div className="mb-4">
               <label className="block mb-1">Título Acadêmico:</label>
-              <input type="text" name="academicTitle" value={formData.academicTitle} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" />
+              <input type="text" name="academicTitle" value={formData.academicTitle} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
             </div>
           </div>
         )}
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">Criar Usuário</button>
+        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+          Criar Usuário
+        </button>
       </form>
     </div>
   );

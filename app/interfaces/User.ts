@@ -1,3 +1,5 @@
+import { Key } from "react";
+
 export interface User {
   id: Key | null | undefined;
   parentCPF: string;
