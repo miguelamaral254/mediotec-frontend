@@ -2,6 +2,15 @@ import axios from 'axios';
 
 const BASE_URL =  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'; 
 
+export const getAllUsers = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/user/all`);
+    return response.data; // Retorna a lista de usuários
+  } catch (error) {
+    console.error("Erro ao buscar todos os usuários:", error);
+    throw error;
+  }
+};
 export const getParentByCpf = async (cpf: string) => {
   try {
     const response = await axios.get(`${BASE_URL}/parent/${cpf}`);
