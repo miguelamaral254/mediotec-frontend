@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
-import { getAllClasses } from '@/app/services/schoolClassService';
+import { getAllClasses, updateClass } from '@/app/services/schoolClassService';
 import SchoolClassDetailModal from './SchoolClassDetailModal';
-import { FaEye } from 'react-icons/fa';
-import { SchoolClass } from '@/app/interfaces/SchoolClass'; // Importe a interface SchoolClass
+import SchoolClassEditModal from './SchoolClassEditModal';
+import { FaEye, FaEdit } from 'react-icons/fa';
+import { SchoolClass } from '@/app/interfaces/SchoolClass';
 
 const ConsultSchoolClass = () => {
-  const [filter, setFilter] = useState<string>(''); // Filtro para as classes
-  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]); // Defina o tipo como SchoolClass[]
-  const [filteredClasses, setFilteredClasses] = useState<SchoolClass[]>([]); // Defina o tipo como SchoolClass[]
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedClass, setSelectedClass] = useState<SchoolClass | null>(null); // Defina o tipo como SchoolClass ou null
+  const [filter, setFilter] = useState<string>('');
+  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
+  const [filteredClasses, setFilteredClasses] = useState<SchoolClass[]>([]);
+  const [detailModalIsOpen, setDetailModalIsOpen] = useState<boolean>(false);
+  const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);
+  const [selectedClass, setSelectedClass] = useState<SchoolClass | null>(null);
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -18,7 +20,7 @@ const ConsultSchoolClass = () => {
         setAllClasses(classes);
         setFilteredClasses(classes);
       } catch (error) {
-        console.error("Erro ao buscar todas as classes:", error);
+        console.error("Error fetching classes:", error);
       }
     };
 
@@ -30,19 +32,47 @@ const ConsultSchoolClass = () => {
     setFilter(value);
 
     const filtered = allClasses.filter(schoolClass =>
-      schoolClass.code.toLowerCase().includes(value.toLowerCase()) // Use 'code' se 'name' não existir
+      schoolClass.code.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredClasses(filtered);
   };
 
-  const openModal = (schoolClass: SchoolClass) => { // Defina o tipo do parâmetro
+  const openDetailModal = (schoolClass: SchoolClass) => {
     setSelectedClass(schoolClass);
-    setModalIsOpen(true);
+    setDetailModalIsOpen(true);
   };
 
-  const closeModal = () => {
-    setModalIsOpen(false);
+  const openEditModal = (schoolClass: SchoolClass) => {
+    setSelectedClass(schoolClass);
+    setEditModalIsOpen(true);
+  };
+
+  const closeModals = () => {
+    setDetailModalIsOpen(false);
+    setEditModalIsOpen(false);
     setSelectedClass(null);
+  };
+
+  const onUpdateClass = async (updatedClass: SchoolClass) => {
+    if (selectedClass?.id) {
+      try {
+        await updateClass(selectedClass.id, updatedClass);
+        
+        setFilteredClasses(prev =>
+          prev.map(schoolClass =>
+            schoolClass.id === updatedClass.id ? updatedClass : schoolClass
+          )
+        );
+        // Também atualiza allClasses para manter a consistência
+        setAllClasses(prev =>
+          prev.map(schoolClass =>
+            schoolClass.id === updatedClass.id ? updatedClass : schoolClass
+          )
+        );
+      } catch (error) {
+        console.error("Error updating class:", error);
+      }
+    }
   };
 
   return (
@@ -51,7 +81,7 @@ const ConsultSchoolClass = () => {
 
       <input
         type="text"
-        placeholder="Filtrar por código da classe..." // Altere para 'código' se necessário
+        placeholder="Filtrar por código da classe..."
         value={filter}
         onChange={handleFilterChange}
         className="mb-4 border border-gray-300 rounded-md p-2 w-full"
@@ -64,19 +94,39 @@ const ConsultSchoolClass = () => {
         ) : (
           filteredClasses.map((schoolClass) => (
             <div key={schoolClass.id} className="p-4 border-b last:border-b-0 flex justify-between items-center">
-              <span>{schoolClass.code}</span> {/* Alterar para 'code' se não houver 'name' */}
-              <button
-                onClick={() => openModal(schoolClass)}
-                className="text-blue-600 flex gap-1 justify-center items-center hover:underline"
-              >
-                <FaEye /> Ver Detalhes
-              </button>
+              <span>{schoolClass.code}</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => openDetailModal(schoolClass)}
+                  className="text-blue-600 flex gap-1 justify-center items-center hover:underline"
+                >
+                  <FaEye /> Ver Detalhes
+                </button>
+                <button
+                  onClick={() => openEditModal(schoolClass)}
+                  className="text-green-600 flex gap-1 justify-center items-center hover:underline"
+                >
+                  <FaEdit /> Editar
+                </button>
+              </div>
             </div>
           ))
         )}
       </div>
 
-      <SchoolClassDetailModal isOpen={modalIsOpen} onRequestClose={closeModal} selectedClass={selectedClass} />
+      <SchoolClassDetailModal
+        isOpen={detailModalIsOpen}
+        onRequestClose={closeModals}
+        selectedClass={selectedClass}
+      />
+
+      <SchoolClassEditModal
+        isOpen={editModalIsOpen}
+        onRequestClose={closeModals}
+        selectedClass={selectedClass}
+        onUpdateClass={onUpdateClass}
+        classId={selectedClass?.id || 0} // Garante que faça referência ao ID da classe selecionada
+      />
     </div>
   );
 };

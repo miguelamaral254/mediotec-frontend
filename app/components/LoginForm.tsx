@@ -2,9 +2,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image'; 
-import { login } from '../services/authService';
+import { login, getUserData } from '../services/authService';
 import InputMask from 'react-input-mask';
-import logo from '../../public/images/logo_mediotec.png'
+import Swal from 'sweetalert2';
+import logo from '../../public/images/logo_mediotec.png';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ cpf: '', password: '' });
@@ -13,7 +14,6 @@ const LoginForm = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -22,15 +22,31 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null); // Reseta o erro antes de tentar fazer login
 
     try {
-      const cleanedCPF = formData.cpf.replace(/\D/g, '');
+      const cleanedCPF = formData.cpf.replace(/\D/g, ''); // Remove caracteres especiais do CPF
+
+      // Verifica o status do usuário
+      const userData = await getUserData(cleanedCPF);
+
+      if (!userData.active) {
+        // Exibe SweetAlert se o usuário estiver inativo
+        Swal.fire({
+          icon: 'error',
+          title: 'Usuário inativo',
+          text: 'Usuário inativo, entre em contato com a instituição.',
+        });
+        return; // Interrompe o processo de login
+      }
+
+      // Se o usuário estiver ativo, faz o login
       const response = await login(cleanedCPF, formData.password);
       localStorage.setItem('token', response.token);
       localStorage.setItem('cpf', cleanedCPF);
       router.push('/auth/dashboard');
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setError('CPF ou senha incorretos.');
     }
   };
