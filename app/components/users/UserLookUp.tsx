@@ -7,7 +7,7 @@ import { FaPencilAlt, FaEye } from 'react-icons/fa';
 import { updateUser } from '@/app/services/updateUserService';
 import UserEditModal from './UserEditModal';
 
-const ConsultUser = () => {
+const UserLookUp = () => {
   const [cpf, setCpf] = useState('');
   const [userType, setUserType] = useState('STUDENT');
   const [userData, setUserData] = useState<User | null>(null);
@@ -218,4 +218,4 @@ const ConsultUser = () => {
   );
 };
 
-export default ConsultUser;
+export default UserLookUp;

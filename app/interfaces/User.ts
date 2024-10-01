@@ -1,4 +1,5 @@
 export interface User {
+  id: Key | null | undefined;
   parentCPF: any;
   cpf: string;
   name: string;

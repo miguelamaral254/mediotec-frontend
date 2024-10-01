@@ -7,14 +7,28 @@ const translations: Record<string, Record<string, string>> = {
     E: 'Turma E',
     F: 'Turma F',
   },
-  // Outras traduções...
+  shift: {
+    MORNING: 'Manhã',
+    AFTERNOON: 'Tarde',
+    EVENING: 'Noite',
+  },
+  year: {
+    FIRST: 'Primeiro Ano',
+    SECOND: 'Segundo Ano',
+    THIRD: 'Terceiro Ano',
+  },
+  technicalCourse: {
+    TDS: 'Técnico em Desenvolvimento de Sistemas',
+    TLS: 'Técnico em Logística',
+  },
+  
 };
 
 export const translateEnum = (value: string, type: string): string => {
   if (!translations[type]) {
     console.warn(`Type "${type}" not found in translations`);
-    return value; // Retorna o valor original se o tipo não existir
+    return value; 
   }
 
-  return translations[type][value] || value; // Retorna o valor traduzido ou o original se não encontrado
+  return translations[type][value] || value; 
 };

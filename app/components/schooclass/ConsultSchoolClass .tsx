@@ -1,110 +1,82 @@
-'use client';
-
-import { useState } from 'react';
-import { getSchoolClass } from '@/app/services/schoolClassService';
-import { SchoolClass } from '../../interfaces/SchoolClass';
-import Swal from 'sweetalert2';
-import StudentList from './StudentList'; // Ajuste o caminho conforme necessário
+import { useEffect, useState } from 'react';
+import { getAllClasses } from '@/app/services/schoolClassService';
+import SchoolClassDetailModal from './SchoolClassDetailModal';
+import { FaEye } from 'react-icons/fa';
+import { SchoolClass } from '@/app/interfaces/SchoolClass'; // Importe a interface SchoolClass
 
 const ConsultSchoolClass = () => {
-  const [id, setId] = useState<string>('');
-  const [schoolClass, setSchoolClass] = useState<SchoolClass | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<string>(''); // Filtro para as classes
+  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]); // Defina o tipo como SchoolClass[]
+  const [filteredClasses, setFilteredClasses] = useState<SchoolClass[]>([]); // Defina o tipo como SchoolClass[]
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedClass, setSelectedClass] = useState<SchoolClass | null>(null); // Defina o tipo como SchoolClass ou null
 
-  const handleSearch = async () => {
-    setError(null);
-    setSchoolClass(null);
-
-    try {
-      const numericId = Number(id);
-      if (isNaN(numericId)) {
-        throw new Error('ID deve ser um número.');
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const classes = await getAllClasses();
+        setAllClasses(classes);
+        setFilteredClasses(classes);
+      } catch (error) {
+        console.error("Erro ao buscar todas as classes:", error);
       }
-      const data = await getSchoolClass(numericId);
-      if (!data) {
-        throw new Error('Turma não encontrada.');
-      }
-      setSchoolClass(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao buscar turma');
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro',
-        text: error || 'Turma não encontrada.',
-      });
-    }
-  };
-
-  // Função para traduzir os enums
-  const translateEnum = (value: string, type: 'shift' | 'year' | 'technicalCourse') => {
-    const translations: { [key: string]: string } = {
-      // Traduções para shift
-      MORNING: 'Manhã',
-      AFTERNOON: 'Tarde',
-      EVENING: 'Noite',
-      // Traduções para year
-      FIRST: '1°',
-      SECOND: '2°',
-      THIRD: '3°',
-      // Traduções para technicalCourse
-      TDS: 'Técnico em Desenvolvimento de Sistemas',
-      TLS: 'Técnico em Logística',
     };
 
-    if (type === 'shift' || type === 'year' || type === 'technicalCourse') {
-      return translations[value] || value;
-    }
-    return value;
+    fetchClasses();
+  }, []);
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFilter(value);
+
+    const filtered = allClasses.filter(schoolClass =>
+      schoolClass.code.toLowerCase().includes(value.toLowerCase()) // Use 'code' se 'name' não existir
+    );
+    setFilteredClasses(filtered);
+  };
+
+  const openModal = (schoolClass: SchoolClass) => { // Defina o tipo do parâmetro
+    setSelectedClass(schoolClass);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedClass(null);
   };
 
   return (
     <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Turma</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Classes</h2>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">ID da Turma:</label>
-        <input
-          type="text"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          placeholder="Digite o ID da turma"
-          className="border rounded-md p-2 w-full text-gray-700"
-        />
+      <input
+        type="text"
+        placeholder="Filtrar por código da classe..." // Altere para 'código' se necessário
+        value={filter}
+        onChange={handleFilterChange}
+        className="mb-4 border border-gray-300 rounded-md p-2 w-full"
+      />
+
+      <h3 className="text-lg font-semibold mb-2">Classes Disponíveis:</h3>
+      <div className="bg-white rounded-lg shadow">
+        {filteredClasses.length === 0 ? (
+          <p className="p-4 text-gray-500">Nenhuma classe encontrada.</p>
+        ) : (
+          filteredClasses.map((schoolClass) => (
+            <div key={schoolClass.id} className="p-4 border-b last:border-b-0 flex justify-between items-center">
+              <span>{schoolClass.code}</span> {/* Alterar para 'code' se não houver 'name' */}
+              <button
+                onClick={() => openModal(schoolClass)}
+                className="text-blue-600 flex gap-1 justify-center items-center hover:underline"
+              >
+                <FaEye /> Ver Detalhes
+              </button>
+            </div>
+          ))
+        )}
       </div>
 
-      <button
-        onClick={handleSearch}
-        className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
-      >
-        Buscar
-      </button>
-
-      {schoolClass && (
-        <div className="mt-6 bg-white p-4 rounded-lg shadow-lg text-gray-700">
-          <h3 className="text-xl font-bold mb-2">Dados da Turma:</h3>
-          <p>
-            <strong>Ano:</strong> {translateEnum(schoolClass.year, 'year')} {schoolClass.letter} {/* Exibir ano traduzido */}
-          </p>
-          <p>
-            <strong>Turno:</strong> {translateEnum(schoolClass.shift, 'shift')} {/* Exibir turno traduzido */}
-          </p>
-          <p>
-            <strong>Curso Técnico:</strong> {translateEnum(schoolClass.technicalCourse, 'technicalCourse')} {/* Exibir curso técnico traduzido */}
-          </p>
-          <p>
-            <strong>Código:</strong> {schoolClass.code}
-          </p>
-          <p>
-            <strong>Data de Criação:</strong> {new Date(schoolClass.date).toLocaleDateString('pt-BR')} {/* Exibir data */}
-          </p>
-
-          <h4 className="text-lg font-semibold mt-4">Estudantes:</h4>
-          <StudentList 
-            students={schoolClass.students || []} // Fornecer um array vazio por padrão
-            showRemoveButton={false} // Ocultar o botão de remoção para este componente
-          />
-        </div>
-      )}
+      <SchoolClassDetailModal isOpen={modalIsOpen} onRequestClose={closeModal} selectedClass={selectedClass} />
     </div>
   );
 };

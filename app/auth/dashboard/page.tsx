@@ -30,7 +30,7 @@ export default function Dashboard() {
         setUser(data);
         setLoading(false);
       } catch (err) {
-        console.log(err)
+        console.log(err);
         setError('Erro ao carregar dados do usuário.');
         setLoading(false);
       }
@@ -48,8 +48,8 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container px-32 pt-10 bg-gray-100 min-h-screen justify-center">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Dashboard</h1>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-10 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Dashboard</h1>
       {user ? (
         <div>
           {/* Seções específicas para cada tipo de usuário */}
@@ -64,7 +64,7 @@ export default function Dashboard() {
           <UserInfo user={user} />
 
           {/* Exibir token apenas como exemplo */}
-          <div className="mt-4 text-black">
+          <div className="mt-4 text-black text-center">
             <strong>Token:</strong> {localStorage.getItem('token')}
           </div>
         </div>
