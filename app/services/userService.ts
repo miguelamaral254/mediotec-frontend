@@ -16,6 +16,9 @@ export const createUser = async (userType: string, userData: User) => {
     case 'PROFESSOR':
       endpoint = '/professor/register';
       break;
+      case 'COORDINATION':
+      endpoint = '/coordination/register';
+      break;
     default:
       throw new Error('Tipo de usuário inválido');
   }

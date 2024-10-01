@@ -7,6 +7,10 @@ export const updateUser = async (cpf: string, userData: User) => {
   try {
     let url = '';
     switch (userData.role) {
+      case 'ADMIN':
+        url = `${API_BASE_URL}/coordination/update/${cpf}`;
+        break;
+      
       case 'PARENT':
         url = `${API_BASE_URL}/parent/update/${cpf}`;
         break;
@@ -20,7 +24,7 @@ export const updateUser = async (cpf: string, userData: User) => {
         throw new Error('Tipo de usuário inválido');
     }
 
-    // Aqui, você pode validar `userData` se necessário
+    
 
     const response = await axios.put(url, userData);
     return response.data;

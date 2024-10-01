@@ -81,6 +81,7 @@ const CreateUser = () => {
         <option value="STUDENT">Aluno</option>
         <option value="PROFESSOR">Professor</option>
         <option value="PARENT">Pai</option>
+        <option value="COORDINATION">Coordenação</option>
       </select>
       <form onSubmit={handleSubmit}>
         {/* Campos do formulário com base no tipo de usuário */}
@@ -108,8 +109,8 @@ const CreateUser = () => {
           <input type="email" name="email" value={formData.email} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
         </div>
         {/* Campos específicos baseados no tipo de usuário */}
-        {userType === 'STUDENT' && (
-          <>
+        {(userType === 'STUDENT' || userType === 'COORDINATION') && (
+          <div>
             <div className="mb-4">
               <label className="block mb-1">Data de Nascimento:</label>
               <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
@@ -140,10 +141,10 @@ const CreateUser = () => {
                 required
               />
             </div>
-          </>
+          </div>
         )}
         {userType === 'PARENT' && (
-          <>
+          <div>
             <div className="mb-4">
               <label className="block mb-1">Data de Nascimento:</label>
               <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
@@ -174,10 +175,10 @@ const CreateUser = () => {
                 required
               />
             </div>
-          </>
+          </div>
         )}
         {userType === 'PROFESSOR' && (
-          <>
+          <div>
             <div className="mb-4">
               <label className="block mb-1">Data de Nascimento:</label>
               <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
@@ -209,16 +210,16 @@ const CreateUser = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-1">Área de Expertise:</label>
-              <input type="text" name="expertiseArea" value={formData.expertiseArea} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
+              <label className="block mb-1">Área de Especialização:</label>
+              <input type="text" name="expertiseArea" value={formData.expertiseArea} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" />
             </div>
             <div className="mb-4">
               <label className="block mb-1">Título Acadêmico:</label>
-              <input type="text" name="academicTitle" value={formData.academicTitle} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
+              <input type="text" name="academicTitle" value={formData.academicTitle} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" />
             </div>
-          </>
+          </div>
         )}
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">Criar Usuário</button>
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded">Criar Usuário</button>
       </form>
     </div>
   );

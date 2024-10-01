@@ -5,7 +5,7 @@ const BASE_URL =  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 export const getAllUsers = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/user/all`);
-    return response.data; // Retorna a lista de usuários
+    return response.data; 
   } catch (error) {
     console.error("Erro ao buscar todos os usuários:", error);
     throw error;
@@ -46,6 +46,15 @@ export const getStudentByCpf = async (cpf: string) => {
     return response.data;
   } catch (error) {
     console.error("Erro ao buscar aluno:", error);
+    throw error;
+  }
+};
+export const getCoordinationByCpf = async (cpf: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/coordination/${cpf}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar coordenador(a):", error);
     throw error;
   }
 };
