@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import CreateUser from '../../../components/users/CreateUser';
-import UpdateUser from '../../../components/users/UpdateUser';
+
 import ConsultUser from '../../../components/users/ConsultUser';
 
 const ManageUsers = () => {
@@ -16,13 +16,12 @@ const ManageUsers = () => {
           <div className="flex space-x-4">
             <button onClick={() => setAction('create')} className="p-2 bg-blue-500 text-white rounded">Criar Usuário</button>
             <button onClick={() => setAction('consult')} className="p-2 bg-green-500 text-white rounded">Consultar Usuário</button>
-            <button onClick={() => setAction('update')} className="p-2 bg-yellow-500 text-white rounded">Atualizar Usuário</button>
           </div>
         </div>
         
         {action === 'create' && <CreateUser />}
         {action === 'consult' && <ConsultUser />}
-        {action === 'update' && <UpdateUser />}
+        
       </div>
     </div>
   );

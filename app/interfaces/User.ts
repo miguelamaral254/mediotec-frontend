@@ -1,4 +1,5 @@
 export interface User {
+  parentCPF: any;
   cpf: string;
   name: string;
   email: string;

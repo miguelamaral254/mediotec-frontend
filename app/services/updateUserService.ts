@@ -19,12 +19,17 @@ export const updateUser = async (cpf: string, userData: User) => {
       default:
         throw new Error('Tipo de usuário inválido');
     }
+
+    // Aqui, você pode validar `userData` se necessário
+
     const response = await axios.put(url, userData);
     return response.data;
+
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data?.message || 'Erro ao atualizar usuário');
     }
+    console.error("Erro desconhecido:", error); // Adicione logging para erros desconhecidos
     throw new Error('Erro desconhecido');
   }
 };
