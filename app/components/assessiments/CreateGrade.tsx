@@ -1,113 +1,197 @@
-"use client";
-
-import React, { useState } from 'react';
-import { GradeCreateDTO } from '../../interfaces/GradeCreateDTO'; // Importando o DTO correto
+import React, { useState, useEffect, useRef } from 'react';
+import { getStudentByCpf, getDisciplinesByStudentCpf } from '../../services/userConsultService';
+import { createGrades } from '../../services/gradeService';
+import Swal from 'sweetalert2';
+import { User } from '../../interfaces/User';
 import { Discipline } from '../../interfaces/Discipline';
-import { createGrades } from '../../services/gradeService'; // Ajuste o caminho conforme necessário
+import { CreateGradeDTO } from '@/app/interfaces/CreateGradeDTO';
 
-interface CreateGradeProps {
-    discipline: Discipline;
-    studentCpf: string; // CPF do estudante
-    onClose: () => void; // Função para fechar o componente
-    onSaveGrade: (grades: { av1: number; av2: number; av3: number; av4: number }) => Promise<void>; // Propriedade adicional para salvar a nota
-}
+// Enum para os tipos de avaliação
+const EvaluationType = {
+  AV1: 'AV1',
+  AV2: 'AV2',
+  AV3: 'AV3',
+  AV4: 'AV4',
+  RECOVERY: 'RECOVERY',
+};
 
-const CreateGrade: React.FC<CreateGradeProps> = ({ discipline, studentCpf, onClose, onSaveGrade }) => {
-    const [grades, setGrades] = useState({
-        av1: 0,
-        av2: 0,
-        av3: 0,
-        av4: 0,
-    });
+const CreateGrade = () => {
+  const [cpf, setCpf] = useState('');
+  const [student, setStudent] = useState<User | null>(null);
+  const [disciplines, setDisciplines] = useState<Discipline[]>([]);
+  const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
+  const [selectedEvaluationType, setSelectedEvaluationType] = useState<string>(EvaluationType.AV1); // Default para AV1
+  const [evaluationValue, setEvaluationValue] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [showCreateGrade, setShowCreateGrade] = useState(false);
+  const detailsRef = useRef<HTMLDivElement | null>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setGrades((prevGrades) => ({
-            ...prevGrades,
-            [name]: Number(value),
-        }));
-    };
+  const handleSearch = async () => {
+    setError(null);
+    setStudent(null);
+    setDisciplines([]);
 
-    // Modificando a função para aceitar grades como parâmetro
-    const handleSaveGrade = async (grades: { av1: number; av2: number; av3: number; av4: number }) => {
-        if (!discipline || !studentCpf) return; // Validação para garantir que a disciplina e o CPF do estudante estão disponíveis
+    try {
+      const studentData = await getStudentByCpf(cpf);
+      setStudent(studentData);
 
-        // Verificação e log do ID da disciplina
-        console.log("Discipline recebido:", discipline);
-        const disciplineId = discipline.id !== undefined ? discipline.id : 0;
-        console.log("Discipline ID:", disciplineId);
+      // Obter as disciplinas associadas ao estudante
+      const disciplinesData = await getDisciplinesByStudentCpf(cpf);
+      setDisciplines(disciplinesData);
+    } catch (err) {
+      console.error(err);
+      setError('Erro ao buscar informações do aluno. Verifique o CPF e tente novamente.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: error || 'Erro ao buscar informações do aluno.',
+      });
+    }
+  };
 
-        // Usando o GradeCreateDTO diretamente
-        const gradeCreateDTO: GradeCreateDTO = {
-            studentDisciplineId: disciplineId, // ID da disciplina
-            av1: grades.av1,
-            av2: grades.av2,
-            av3: grades.av3,
-            av4: grades.av4,
-            finalGrade: (grades.av1 + grades.av2 + grades.av3 + grades.av4) / 4,
+  const handleDisciplineClick = (discipline: Discipline) => {
+    setSelectedDiscipline(prev => (prev && prev.id === discipline.id ? null : discipline));
+    setShowCreateGrade(true);
+  };
+
+  const handleSaveGrade = async () => {
+    if (!selectedDiscipline || !student || evaluationValue === null) return;
+
+    try {
+        // Criar o objeto de nota usando a interface `CreateGradeDTO`
+        const gradeDTO: CreateGradeDTO = {
+            disciplineId: selectedDiscipline.id, 
+            studentCpf: student.cpf, 
+            evaluation: evaluationValue, 
+            evaluationType: selectedEvaluationType, 
             evaluationDate: new Date().toISOString(),
         };
 
-        // Log do DTO antes de enviar
-        console.log("Grade Create DTO:", JSON.stringify(gradeCreateDTO, null, 2));
+        console.log("Enviando JSON para criar a nota:", JSON.stringify(gradeDTO, null, 2));
 
-        try {
-            const response = await createGrades(gradeCreateDTO); // Envia o DTO para o back-end
-            console.log("Nota criada com sucesso:", response);
-            onSaveGrade(grades); // Chama a função passada como prop para salvar a nota
-            onClose(); // Fecha o componente
-        } catch (error) {
-            console.error("Erro ao salvar a nota:", error);
-        }
+        const response = await createGrades(gradeDTO);
+        console.log("Nota criada com sucesso:", response);
+
+        // Adicione aqui o SweetAlert para sucesso
+        Swal.fire({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'Nota criada com sucesso!',
+            confirmButtonText: 'OK'
+        });
+
+        setShowCreateGrade(false);
+        setSelectedDiscipline(null);
+    } catch (error) {
+        console.error("Erro ao salvar a nota:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao criar a nota. Tente novamente.',
+            confirmButtonText: 'OK'
+        });
+    }
+};
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (detailsRef.current && !detailsRef.current.contains(event.target as Node)) {
+      setShowCreateGrade(false);
+      setSelectedDiscipline(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     };
+  }, []);
 
-    return (
-        <div className="p-4 bg-white rounded shadow-md">
-            <h1 className="text-xl font-bold mb-4">Criar Nota para {discipline.name}</h1>
-            
-            <table className="min-w-full border-collapse border border-gray-300 mb-4">
-                <thead>
-                    <tr className="bg-gray-200">
-                        <th className="border border-gray-300 p-2">Avaliação</th>
-                        <th className="border border-gray-300 p-2">Nota</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {['av1', 'av2', 'av3', 'av4'].map((av) => (
-                        <tr key={av} className="hover:bg-gray-100">
-                            <td className="border border-gray-300 p-2">{av.toUpperCase()}</td>
-                            <td className="border border-gray-300 p-2">
-                                <input
-                                    type="number"
-                                    name={av}
-                                    value={grades[av as keyof typeof grades]}
-                                    onChange={handleChange}
-                                    className="border rounded p-1 w-full"
-                                    min="0"
-                                    max="10"
-                                />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+  return (
+    <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10" ref={detailsRef}>
+      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Criar Avaliação do Aluno</h2>
 
-            <div className="flex justify-end space-x-2">
-                <button 
-                    onClick={() => handleSaveGrade(grades)} // Passando grades como parâmetro
-                    className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
-                >
-                    Salvar Nota
-                </button>
-                <button 
-                    onClick={onClose}
-                    className="bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded hover:bg-gray-400 transition duration-200"
-                >
-                    Cancelar
-                </button>
-            </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">CPF do Aluno:</label>
+        <input
+          type="text"
+          value={cpf}
+          onChange={(e) => setCpf(e.target.value)}
+          placeholder="Digite o CPF do aluno"
+          className="border rounded-md p-2 w-full text-gray-700"
+        />
+      </div>
+
+      <button
+        onClick={handleSearch}
+        className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
+      >
+        Buscar
+      </button>
+
+      {error && <p className="text-red-500 mt-2">{error}</p>}
+
+      {student && (
+        <div className="mt-6 bg-white p-4 rounded-lg shadow-lg">
+          <h3 className="font-semibold text-lg">Informações do Aluno</h3>
+          <p><strong>Nome:</strong> {student.name}</p>
+          <p><strong>CPF:</strong> {student.cpf}</p>
+          <p><strong>Email:</strong> {student.email}</p>
+          <h4 className="font-semibold mt-4">Disciplinas:</h4>
+          <ul>
+            {disciplines.map((discipline) => (
+              <li
+                key={discipline.id}
+                onClick={() => handleDisciplineClick(discipline)}
+                className={`cursor-pointer p-2 rounded-md hover:bg-gray-100 ${selectedDiscipline?.id === discipline.id ? 'bg-gray-200' : ''}`}
+              >
+                {discipline.name}
+              </li>
+            ))}
+          </ul>
         </div>
-    );
+      )}
+
+      {showCreateGrade && selectedDiscipline && (
+        <div className="mt-6 bg-white p-4 rounded-lg shadow-lg">
+          <h4 className="font-semibold mb-4">Criar Nota para {selectedDiscipline.name}</h4>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Tipo de Avaliação:</label>
+            <select
+              value={selectedEvaluationType}
+              onChange={(e) => setSelectedEvaluationType(e.target.value)}
+              className="border rounded-md p-2 w-full text-gray-700"
+            >
+              {Object.values(EvaluationType).map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Valor da Avaliação:</label>
+            <input
+              type="number"
+              value={evaluationValue || ''}
+              onChange={(e) => setEvaluationValue(Number(e.target.value))}
+              placeholder="Digite o valor da avaliação"
+              className="border rounded-md p-2 w-full text-gray-700"
+            />
+          </div>
+
+          <button
+            onClick={handleSaveGrade}
+            className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
+          >
+            Salvar Nota
+          </button>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default CreateGrade;

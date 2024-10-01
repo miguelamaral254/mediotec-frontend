@@ -2,21 +2,19 @@ import axios from 'axios';
 
 import { ResponseGradeDTO } from '../interfaces/ResponseGradeDTO';
 
-import { StudentDisciplineDTO } from '../interfaces/StudentDisciplineDTO';
-import { GradeDTO } from '@/app/interfaces/GradeDTO';
-import { GradeCreateDTO } from '../interfaces/GradeCreateDTO';
+import { CreateGradeDTO } from '../interfaces/CreateGradeDTO';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Função para salvar uma nota (Grade) para uma avaliação específica
-export const saveGrade = async (id : number, gradeData: Omit<GradeDTO, 'id'>): Promise<GradeDTO> => {
-  const response = await axios.post<GradeDTO>(`${API_BASE_URL}/grades/assessment/${id}/grades`, gradeData);
+export const saveGrade = async (id : number, gradeData: Omit<CreateGradeDTO, 'id'>): Promise<CreateGradeDTO> => {
+  const response = await axios.post<CreateGradeDTO>(`${API_BASE_URL}/grades/assessment/${id}/grades`, gradeData);
   return response.data;
 };
 
 // Função para criar uma nova avaliação com notas
-export const createGrades = async (gradeCreateDTO: GradeCreateDTO): Promise<GradeCreateDTO> => {
-  const response = await axios.post<GradeCreateDTO>(`${API_BASE_URL}/grades`, gradeCreateDTO);
+export const createGrades = async (createGradeDTO: CreateGradeDTO): Promise<CreateGradeDTO> => {
+  const response = await axios.post<CreateGradeDTO>(`${API_BASE_URL}/grades`, createGradeDTO);
   return response.data;
 };
 
@@ -32,8 +30,9 @@ export const getAssessmentById = async (assessmentId: number): Promise<ResponseG
   const response = await axios.get<ResponseGradeDTO>(`${API_BASE_URL}/assessments/${assessmentId}`);
   return response.data;
 };
-
+/*
 export const getStudentDisciplinesByCpf = async (cpf: string): Promise<StudentDisciplineDTO[]> => {
   const response = await axios.get<StudentDisciplineDTO[]>(`${API_BASE_URL}/student-disciplines/student/${cpf}/disciplines`);
   return response.data;
 };
+*/

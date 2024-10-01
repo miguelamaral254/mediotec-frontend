@@ -3,8 +3,9 @@
 import { useState } from 'react';
 
 //import ConsultAssessment from '@/app/components/assessiments/ConsultAssessment';
-import StudentDisciplineLookup from '@/app/components/assessiments/StudentDisciplineLookup';
-import CreateStudentAssessment from '@/app/components/assessiments/CreateStudentDiscipline';
+
+import CreateGrade from '@/app/components/assessiments/CreateGrade';
+import GradesLookUp from '@/app/components/assessiments/GradesLookUp';
 //import UpdateAssessment from '@/app/components/assessments/'; // Ajuste o caminho conforme necessário
 
 const ManageAssessments = () => {
@@ -20,8 +21,8 @@ const ManageAssessments = () => {
           <button onClick={() => setAction('update')} className="p-2 bg-yellow-500 text-white rounded">Atualizar Avaliação</button>
         </div>
         
-        {action === 'create' && <CreateStudentAssessment />}
-        {action === 'consult' && <StudentDisciplineLookup />}
+        {action === 'create' && <CreateGrade />}
+        {action === 'consult' && <GradesLookUp />}
         {/*action === 'update' && <UpdateAssessment />} {/* Certifique-se de ter o componente UpdateAssessment */}
       </div>
     </div>

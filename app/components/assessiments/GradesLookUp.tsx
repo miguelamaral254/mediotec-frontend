@@ -7,7 +7,7 @@ import { User } from '../../interfaces/User';
 import { Discipline } from '../../interfaces/Discipline';
 import Disciplines from './Disciplines'; 
 
-const StudentDisciplineLookup = () => {
+const GradesLookUp = () => {
   const [cpf, setCpf] = useState('');
   const [student, setStudent] = useState<User | null>(null);
   const [disciplines, setDisciplines] = useState<Discipline[]>([]);
@@ -69,4 +69,4 @@ const StudentDisciplineLookup = () => {
   );
 };
 
-export default StudentDisciplineLookup;
+export default GradesLookUp;
