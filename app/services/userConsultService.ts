@@ -21,6 +21,15 @@ export const getProfessorByCpf = async (cpf: string) => {
     throw error;
   }
 };
+export const getAllProfessors = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/professor`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar todos os professores:", error);
+    throw error;
+  }
+};
 
 export const getStudentByCpf = async (cpf: string) => {
   try {

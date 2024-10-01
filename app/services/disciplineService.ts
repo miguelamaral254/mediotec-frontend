@@ -9,6 +9,11 @@ export const createDiscipline = async (disciplineData: Omit<Discipline, 'id'>): 
   return response.data;
 };
 
+export const getAllDiscipline = async (): Promise<Discipline[]> => { // Altera para retornar uma lista
+  const response = await axios.get<Discipline[]>(`${API_BASE_URL}/disciplines`); // Altera para buscar uma lista de disciplinas
+  return response.data;
+};
+
 export const getDiscipline = async (id: string): Promise<Discipline> => {
   const response = await axios.get<Discipline>(`${API_BASE_URL}/disciplines/${id}`);
   return response.data;

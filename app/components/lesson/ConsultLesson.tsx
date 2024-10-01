@@ -1,26 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getAllLessons } from '@/app/services/lessonService'; 
 import { getLessonById } from '@/app/services/lessonService'; 
 import Swal from 'sweetalert2';
 import { Lesson } from '@/app/interfaces/Lesson'; // Ajuste o caminho de importação conforme necessário
 
 const ConsultLesson = () => {
-  const [id, setId] = useState<string>('');
+  const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const data = await getAllLessons();
+        setLessons(data);
+      } catch (err) {
+        console.error("Erro ao buscar aulas:", err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: 'Não foi possível carregar as aulas.',
+        });
+      }
+    };
+
+    fetchLessons();
+  }, []);
 
   const handleSearch = async () => {
     setError(null);
     setLesson(null);
 
     try {
-      const numericId = Number(id);
-      if (isNaN(numericId)) {
-        throw new Error('ID deve ser um número.');
+      if (selectedLessonId === null) {
+        throw new Error('Por favor, selecione uma aula.');
       }
 
-      const data = await getLessonById(numericId);
+      const data = await getLessonById(selectedLessonId);
       if (!data) {
         throw new Error('Aula não encontrada.');
       }
@@ -41,14 +60,19 @@ const ConsultLesson = () => {
       <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Aula</h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">ID da Aula:</label>
-        <input
-          type="text"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          placeholder="Digite o ID da aula"
+        <label className="block text-sm font-medium text-gray-700">Selecione a Aula:</label>
+        <select
+          value={selectedLessonId || ''}
+          onChange={(e) => setSelectedLessonId(Number(e.target.value))}
           className="border rounded-md p-2 w-full text-gray-700"
-        />
+        >
+          <option value="" disabled>Selecione uma aula</option>
+          {lessons.map((lesson) => (
+            <option key={lesson.id} value={lesson.id}>
+              {lesson.name} - {lesson.startTime} {/* Ajuste para mostrar informações desejadas */}
+            </option>
+          ))}
+        </select>
       </div>
 
       <button

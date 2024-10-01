@@ -1,24 +1,81 @@
 'use client';
 
-import { useState } from 'react';
-import { createLesson } from '@/app/services/lessonService'; // Adjust the import path as necessary
+import { useEffect, useState } from 'react';
+import { createLesson } from '@/app/services/lessonService'; // Ajuste o caminho da importação conforme necessário
+import { getAllDiscipline } from '@/app/services/disciplineService'; // Ajuste o caminho da importação conforme necessário
+import { getAllClasses } from '@/app/services/schoolClassService'; // Novo serviço para buscar turmas
+import { getAllProfessors } from '@/app/services/userConsultService'; // Novo serviço para buscar professores
 import Swal from 'sweetalert2';
-import { Lesson } from '../../interfaces/Lesson'; // Adjust the import path as necessary
+import { Lesson } from '../../interfaces/Lesson'; // Ajuste o caminho da importação conforme necessário
+import { Discipline } from '../../interfaces/Discipline'; // Ajuste o caminho da importação conforme necessário
+import { SchoolClass } from '../../interfaces/SchoolClass'; // Ajuste o caminho da importação conforme necessário
+import { User } from '../../interfaces/User'; // Ajuste o caminho da importação conforme necessário
 
 const CreateLesson = () => {
-  const [name, setName] = useState<string>(''); // State for lesson name
+  const [name, setName] = useState<string>(''); // State para o nome da aula
   const [schoolClassId, setSchoolClassId] = useState<number | null>(null);
   const [disciplineId, setDisciplineId] = useState<number | null>(null);
-  const [professorCpf, setProfessorCpf] = useState<string>('');
+  const [professorCpf, setProfessorCpf] = useState<string>(''); // Manter como string para o CPF
   const [startTime, setStartTime] = useState<string>('');
   const [endTime, setEndTime] = useState<string>('');
   const [room, setRoom] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [disciplines, setDisciplines] = useState<Discipline[]>([]); // State para armazenar as disciplinas
+  const [schoolClasses, setSchoolClasses] = useState<SchoolClass[]>([]); // State para armazenar as turmas
+  const [professors, setProfessors] = useState<User[]>([]); // State para armazenar os professores
+
+  useEffect(() => {
+    const fetchDisciplines = async () => {
+      try {
+        const data = await getAllDiscipline();
+        setDisciplines(data);
+      } catch (err) {
+        console.error("Erro ao buscar disciplinas:", err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: 'Não foi possível carregar as disciplinas.',
+        });
+      }
+    };
+
+    const fetchClasses = async () => {
+      try {
+        const data = await getAllClasses(); // Buscar todas as turmas
+        setSchoolClasses(data);
+      } catch (err) {
+        console.error("Erro ao buscar turmas:", err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: 'Não foi possível carregar as turmas.',
+        });
+      }
+    };
+
+    const fetchProfessors = async () => {
+      try {
+        const data = await getAllProfessors(); // Buscar todos os professores
+        setProfessors(data);
+      } catch (err) {
+        console.error("Erro ao buscar professores:", err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: 'Não foi possível carregar os professores.',
+        });
+      }
+    };
+
+    fetchDisciplines();
+    fetchClasses(); // Chama a função para buscar turmas
+    fetchProfessors(); // Chama a função para buscar professores
+  }, []);
 
   const handleCreate = async () => {
     setError(null);
 
-    // Validate inputs
+    // Validação dos inputs
     if (!name || schoolClassId === null || disciplineId === null || !professorCpf || !startTime || !endTime || !room) {
       const errorMessage = 'Por favor, preencha todos os campos.';
       setError(errorMessage);
@@ -32,10 +89,13 @@ const CreateLesson = () => {
 
     try {
       const newLesson: Lesson = {
-        name, // Include name in the new lesson object
+        name, // Inclui o nome no objeto da nova aula
         schoolClass: { id: schoolClassId },
         discipline: { id: disciplineId },
-        professor: { cpf: professorCpf },
+        professor: {
+          cpf: professorCpf,
+          name: ''
+        },
         startTime,
         endTime,
         room,
@@ -48,8 +108,8 @@ const CreateLesson = () => {
         text: 'Aula criada com sucesso!',
       });
 
-      // Reset fields after success
-      setName(''); // Reset name field
+      // Limpa os campos após o sucesso
+      setName(''); // Limpa o campo do nome
       setSchoolClassId(null);
       setDisciplineId(null);
       setProfessorCpf('');
@@ -85,39 +145,54 @@ const CreateLesson = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">ID da Turma:</label>
-          <input
-            type="number"
+          <label className="block text-sm font-medium text-gray-700">Turma:</label>
+          <select
             value={schoolClassId || ''}
             onChange={(e) => setSchoolClassId(Number(e.target.value))}
-            placeholder="Digite o ID da turma"
             className="border rounded-md p-2 w-full text-gray-700"
-            required 
-          />
+            required
+          >
+            <option value="" disabled>Selecione uma turma</option>
+            {schoolClasses.map((schoolClass) => (
+              <option key={schoolClass.id} value={schoolClass.id}>
+                {schoolClass.code} - {schoolClass.year} {schoolClass.letter}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">ID da Disciplina:</label>
-          <input
-            type="number"
+          <label className="block text-sm font-medium text-gray-700">Disciplina:</label>
+          <select
             value={disciplineId || ''}
             onChange={(e) => setDisciplineId(Number(e.target.value))}
-            placeholder="Digite o ID da disciplina"
             className="border rounded-md p-2 w-full text-gray-700"
-            required 
-          />
+            required
+          >
+            <option value="" disabled>Selecione uma disciplina</option>
+            {disciplines.map((discipline) => (
+              <option key={discipline.id} value={discipline.id}>
+                {discipline.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">CPF do Professor:</label>
-          <input
-            type="text"
+          <label className="block text-sm font-medium text-gray-700">Professor:</label>
+          <select
             value={professorCpf}
             onChange={(e) => setProfessorCpf(e.target.value)}
-            placeholder="Digite o CPF do professor"
             className="border rounded-md p-2 w-full text-gray-700"
             required 
-          />
+          >
+            <option value="" disabled>Selecione um professor</option>
+            {professors.map((professor) => (
+              <option key={professor.cpf} value={professor.cpf}>
+                {professor.name} 
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mb-4">
@@ -148,24 +223,20 @@ const CreateLesson = () => {
             type="text"
             value={room}
             onChange={(e) => setRoom(e.target.value)}
-            placeholder="Digite a sala"
+            placeholder="Digite o número da sala"
             className="border rounded-md p-2 w-full text-gray-700"
             required 
           />
         </div>
 
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
         <button
           type="submit"
-          className="mt-4 w-full bg-blue-500 hover:bg-green-600 text-white p-2 rounded-md"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          Criar
+          Criar Aula
         </button>
-
-        {error && (
-          <div className="mt-4 text-red-600">
-            {error}
-          </div>
-        )}
       </form>
     </div>
   );
