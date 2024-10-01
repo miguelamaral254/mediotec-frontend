@@ -1,71 +1,130 @@
-'use client';
-
-import { useState } from 'react';
-import { getDiscipline } from '@/app/services/disciplineService';
+import { useEffect, useState } from 'react';
+import { getAllDiscipline, updateDiscipline } from '@/app/services/disciplineService'; // Update import
+import DisciplineDetailModal from './DisciplineDetailModal';
+import DisciplineEditModal from './DisciplineEditModal';
+import { FaEye, FaEdit } from 'react-icons/fa';
 import { Discipline } from '../../interfaces/Discipline';
-import Swal from 'sweetalert2';
 
 const ConsultDiscipline = () => {
-  const [id, setId] = useState('');
-  const [discipline, setDiscipline] = useState<Discipline | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<string>('');
+  const [allDisciplines, setAllDisciplines] = useState<Discipline[]>([]);
+  const [filteredDisciplines, setFilteredDisciplines] = useState<Discipline[]>([]);
+  const [detailModalIsOpen, setDetailModalIsOpen] = useState(false);
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
 
-  const handleSearch = async () => {
-    setError(null);
-    setDiscipline(null);
-
-    try {
-      const data = await getDiscipline(id);
-      if (!data) {
-        throw new Error('Disciplina não encontrada.');
+  useEffect(() => {
+    const fetchDisciplines = async () => {
+      try {
+        const disciplines = await getAllDiscipline();
+        setAllDisciplines(disciplines);
+        setFilteredDisciplines(disciplines);
+      } catch (error) {
+        console.error("Erro ao buscar todas as disciplinas:", error);
       }
-      setDiscipline(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao buscar disciplina');
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro',
-        text: error || 'Disciplina não encontrada.',
-      });
+    };
+
+    fetchDisciplines();
+  }, []);
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFilter(value);
+    const filtered = allDisciplines.filter(discipline =>
+      discipline.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredDisciplines(filtered);
+  };
+
+  const openDetailModal = (discipline: Discipline) => {
+    setSelectedDiscipline(discipline);
+    setDetailModalIsOpen(true);
+  };
+
+  const openEditModal = (discipline: Discipline) => {
+    setSelectedDiscipline(discipline);
+    setEditModalIsOpen(true);
+  };
+
+  const closeModals = () => {
+    setDetailModalIsOpen(false);
+    setEditModalIsOpen(false);
+    setSelectedDiscipline(null);
+  };
+
+  const onUpdateDiscipline = async (updatedDiscipline: Discipline) => {
+    if (selectedDiscipline && selectedDiscipline.id !== undefined) {
+      try {
+        await updateDiscipline(selectedDiscipline.id.toString(), updatedDiscipline); // Convert id to string
+        // Update the discipline in the list after successful update
+        setFilteredDisciplines(prev =>
+          prev.map(discipline =>
+            discipline.id === updatedDiscipline.id ? updatedDiscipline : discipline
+          )
+        );
+      } catch (error) {
+        console.error("Erro ao atualizar disciplina:", error);
+        throw error; // Rethrow to handle it in DisciplineEditModal
+      }
+    } else {
+      console.error("Discipline ID is not defined");
     }
   };
+  
 
   return (
     <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Disciplina</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Disciplinas</h2>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">ID da Disciplina:</label>
-        <input
-          type="text"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          placeholder="Digite o ID da disciplina"
-          className="border rounded-md p-2 w-full text-gray-700"
-        />
+      <input
+        type="text"
+        placeholder="Filtrar por nome da disciplina..."
+        value={filter}
+        onChange={handleFilterChange}
+        className="mb-4 border border-gray-300 rounded-md p-2 w-full"
+      />
+
+      <h3 className="text-lg font-semibold mb-2">Disciplinas Disponíveis:</h3>
+      <div className="bg-white rounded-lg shadow">
+        {filteredDisciplines.length === 0 ? (
+          <p className="p-4 text-gray-500">Nenhuma disciplina encontrada.</p>
+        ) : (
+          filteredDisciplines.map((discipline) => (
+            <div key={discipline.id} className="p-4 border-b last:border-b-0 flex justify-between items-center">
+              <span>{discipline.name}</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => openDetailModal(discipline)}
+                  className="text-blue-600 flex gap-1 justify-center items-center hover:underline"
+                >
+                  <FaEye /> Ver Detalhes
+                </button>
+                <button
+                  onClick={() => openEditModal(discipline)}
+                  className="text-green-600 flex gap-1 justify-center items-center hover:underline"
+                >
+                  <FaEdit /> Editar
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
-      <button
-        onClick={handleSearch}
-        className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
-      >
-        Buscar
-      </button>
+      {/* Modal de Detalhes */}
+      <DisciplineDetailModal
+        isOpen={detailModalIsOpen}
+        onRequestClose={closeModals}
+        selectedDiscipline={selectedDiscipline}
+      />
 
-      {discipline && (
-        <div className="mt-6 bg-white p-4 rounded-lg shadow-lg text-gray-700">
-          <h3 className="text-xl font-bold mb-2">Dados da Disciplina:</h3>
-          <p>
-            <strong>Nome:</strong> {discipline.name}
-          </p>
-          <p>
-            <strong>Carga Horária:</strong> {discipline.workload}
-          </p>
-          <p>
-            <strong>Descrição:</strong> {discipline.description}
-          </p>
-        </div>
-      )}
+      {/* Modal de Edição */}
+      <DisciplineEditModal
+        isOpen={editModalIsOpen}
+        onRequestClose={closeModals}
+        selectedDiscipline={selectedDiscipline}
+        onUpdateDiscipline={onUpdateDiscipline} // Pass the update function here
+      />
     </div>
   );
 };
