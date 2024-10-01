@@ -5,7 +5,7 @@ import CreateUser from '../../../components/users/CreateUser';
 import UserLookUp from '../../../components/users/UserLookUp';
 
 const ManageUsers = () => {
-  const [action, setAction] = useState<'create' | 'update' | 'consult' | null>(null);
+  const [action, setAction] = useState<'create' | 'consult'>('consult');
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 sm:p-8 bg-gray-100">

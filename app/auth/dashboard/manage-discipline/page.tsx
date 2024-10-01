@@ -5,7 +5,8 @@ import CreateDiscipline from '@/app/components/disciplines/CreateDiscipline';
 import ConsultDiscipline from '@/app/components/disciplines/ConsultDiscipline';
 
 const ManageDisciplines = () => {
-  const [action, setAction] = useState<'create' | 'consult' | null>(null);
+  
+  const [action, setAction] = useState<'create' | 'consult'>('consult');
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100">

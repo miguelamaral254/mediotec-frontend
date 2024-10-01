@@ -7,7 +7,7 @@ import UpdateLesson from '@/app/components/lesson/UpdateLesson';
 import { useState } from 'react';
 
 const ManageLessons = () => {
-  const [action, setAction] = useState<'create' | 'update' | 'consult' | null>(null);
+  const [action, setAction] = useState<'create' | 'update' | 'consult'>('consult');
   const [lessonId, setLessonId] = useState<number | null>(null); // for UpdateLesson
 
   return (

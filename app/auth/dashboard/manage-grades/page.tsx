@@ -1,15 +1,13 @@
+// page.tsx
 'use client';
 
 import { useState } from 'react';
-
-//import ConsultAssessment from '@/app/components/assessiments/ConsultAssessment';
-
 import CreateGrade from '@/app/components/grades/CreateGrade';
 import GradesLookUp from '@/app/components/grades/GradesLookUp';
-//import UpdateAssessment from '@/app/components/assessments/'; // Ajuste o caminho conforme necessário
 
 const ManageAssessments = () => {
-  const [action, setAction] = useState<'create' | 'update' | 'consult' | null>(null);
+  
+  const [action, setAction] = useState<'create' | 'consult'>('consult');
 
   return (
     <div className="flex items-center justify-center min-h-screen p-8 bg-gray-100">
@@ -18,12 +16,11 @@ const ManageAssessments = () => {
         <div className="flex justify-center space-x-4 mb-4">
           <button onClick={() => setAction('create')} className="p-2 bg-blue-500 text-white rounded">Criar Avaliação</button>
           <button onClick={() => setAction('consult')} className="p-2 bg-green-500 text-white rounded">Consultar Avaliação</button>
-          <button onClick={() => setAction('update')} className="p-2 bg-yellow-500 text-white rounded">Atualizar Avaliação</button>
         </div>
         
         {action === 'create' && <CreateGrade />}
         {action === 'consult' && <GradesLookUp />}
-        {/*action === 'update' && <UpdateAssessment />} {/* Certifique-se de ter o componente UpdateAssessment */}
+        
       </div>
     </div>
   );

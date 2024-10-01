@@ -1,4 +1,4 @@
-// page.tsx
+
 'use client';
 
 import { useState } from 'react';
@@ -6,7 +6,8 @@ import CreateSchoolClass from '@/app/components/schooclass/CreateSchoolClass';
 import SchoolClassLookUp from '@/app/components/schooclass/SchoolClassLookUp ';
 
 const ManageSchoolClasses = () => {
-  const [action, setAction] = useState<'create' | 'update' | 'consult' | null>(null);
+  // Inicializando 'action' com 'consult' para exibir o SchoolClassLookUp por padrão
+  const [action, setAction] = useState<'create' | 'update' | 'consult'>('consult');
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100">
@@ -28,7 +29,7 @@ const ManageSchoolClasses = () => {
         </div>
 
         {action === 'create' && <CreateSchoolClass />}
-        {action === 'consult' && <SchoolClassLookUp  />}
+        {action === 'consult' && <SchoolClassLookUp />}
       </div>
     </div>
   );
