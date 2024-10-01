@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 //import ConsultAssessment from '@/app/components/assessiments/ConsultAssessment';
 
-import CreateGrade from '@/app/components/assessiments/CreateGrade';
-import GradesLookUp from '@/app/components/assessiments/GradesLookUp';
+import CreateGrade from '@/app/components/grades/CreateGrade';
+import GradesLookUp from '@/app/components/grades/GradesLookUp';
 //import UpdateAssessment from '@/app/components/assessments/'; // Ajuste o caminho conforme necessário
 
 const ManageAssessments = () => {

@@ -149,7 +149,7 @@ const Navbar: React.FC = () => {
                         Aulas
                       </Link>
 
-                      <Link href="/auth/dashboard/manage-assessments" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
+                      <Link href="/auth/dashboard/manage-grades" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
                         <FaBook className="mr-2" />
                         Avaliações
                       </Link>

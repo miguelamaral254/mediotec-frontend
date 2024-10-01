@@ -3,7 +3,7 @@ import { Discipline } from '../../interfaces/Discipline';
 import { ResponseGradeDTO } from '../../interfaces/ResponseGradeDTO'; 
 import { getAssessmentsByStudentCpf } from '../../services/gradeService'; 
 import Swal from 'sweetalert2';
-import { fromScore } from '../../utils/concept'; // Ajuste o caminho conforme necessário
+import GradesOverview from './GradesOverview'; // Ajuste o caminho conforme necessário
 
 interface DisciplinesProps {
   disciplines: Discipline[];
@@ -91,32 +91,12 @@ const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, cpf }) => {
           <div className="p-4 bg-white rounded-lg shadow-md">
             <h5 className="text-xl font-bold">{selectedDiscipline.name}</h5>
 
-            {responseGradeDTOs.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 mt-4">
-                {responseGradeDTOs.map((responseGradeDTO) => {
-                  const concept = fromScore(responseGradeDTO.evaluation); // Convertendo a nota para conceito
-
-                  return (
-                    <div key={responseGradeDTO.id} className="p-4 bg-gray-100 rounded-lg shadow-md">
-                      <div className="flex justify-between items-center">
-                        <h6 className="text-lg font-semibold">Tipo de Avaliação: {responseGradeDTO.evaluationType}</h6>
-                        <p className="text-sm text-gray-500">{new Date(responseGradeDTO.evaluationDate).toLocaleDateString()}</p>
-                      </div>
-                      <p className="mt-2"><strong>Conceito:</strong> {concept}</p> {/* Exibindo o conceito */}
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p>Nenhuma avaliação encontrada.</p>
-            )}
-
-            <button
-              onClick={handleClose}
-              className="mt-4 w-full bg-red-500 hover:bg-red-600 text-white p-2 rounded-md transition duration-200 ease-in-out"
-            >
-              Fechar
-            </button>
+            {/* Chama o GradesOverview aqui, passando as notas e a disciplina selecionada */}
+            <GradesOverview
+              discipline={selectedDiscipline}
+              grades={responseGradeDTOs}
+              onClose={handleClose} 
+            />
           </div>
         </div>
       )}
