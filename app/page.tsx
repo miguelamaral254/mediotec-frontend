@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <>
+    <div>
       <h1>Bem-vindo ao Login Auth API</h1>
       <nav>
         <ul>
@@ -11,6 +11,6 @@ export default function Home() {
           </li>
         </ul>
       </nav>
-    </>
+    </div>
   );
 }
