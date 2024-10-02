@@ -1,8 +1,9 @@
 
-import Settings from '@/app/components/users/Settings';
+//import Settings from '@/app/components/users/Settings';
 
 const SettingsPage = () => {
-  return <Settings />;
+  return false
+  // <Settings />;
 };
 
 export default SettingsPage;
