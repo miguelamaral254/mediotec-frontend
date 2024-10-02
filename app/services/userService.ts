@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { User } from '../interfaces/User';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const createUser = async (userType: string, userData: User) => {
   let endpoint = '';
