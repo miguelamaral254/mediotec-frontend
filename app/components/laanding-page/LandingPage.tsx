@@ -1,32 +1,48 @@
+"use client"
 import Head from 'next/head';
+
+import Image from 'next/image';
+import BGI from "@/public/images/bg-site.webp";
+import Banner from "@/public/images/logo_mediotec.png";
+
+import LPNavbar from './LPNavbar';
 
 const LandingPage = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div
+      className="flex flex-col min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${BGI.src})` }}
+    >
       <Head>
         <title>Portal do Aluno</title>
         <meta name="description" content="Bem-vindo ao Portal do Aluno" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* Cabeçalho */}
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-3xl font-bold text-center">Portal do Aluno</h1>
-      </header>
+      <LPNavbar />
 
-      {/* Seção Principal */}
-      <main className="flex-grow flex flex-col items-center justify-center p-6">
-        <h2 className="text-2xl font-semibold mb-4">Bem-vindo ao seu Portal do Aluno!</h2>
-        <p className="mb-6 text-center">
-          Aqui você pode acessar suas notas, acompanhar suas disciplinas e muito mais. 
-          Faça login para começar!
-        </p>
-        <button className="bg-blue-500 text-white px-6 py-2 rounded-md shadow hover:bg-blue-600 transition">
-          Fazer Login
-        </button>
+      <main className="flex-grow flex flex-col md:flex-row items-center justify-center p-6 bg-opacity-70 bg-gray-800">
+        <div className="flex flex-col items-center md:items-start md:w-1/2 p-4 text-white">
+          <h2 className="text-2xl font-semibold mb-4 text-center md:text-left">
+            Bem-vindo ao seu Portal do Aluno!
+          </h2>
+          <p className="mb-6 text-center md:text-left">
+            Aqui você pode acessar suas notas, acompanhar suas disciplinas e muito mais. 
+            Faça login para começar!
+          </p>
+        </div>
+        <div className="md:w-1/2 p-4">
+          <Image 
+            src={Banner} 
+            alt="Banner do Portal do Aluno"
+            layout="responsive" 
+            width={700} 
+            height={300} 
+            className="rounded-lg" 
+          />
+        </div>
       </main>
 
-      {/* Rodapé */}
       <footer className="bg-gray-800 text-white p-4 text-center">
         <p>© {new Date().getFullYear()} Portal do Aluno. Todos os direitos reservados.</p>
       </footer>

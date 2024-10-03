@@ -22,20 +22,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const token = localStorage.getItem('token');
     const cpf = localStorage.getItem('cpf');
 
+    // Verifica se o usuário está acessando a raiz do projeto
     if (!token || !cpf) {
-      router.push('/auth/login'); 
-    } else {
-      const fetchUserData = async () => {
-        try {
-          const data = await getUserData(cpf);
-          setUser(data);
-        } catch (error) {
-          console.error('Erro ao carregar dados do usuário:', error);
-          router.push('/auth/login');
-        }
-      };
-      fetchUserData();
+      // Apenas redireciona para a página de login se não estiver na raiz
+      const pathname = window.location.pathname;
+      if (pathname !== '/') {
+        router.push('/auth/login');
+      }
+      return; // Sai da função se o usuário não estiver autenticado
     }
+
+    const fetchUserData = async () => {
+      try {
+        const data = await getUserData(cpf);
+        setUser(data);
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
+        router.push('/auth/login');
+      }
+    };
+    
+    fetchUserData();
   }, [router]);
 
   const logout = () => {
