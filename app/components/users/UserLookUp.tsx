@@ -38,7 +38,7 @@ const UserLookUp = () => {
     setShowResults(false); 
     
     const cleanedCpf = cpf.replace(/\D/g, '');
-
+  
     try {
       let data: User | null;
       switch (userType) {
@@ -55,23 +55,26 @@ const UserLookUp = () => {
           data = await getStudentByCpf(cleanedCpf);
           break;
         case 'ALL':
-          data = await getAllUsers();
+          // Buscar todos os usuários e filtrar pelo CPF
+          const allUsersData = await getAllUsers();
+          data = allUsersData.find((user: { cpf: string; }) => user.cpf.replace(/\D/g, '') === cleanedCpf) || null;
           break;
         default:
           data = await getAllUsers();
           break;
       }
-
+  
       if (!data || (userType !== 'ALL' && data.role !== userType)) {
         throw new Error('Usuário não encontrado ou não corresponde ao tipo selecionado');
       }
-
+  
       setUserData(data);
       setShowResults(true); // Mostrar resultados após consulta bem-sucedida
     } catch (err) {
       setError('Erro ao buscar usuário: ' + (err instanceof Error ? err.message : ''));
     }
   };
+  
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value);

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Discipline } from '../../interfaces/Discipline';
-import { ResponseGradeDTO } from '../../interfaces/ResponseGradeDTO'; 
+import { ResponseGrade } from '../../interfaces/ResponseGrade'; 
 import { getAssessmentsByStudentCpf } from '../../services/gradeService'; 
 import Swal from 'sweetalert2';
 import GradesOverview from './GradesOverview'; // Ajuste o caminho conforme necessário
@@ -12,7 +12,7 @@ interface DisciplinesProps {
 
 const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, cpf }) => {
   const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
-  const [responseGradeDTOs, setResponseGradeDTOs] = useState<ResponseGradeDTO[]>([]);
+  const [ResponseGrades, setResponseGrades] = useState<ResponseGrade[]>([]);
   const detailsRef = useRef<HTMLDivElement | null>(null);
 
   const handleDisciplineClick = async (discipline: Discipline) => {
@@ -23,22 +23,22 @@ const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, cpf }) => {
     if (!discipline || !discipline.id) return;
 
     // Clear grades before fetching new ones
-    setResponseGradeDTOs([]);
+    setResponseGrades([]);
 
     try {
       // Fetch grades for the selected discipline and student CPF
-      const responseGradeDTOsData = await getAssessmentsByStudentCpf(cpf, discipline.id);
-      console.log('Dados de avaliações recebidos:', responseGradeDTOsData);
+      const ResponseGradesData = await getAssessmentsByStudentCpf(cpf, discipline.id);
+      console.log('Dados de avaliações recebidos:', ResponseGradesData);
 
       // Check if the response is an array and set the state
-      if (Array.isArray(responseGradeDTOsData)) {
-        setResponseGradeDTOs(responseGradeDTOsData);
-      } else if (responseGradeDTOsData) {
+      if (Array.isArray(ResponseGradesData)) {
+        setResponseGrades(ResponseGradesData);
+      } else if (ResponseGradesData) {
         // If not an array but not null, wrap in an array
-        setResponseGradeDTOs([responseGradeDTOsData]);
+        setResponseGrades([ResponseGradesData]);
       } else {
         console.log('Nenhuma nota encontrada para esta disciplina.');
-        setResponseGradeDTOs([]); // Clear data if no grades found
+        setResponseGrades([]); // Clear data if no grades found
       }
     } catch (err) {
       console.error('Erro ao buscar as avaliações:', err);
@@ -94,7 +94,7 @@ const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, cpf }) => {
             {/* Chama o GradesOverview aqui, passando as notas e a disciplina selecionada */}
             <GradesOverview
               discipline={selectedDiscipline}
-              grades={responseGradeDTOs}
+              grades={ResponseGrades}
               onClose={handleClose} 
             />
           </div>

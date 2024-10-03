@@ -1,11 +1,11 @@
 import React from 'react';
-import { ResponseGradeDTO } from '../../interfaces/ResponseGradeDTO'; // Ajuste o caminho conforme necessário
+import { ResponseGrade } from '../../interfaces/ResponseGrade'; // Ajuste o caminho conforme necessário
 import { Discipline } from '../../interfaces/Discipline';
 import { fromScore } from '../../utils/concept'; // Ajuste o caminho conforme necessário
 
 interface GradesOverviewProps {
   discipline: Discipline; 
-  grades: ResponseGradeDTO[]; 
+  grades: ResponseGrade[]; 
   onClose: () => void; // Caso precise desta função
 }
 
@@ -16,13 +16,13 @@ const GradesOverview: React.FC<GradesOverviewProps> = ({ grades }) => {
   const av4 = grades.find(grade => grade.evaluationType === 'AV4')?.evaluation || 0;
   const recovery = grades.find(grade => grade.evaluationType === 'RECOVERY')?.evaluation || null;
 
-  // Calcular a média
+  
   const average = ((av1 + av2 + av3 + av4) / 4).toFixed(2); // Usando toFixed para formatar a média
 
-  // Determinar a situação do aluno
+  
   const situation = average && parseFloat(average) < 7 ? 'Reprovado' : 'Aprovado';
 
-  // Obter conceitos para cada avaliação
+  
   const av1Concept = fromScore(av1);
   const av2Concept = fromScore(av2);
   const av3Concept = fromScore(av3);

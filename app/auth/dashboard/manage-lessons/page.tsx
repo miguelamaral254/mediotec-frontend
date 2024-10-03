@@ -3,11 +3,12 @@
 
 import ConsultLesson from '@/app/components/lesson/ConsultLesson';
 import CreateLesson from '@/app/components/lesson/CreateLesson';
-import UpdateLesson from '@/app/components/lesson/UpdateLesson';
+
 import { useState } from 'react';
 
 const ManageLessons = () => {
   const [action, setAction] = useState<'create' | 'update' | 'consult'>('consult');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [lessonId, setLessonId] = useState<number | null>(null); // for UpdateLesson
 
   return (
@@ -27,17 +28,12 @@ const ManageLessons = () => {
           >
             Consultar Aula
           </button>
-          <button
-            onClick={() => { setAction('update'); setLessonId(1); }}
-            className="p-2 w-full sm:w-auto bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-200"
-          >
-            Atualizar Aula
-          </button>
+         
         </div>
 
         {action === 'create' && <CreateLesson />}
         {action === 'consult' && <ConsultLesson />}
-        {action === 'update' && lessonId && <UpdateLesson lessonId={lessonId} />}
+        
       </div>
     </div>
   );

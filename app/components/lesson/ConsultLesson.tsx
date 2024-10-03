@@ -1,15 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getAllLessons } from '@/app/services/lessonService'; 
-import { getLessonById } from '@/app/services/lessonService'; 
+import { getAllLessons, getLessonById } from '@/app/services/lessonService'; 
 import Swal from 'sweetalert2';
-import { Lesson } from '@/app/interfaces/Lesson'; // Ajuste o caminho de importação conforme necessário
+import { Schedule, Week } from '@/app/interfaces/Lesson'; 
+import { ResponseLesson } from '@/app/interfaces/ResponseLesson';
 
 const ConsultLesson = () => {
   const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null);
-  const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [lessons, setLessons] = useState<ResponseLesson[]>([]);
+  const [lesson, setLesson] = useState<ResponseLesson | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -55,6 +55,16 @@ const ConsultLesson = () => {
     }
   };
 
+  const getFormattedTime = (schedule: string | undefined) => {
+    if (!schedule) return 'Não disponível';
+    return Schedule[schedule as keyof typeof Schedule] || 'Hora inválida';
+  };
+
+  const getFormattedWeekday = (weekDay: string | undefined) => {
+    if (!weekDay) return 'Não disponível';
+    return Week[weekDay as keyof typeof Week] || 'Dia inválido';
+  };
+
   return (
     <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
       <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Aula</h2>
@@ -69,7 +79,7 @@ const ConsultLesson = () => {
           <option value="" disabled>Selecione uma aula</option>
           {lessons.map((lesson) => (
             <option key={lesson.id} value={lesson.id}>
-              {lesson.name} - {lesson.startTime} {/* Ajuste para mostrar informações desejadas */}
+              {lesson.name} - {getFormattedTime(lesson.startTime)}
             </option>
           ))}
         </select>
@@ -85,27 +95,14 @@ const ConsultLesson = () => {
       {lesson && (
         <div className="mt-6 bg-white p-4 rounded-lg shadow-lg text-gray-700">
           <h3 className="text-xl font-bold mb-2">Dados da Aula:</h3>
-          <p>
-            <strong>Nome da Aula:</strong> {lesson.name}
-          </p>
-          <p>
-            <strong>Nome do Professor:</strong> {lesson.professor.name}
-          </p>
-          <p>
-            <strong>Disciplina:</strong> {lesson.discipline.id} {/* Aqui você pode ajustar para mostrar o nome, se disponível */}
-          </p>
-          <p>
-            <strong>Código da Turma:</strong> {lesson.schoolClass.id}
-          </p>
-          <p>
-            <strong>Início:</strong> {new Date(lesson.startTime).toLocaleTimeString('pt-BR')}
-          </p>
-          <p>
-            <strong>Término:</strong> {new Date(lesson.endTime).toLocaleTimeString('pt-BR')}
-          </p>
-          <p>
-            <strong>Sala:</strong> {lesson.room}
-          </p>
+          <p><strong>Nome da Aula:</strong> {lesson.name}</p>
+          <p><strong>Nome do Professor:</strong> {lesson.professor?.name || 'Não disponível'}</p>
+          <p><strong>Disciplina:</strong> {lesson.discipline?.name || 'Não disponível'}</p>
+          <p><strong>Código da Turma:</strong> {lesson.schoolClass?.code || 'Não disponível'}</p>
+          <p><strong>Dia da Semana:</strong> {getFormattedWeekday(lesson.weekDay)}</p>
+          <p><strong>Início:</strong> {getFormattedTime(lesson.startTime)}</p>
+          <p><strong>Término:</strong> {getFormattedTime(lesson.endTime)}</p>
+          <p><strong>Sala:</strong> {lesson.room}</p>
         </div>
       )}
 

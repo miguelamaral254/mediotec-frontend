@@ -1,6 +1,6 @@
 
 
-export interface ResponseGradeDTO {
+export interface ResponseGrade {
     id?: number; 
     studentCpf: string;
     disciplineId: number; 

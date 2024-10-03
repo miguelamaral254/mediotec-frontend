@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ResponseGradeDTO } from '../interfaces/ResponseGradeDTO';
+import { ResponseGradeDTO } from '../interfaces/ResponseGrade';
 
 import { CreateGradeDTO } from '../interfaces/CreateGradeDTO';
 
