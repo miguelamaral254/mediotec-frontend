@@ -21,12 +21,18 @@ const Navbar: React.FC = () => {
   const { user, setUser } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isManageDropdownOpen, setIsManageDropdownOpen] = useState(false);
+  const [isSemesterDropdownOpen, setIsSemesterDropdownOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const manageDropdownRef = useRef<HTMLDivElement>(null);
+  const semesterDropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const toggleManageDropdown = () => {
     setIsManageDropdownOpen((prev) => !prev);
+  };
+
+  const toggleSemesterDropdown = () => {
+    setIsSemesterDropdownOpen((prev) => !prev);
   };
 
   const handleLogout = () => {
@@ -36,7 +42,6 @@ const Navbar: React.FC = () => {
     router.push('/');
   };
 
-  // Fechar a sidebar e dropdown ao clicar fora
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -45,6 +50,7 @@ const Navbar: React.FC = () => {
       ) {
         setIsSidebarOpen(false);
         setIsManageDropdownOpen(false);
+        setIsSemesterDropdownOpen(false);
       }
     };
 
@@ -54,11 +60,11 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  // Close dropdown when mouse leaves sidebar
   useEffect(() => {
     const handleMouseLeaveSidebar = () => {
       setIsSidebarOpen(false);
-      setIsManageDropdownOpen(false); // Close the dropdown when mouse leaves sidebar
+      setIsManageDropdownOpen(false);
+      setIsSemesterDropdownOpen(false);
     };
 
     const sidebar = sidebarRef.current;
@@ -79,10 +85,11 @@ const Navbar: React.FC = () => {
         <div
           ref={sidebarRef}
           className={`fixed top-0 left-0 h-full w-[20rem] text-white bg-blue-700 shadow-xl z-40 flex flex-col justify-between transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[18rem]'}`}
-          onMouseEnter={() => setIsSidebarOpen(true)} // Expand on mouse enter
+          onMouseEnter={() => setIsSidebarOpen(true)}
           onMouseLeave={() => {
-            setIsSidebarOpen(false); // Close when mouse leaves sidebar
-            setIsManageDropdownOpen(false); // Also close the dropdown if it's open
+            setIsSidebarOpen(false);
+            setIsManageDropdownOpen(false);
+            setIsSemesterDropdownOpen(false);
           }}
         >
           <div>
@@ -96,7 +103,7 @@ const Navbar: React.FC = () => {
 
             <div className="flex justify-center mb-4">
               <Image
-                src={avatar} // Atualize o caminho conforme necessário
+                src={avatar}
                 alt="Imagem Circular"
                 width={100}
                 height={100}
@@ -152,6 +159,57 @@ const Navbar: React.FC = () => {
                       <Link href="/auth/dashboard/manage-grades" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
                         <FaBook className="mr-2" />
                         Avaliações
+                      </Link>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {user?.role === 'PROFESSOR' && (
+                <>
+                  <button
+                    onClick={toggleSemesterDropdown}
+                    className="toggle-semester-dropdown flex items-center justify-between w-full p-3 font-semibold text-xl hover:bg-blue-600 transition-colors rounded-lg"
+                  >
+                    <div className="flex items-center">
+                      <FaBook className="mr-2" />
+                      Semestre
+                    </div>
+                  </button>
+
+                  <div
+                    ref={semesterDropdownRef}
+                    className={`overflow-hidden transition-max-height duration-300 ease-in-out ${isSemesterDropdownOpen ? 'max-h-80' : 'max-h-0'}`}
+                  >
+                    <div className="flex flex-col gap-1 pl-6 bg-blue-400">
+                      <Link href="/auth/dashboard/professor-dashboard" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
+                        <FaBook className="mr-2" />
+                        Grade de horários
+                      </Link>
+                    </div>
+                  </div>
+                </>
+              )}
+               {user?.role === 'ADMIN' && (
+                <>
+                  <button
+                    onClick={toggleSemesterDropdown}
+                    className="toggle-semester-dropdown flex items-center justify-between w-full p-3 font-semibold text-xl hover:bg-blue-600 transition-colors rounded-lg"
+                  >
+                    <div className="flex items-center">
+                      <FaBook className="mr-2" />
+                      Semestre
+                    </div>
+                  </button>
+
+                  <div
+                    ref={semesterDropdownRef}
+                    className={`overflow-hidden transition-max-height duration-300 ease-in-out ${isSemesterDropdownOpen ? 'max-h-80' : 'max-h-0'}`}
+                  >
+                    <div className="flex flex-col gap-1 pl-6 bg-blue-400">
+                      <Link href="/auth/dashboard/professor-dashboard" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
+                        <FaBook className="mr-2" />
+                        Grade de horários
                       </Link>
                     </div>
                   </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Modal from 'react-modal';
 import { ProfessorLessonResponse } from '@/app/interfaces/ProfessorLessonResponse';
 
 // Lista de dias da semana
@@ -35,11 +36,15 @@ const times = [
   '13:30', '14:20', '15:10', '16:00',
 ];
 
-const LessonList = ({ lessons }: { lessons: ProfessorLessonResponse[] }) => {
-  // Criar um mapa de lições agrupadas por dia da semana e horário
+interface LessonListProps {
+  lessons: ProfessorLessonResponse[];
+  isOpen: boolean;
+  onRequestClose: () => void;
+}
+
+const LessonList: React.FC<LessonListProps> = ({ lessons, isOpen, onRequestClose }) => {
   const scheduleMap: { [key: string]: { [key: string]: ProfessorLessonResponse[] } } = {};
 
-  // Inicializar cada dia da semana e horário no mapa
   daysOfWeek.forEach((day) => {
     scheduleMap[day] = {};
     times.forEach((time) => {
@@ -47,11 +52,8 @@ const LessonList = ({ lessons }: { lessons: ProfessorLessonResponse[] }) => {
     });
   });
 
-  // Agrupar as lições pelo dia da semana e horário
   lessons.forEach((lesson) => {
     const { weekDay, startTime } = lesson;
-
-    // Convertendo o enum weekDay e startTime para valores legíveis
     const readableWeekDay = weekDayMap[weekDay];
     const readableStartTime = timeMap[startTime];
 
@@ -61,43 +63,53 @@ const LessonList = ({ lessons }: { lessons: ProfessorLessonResponse[] }) => {
   });
 
   return (
-    <div className="overflow-x-auto">
-      <h2 className="text-lg font-bold mb-4">Lista de Aulas</h2>
-      <table className="min-w-full table-auto border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
-            <th className="border border-gray-300 p-4">Horário</th>
-            {daysOfWeek.map((day) => (
-              <th key={day} className="border border-gray-300 p-4">{day}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {times.map((time) => (
-            <tr key={time}>
-              {/* Coluna de horários */}
-              <td className="border border-gray-300 p-4 text-center">{time}</td>
-
-              {/* Colunas de dias da semana */}
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      contentLabel="Lista de Aulas"
+      className="fixed inset-0 z-50 ml-8 flex items-center justify-center" // Modal occupies full screen
+      overlayClassName="fixed inset-0 bg-black bg-opacity-75" // Overlay styles
+    >
+      <div className="bg-white max-h-[90%] w-full p-4 overflow-auto flex flex-col"> {/* Container for modal content */}
+        <div className="flex justify-end">
+          <button onClick={onRequestClose} className="bg-red-500 text-white rounded px-4 py-2">
+            Fechar
+          </button>
+        </div>
+        <h2 className="text-lg font-bold mb-4">Lista de Aulas</h2>
+        <table className="min-w-full table-auto border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
+              <th className="border border-gray-300 p-4">Horário</th>
               {daysOfWeek.map((day) => (
-                <td key={`${day}-${time}`} className="border border-gray-300 p-4 text-center">
-                  {scheduleMap[day][time].length > 0 ? (
-                    scheduleMap[day][time].map((lesson) => (
-                      <div key={lesson.id} className="mt-1">
-                        <div className="text-sm font-medium">{lesson.discipline.name}</div>
-                        <div className="text-xs">{lesson.room}</div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-sm text-gray-500">Sem aula</div>
-                  )}
-                </td>
+                <th key={day} className="border border-gray-300 p-4">{day}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {times.map((time) => (
+              <tr key={time}>
+                <td className="border border-gray-300 p-4 text-center">{time}</td>
+                {daysOfWeek.map((day) => (
+                  <td key={`${day}-${time}`} className="border border-gray-300 p-4 text-center">
+                    {scheduleMap[day][time].length > 0 ? (
+                      scheduleMap[day][time].map((lesson) => (
+                        <div key={lesson.id} className="mt-1">
+                          <div className="text-sm font-medium">{lesson.discipline.name}</div>
+                          <div className="text-xs">{lesson.room}</div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-sm text-gray-500">Sem aula</div>
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Modal>
   );
 };
 

@@ -14,6 +14,7 @@ export const getAllUsers = async () => {
     throw error;
   }
 };
+
 export const getParentByCpf = async (cpf: string) => {
   try {
     const response = await axios.get(`${BASE_URL}/parent/${cpf}`);

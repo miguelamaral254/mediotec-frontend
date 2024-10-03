@@ -1,21 +1,52 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import LessonList from './LessonList';
 import { ProfessorLessonResponse } from '@/app/interfaces/ProfessorLessonResponse';
-import { getLessonsByProfessorCpf } from '@/app/services/userConsultService';
+import { getLessonsByProfessorCpf, getAllProfessors } from '@/app/services/userConsultService';
+import { useAuth } from '@/app/context/AuthContext';
+
+interface Professor {
+  cpf: string;
+  name: string;
+}
 
 const ProfessorLessonLookup = () => {
+  const { user } = useAuth();
   const [cpf, setCpf] = useState('');
+  const [professors, setProfessors] = useState<Professor[]>([]);
+  const [filteredProfessors, setFilteredProfessors] = useState<Professor[]>([]);
   const [lessons, setLessons] = useState<ProfessorLessonResponse[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSearch = async () => {
+  useEffect(() => {
+    const fetchProfessors = async () => {
+      try {
+        const data = await getAllProfessors();
+        setProfessors(data);
+        setFilteredProfessors(data);
+      } catch (err) {
+        console.error('Erro ao buscar professores:', err);
+      }
+    };
+
+    if (user?.role === 'ADMIN') {
+      fetchProfessors();
+    } else if (user?.role === 'PROFESSOR') {
+      setCpf(user.cpf);
+      fetchLessons(user.cpf); // Fetch lessons for the logged-in professor
+    }
+  }, [user]);
+
+  // Fetch lessons when the professor's CPF changes
+  const fetchLessons = async (selectedCpf: string) => {
     setError(null);
-    setLessons([]);
+    setLessons([]);  
+    setIsModalOpen(true); // Open modal
 
     try {
-      const lessonsData = await getLessonsByProfessorCpf(cpf);
-      console.log('Dados das lições:', lessonsData);
+      const lessonsData = await getLessonsByProfessorCpf(selectedCpf);
       setLessons(lessonsData);
     } catch (err) {
       console.error(err);
@@ -28,36 +59,59 @@ const ProfessorLessonLookup = () => {
     }
   };
 
+  useEffect(() => {
+    const filtered = professors.filter(prof =>
+      prof.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProfessors(filtered);
+  }, [searchTerm, professors]);
+
+  const handleSearch = (selectedCpf: string) => {
+    setCpf(selectedCpf);
+    fetchLessons(selectedCpf); // Fetch lessons for selected professor
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="bg-gray-200 rounded-lg px-14 shadow-md min-w-full max-w-4xl mx-auto mt-10">
       <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consulta de Lições do Professor</h2>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">CPF do Professor:</label>
-        <input
-          type="text"
-          value={cpf}
-          onChange={(e) => setCpf(e.target.value)}
-          placeholder="Digite o CPF do professor"
-          className="border rounded-md p-2 w-full text-gray-700"
-        />
-      </div>
-
-      <button
-        onClick={handleSearch}
-        className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
-      >
-        Buscar
-      </button>
-
-      {error && <p className="text-red-500 mt-2">{error}</p>}
-
-      {lessons.length > 0 && (
-        <div className="mt-6 bg-white p-4 rounded-lg shadow-lg text-gray-700">
-          <h3 className="text-xl font-bold mb-2">Lições Associadas:</h3>
-          <LessonList lessons={lessons} />
+      {user?.role === 'ADMIN' && (
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Filtrar por Nome do Professor:</label>
+          <input
+            type="text"
+            placeholder="Filtrar por nome..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border rounded-md p-2 w-full text-gray-700 mb-2"
+          />
+          <div className="max-h-60 overflow-y-auto border rounded-md">
+            {filteredProfessors.map((prof) => (
+              <button
+                key={prof.cpf}
+                onClick={() => handleSearch(prof.cpf)}
+                className="flex justify-between p-3 w-full text-left text-gray-900 hover:bg-green-500 hover:text-white transition-colors duration-200"
+              >
+                {prof.name}
+              </button>
+            ))}
+          </div>
         </div>
       )}
+
+      {user?.role === 'PROFESSOR' && (
+        <div className="mb-4">
+          <p className="text-sm font-medium text-gray-700">CPF do Professor: {cpf}</p>
+        </div>
+      )}
+
+      <LessonList lessons={lessons} isOpen={isModalOpen} onRequestClose={handleCloseModal} />
+      
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>} {/* Mensagem de erro */}
     </div>
   );
 };
