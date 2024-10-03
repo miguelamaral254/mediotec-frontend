@@ -1,4 +1,3 @@
-// ProfessorLessonLookup.tsx
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import LessonList from './LessonList';
@@ -13,7 +12,7 @@ const ProfessorLessonLookup = () => {
   const handleSearch = async () => {
     setError(null);
     setLessons([]);
-    
+
     try {
       const lessonsData = await getLessonsByProfessorCpf(cpf);
       console.log('Dados das lições:', lessonsData);
@@ -30,7 +29,7 @@ const ProfessorLessonLookup = () => {
   };
 
   return (
-    <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
+    <div className="bg-gray-200 rounded-lg px-14 shadow-md min-w-full max-w-4xl mx-auto mt-10">
       <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consulta de Lições do Professor</h2>
 
       <div className="mb-4">
@@ -62,4 +61,5 @@ const ProfessorLessonLookup = () => {
     </div>
   );
 };
+
 export default ProfessorLessonLookup;

@@ -15,134 +15,86 @@ const weekDayMap: { [key: string]: string } = {
   SUNDAY: 'Sunday',
 };
 
+// Mapeamento de horários
 const timeMap: { [key: string]: string } = {
   SEVEN_THIRTY: '07:30',
   EIGHT_TWENTY: '08:20',
-  // Adicione outros horários conforme necessário
+  NINE_TEN: '09:10',
+  TEN_OH_OH: '10:00',
+  TEN_FIFTY: '10:50',
+  ELEVEN_FORTY: '11:40',
+  THIRTEEN_THIRTY: '13:30',
+  FOURTEEN_TWENTY: '14:20',
+  FIFTEEN_TEN: '15:10',
+  SIXTEEN_OH_OH: '16:00',
 };
 
-const LessonList = ({ lessons }: { lessons: ProfessorLessonResponse[] }) => {
-  // Criar um mapa de lições agrupadas por dia da semana
-  const scheduleMap: { [key: string]: ProfessorLessonResponse[] } = {};
-
-  // Inicializar cada dia da semana no mapa
-  daysOfWeek.forEach((day) => {
-    scheduleMap[day] = [];
-  });
-
-  // Agrupar as lições pelo dia da semana
-  lessons.forEach((lesson) => {
-    const { weekDay } = lesson;
-
-    // Convertendo o enum weekDay para um dia da semana legível
-    const readableWeekDay = weekDayMap[weekDay];
-
-    if (readableWeekDay && scheduleMap[readableWeekDay]) {
-      scheduleMap[readableWeekDay].push(lesson);
-    }
-  });
-
-  return (
-    <div className="overflow-x-auto">
-      <h2 className="text-lg font-bold mb-4">Lista de Aulas</h2>
-      <div className="grid grid-cols-7 gap-4">
-        {/* Iterar sobre os dias da semana e exibir as aulas abaixo de cada dia */}
-        {daysOfWeek.map((day) => (
-          <div key={day} className="border border-gray-300 p-4">
-            <h3 className="text-md font-semibold text-center">{day}</h3>
-            <div className="mt-2">
-              {scheduleMap[day].length > 0 ? (
-                scheduleMap[day].map((lesson) => (
-                  <div key={lesson.id} className="mt-2">
-                    {/* Convertendo os horários para um formato legível */}
-                    <div className="text-sm font-medium">
-                      {timeMap[lesson.startTime]} - {timeMap[lesson.endTime]}
-                    </div>
-                    <div className="text-sm">{lesson.discipline.name}</div>
-                    <div className="text-sm">{lesson.room}</div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-sm text-gray-500">Sem aulas</div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default LessonList;
-
-  /*
-*/
-
-
-/*
-import React from 'react';
-import { ProfessorLessonResponse } from '@/app/interfaces/ProfessorLessonResponse';
-import { Week } from '@/app/interfaces/Lesson';
-
-const SCHEDULES = {
-  SEVEN_THIRTY: '7:30',
-  EIGHT_TWENTY: '8:20',
-  NINE_TEN: '9:10',
-  TEN_TWENTY: '10:20',
-  ELEVEN_TEN: '11:10',
-  ONE_TWENTY: '12:20',
-  TWO_TEN: '13:10',
-  THREE_TWENTY: '14:20',
-  FOUR_TEN: '15:10',
-} as const;
+// Lista de horários
+const times = [
+  '07:30', '08:20', '09:10', '10:00', '10:50', '11:40',
+  '13:30', '14:20', '15:10', '16:00',
+];
 
 const LessonList = ({ lessons }: { lessons: ProfessorLessonResponse[] }) => {
   // Criar um mapa de lições agrupadas por dia da semana e horário
   const scheduleMap: { [key: string]: { [key: string]: ProfessorLessonResponse[] } } = {};
 
-  // Agrupar as lições
+  // Inicializar cada dia da semana e horário no mapa
+  daysOfWeek.forEach((day) => {
+    scheduleMap[day] = {};
+    times.forEach((time) => {
+      scheduleMap[day][time] = [];
+    });
+  });
+
+  // Agrupar as lições pelo dia da semana e horário
   lessons.forEach((lesson) => {
     const { weekDay, startTime } = lesson;
 
-    // Verifica se o dia da semana já existe no mapa
-    if (!scheduleMap[weekDay]) {
-      scheduleMap[weekDay] = {};
-    }
+    // Convertendo o enum weekDay e startTime para valores legíveis
+    const readableWeekDay = weekDayMap[weekDay];
+    const readableStartTime = timeMap[startTime];
 
-    // Verifica se o horário já existe para esse dia da semana
-    if (!scheduleMap[weekDay][startTime]) {
-      scheduleMap[weekDay][startTime] = [];
+    if (readableWeekDay && readableStartTime && scheduleMap[readableWeekDay][readableStartTime]) {
+      scheduleMap[readableWeekDay][readableStartTime].push(lesson);
     }
-
-    // Adiciona a lição ao horário específico
-    scheduleMap[weekDay][startTime].push(lesson);
   });
 
   return (
     <div className="overflow-x-auto">
       <h2 className="text-lg font-bold mb-4">Lista de Aulas</h2>
-      <table className="min-w-full bg-white border border-gray-300">
+      <table className="min-w-full table-auto border-collapse border border-gray-300">
         <thead>
           <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
-            <th className="border border-gray-300 p-4">Dia da Semana</th>
             <th className="border border-gray-300 p-4">Horário</th>
-            <th className="border border-gray-300 p-4">Disciplina</th>
+            {daysOfWeek.map((day) => (
+              <th key={day} className="border border-gray-300 p-4">{day}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {Object.entries(scheduleMap).map(([weekDay, timeSlots]) =>
-            Object.entries(timeSlots).map(([startTime, lessons]) => (
-              <tr className="border-b" key={`${weekDay}-${startTime}`}>
-                <td className="border border-gray-300 p-4">{weekDay}</td>
-                <td className="border border-gray-300 p-4">{startTime}</td>
-                <td className="border border-gray-300 p-4">
-                  {lessons.map((lesson) => (
-                    <div key={lesson.id}>{lesson.discipline.name}</div>
-                  ))}
+          {times.map((time) => (
+            <tr key={time}>
+              {/* Coluna de horários */}
+              <td className="border border-gray-300 p-4 text-center">{time}</td>
+
+              {/* Colunas de dias da semana */}
+              {daysOfWeek.map((day) => (
+                <td key={`${day}-${time}`} className="border border-gray-300 p-4 text-center">
+                  {scheduleMap[day][time].length > 0 ? (
+                    scheduleMap[day][time].map((lesson) => (
+                      <div key={lesson.id} className="mt-1">
+                        <div className="text-sm font-medium">{lesson.discipline.name}</div>
+                        <div className="text-xs">{lesson.room}</div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-sm text-gray-500">Sem aula</div>
+                  )}
                 </td>
-              </tr>
-            ))
-          )}
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
@@ -150,5 +102,3 @@ const LessonList = ({ lessons }: { lessons: ProfessorLessonResponse[] }) => {
 };
 
 export default LessonList;
-
-*/
