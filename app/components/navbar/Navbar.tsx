@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('cpf');
     setUser(null);
-    router.push('/auth/login');
+    router.push('/');
   };
 
   // Fechar a sidebar e dropdown ao clicar fora

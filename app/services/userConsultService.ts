@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { DisciplineWithClass } from '../interfaces/DisciplineWithClass';
+import { ProfessorLessonResponse } from '../interfaces/ProfessorLessonResponse';
+//import { LessonDetails } from '../components/users/professors/LessonDetails';
 
 const BASE_URL =  process.env.NEXT_PUBLIC_API_URL; 
 
@@ -61,9 +64,44 @@ export const getCoordinationByCpf = async (cpf: string) => {
 export const getDisciplinesByStudentCpf = async (cpf: string) => {
   try {
       const response = await axios.get(`${BASE_URL}/disciplines/student/${cpf}`);
-      return response.data; // Retorna a lista de disciplinas
+      return response.data; 
   } catch (error) {
       console.error('Error fetching disciplines:', error);
       throw error;
   }
 };
+export const getDisciplinesByProfessorCpf = async (cpf: string): Promise<DisciplineWithClass[]> => {
+  try {
+    const response = await axios.get(`${BASE_URL}/professor/${cpf}/disciplines`);
+    return response.data; 
+  } catch (error) {
+    console.error('Error fetching professor disciplines:', error);
+    throw error;
+  }
+};
+
+export const getLessonsByProfessorCpf = async (cpf: string): Promise<ProfessorLessonResponse[]> => { // Atualizando o tipo de retorno
+  try {
+    const response = await axios.get(`${BASE_URL}/professor/professor/${cpf}`);
+    return response.data; 
+  } catch (error) {
+    console.error('Error fetching professor lessons:', error);
+    throw error;
+  }
+};
+/*
+export const getLessonsByProfessorCpf = async (cpf: string): Promise<LessonDetails[]> => {
+  const response = await fetch(`sua-api/endpoint/${cpf}`);
+  const data = await response.json();
+  
+  // Mapear os dados recebidos para a interface LessonDetails, se necessário
+  return data.map((lesson: LessonDetails) => ({
+    id: lesson.id,
+    day: lesson.day,
+    time: lesson.time,
+    subject: lesson.subject,
+    room: lesson.room,
+    professorName: lesson.professorName,
+  }));
+};
+*/
