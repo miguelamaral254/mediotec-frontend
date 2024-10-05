@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUserData } from '../../services/authService';
+
 import { useAuth } from '@/app/context/AuthContext';
-import { AdminSection } from '../../components/users/admin/AdminSection';
-import { ProfessorSection } from '../../components/users/professors/ProfessorSection';
-import { ParentSection } from '../../components/users/parents/ParentSection';
-import { StudentSection } from '../../components/users/students/StudentSection';
+import { getUserData } from '@/app/services/authService';
+import { AdminSection } from '@/app/components/users/admin/AdminSection';
+import { ProfessorSection } from '@/app/components/users/professors/ProfessorSection';
+import { ParentSection } from '@/app/components/users/parents/ParentSection';
+import { StudentSection } from '@/app/components/users/students/StudentSection';
 
 
 export default function Dashboard() {

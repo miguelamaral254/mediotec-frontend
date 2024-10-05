@@ -14,7 +14,7 @@ export const StudentSection = () => (
         Fique atento a novos avisos e comunicados importantes da escola.
       </p>
       <ul className="mt-2">
-        {/* Exemplo de avisos, você pode substituir por dados dinâmicos */}
+      
         <li>1. Reunião de pais e mestres dia 10/10 às 18h.</li>
         <li>2. Entrega de trabalhos até o dia 15/10.</li>
         <li>3. Prova de matemática dia 20/10.</li>
@@ -23,14 +23,14 @@ export const StudentSection = () => (
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-      {/* Card de Grade de Horários */}
+      
       <div className="bg-white rounded-lg shadow-md p-4">
         <h3 className="font-semibold text-lg">Grade de Horários</h3>
         <p className="mt-2 text-gray-600">
           Confira sua grade de horários e não perca nenhuma aula!
         </p>
         <button className="mt-4 text-blue-600 hover:underline">
-          <Link href="/auth/dashboard/student-dashboard/schedules">Ver grade de horários</Link>
+          <Link href="/auth/dashboard/student/schedules">Ver grade de horários</Link>
         </button>
       </div>
 
@@ -40,7 +40,7 @@ export const StudentSection = () => (
           Acompanhe suas notas e desempenho nas disciplinas.
         </p>
         <button className="mt-4 text-blue-600 hover:underline">
-          <Link href="/auth/dashboard/student-dashboard/grades">Ver meus conceitos</Link>
+          <Link href="/auth/dashboard/student/grades">Ver meus conceitos</Link>
         </button>
       </div>
 
@@ -50,7 +50,7 @@ export const StudentSection = () => (
           Confira as disciplinas em que você está matriculado.
         </p>
         <button className="mt-4 text-blue-600 hover:underline">
-          <Link href="/auth/dashboard/student-dashboard/disciplines">Ver disciplinas</Link>
+          <Link href="/auth/dashboard/student/disciplines">Ver disciplinas</Link>
         </button>
       </div>
 

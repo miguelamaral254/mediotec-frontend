@@ -112,7 +112,7 @@ const StudentLessonLookup = () => {
         </div>
       )}
 
-      <StudentSchedule lessons={lessons} isOpen={isModalOpen} onRequestClose={handleCloseModal} />
+      <StudentSchedule lessons={lessons} isOpen={isModalOpen} onRequestClose={handleCloseModal} userRole={user?.role ?? ''} />
       
       {error && <p className="text-red-500 text-sm mt-2">{error}</p>} {/* Error message */}
     </div>
