@@ -1,8 +1,10 @@
 'use client';
 
+import CreateUser from '@/app/components/users/actions/CreateUser';
+import UserLookUp from '@/app/components/users/actions/UserLookUp';
 import { useState } from 'react';
-import CreateUser from '../../../components/users/CreateUser';
-import UserLookUp from '../../../components/users/UserLookUp';
+
+
 
 const ManageUsers = () => {
   const [action, setAction] = useState<'create' | 'consult'>('consult');

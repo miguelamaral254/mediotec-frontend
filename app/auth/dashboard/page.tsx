@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserData } from '../../services/authService';
 import { useAuth } from '@/app/context/AuthContext';
-import { AdminSection } from '../../components/users/AdminSection';
-import { ProfessorSection } from '../../components/users/ProfessorSection';
-import { ParentSection } from '../../components/users/ParentSection';
-import { StudentSection } from '../../components/users/StudentSection';
-import { UserInfo } from '../../components/users/UserInfo';
+import { AdminSection } from '../../components/users/admin/AdminSection';
+import { ProfessorSection } from '../../components/users/professors/ProfessorSection';
+import { ParentSection } from '../../components/users/parents/ParentSection';
+import { StudentSection } from '../../components/users/students/StudentSection';
+
 
 export default function Dashboard() {
   const { user, setUser } = useAuth();
@@ -48,8 +48,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-10 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Dashboard</h1>
+    <div className="mx-auto px-4 sm:px-6 lg:px-8 pt-10 w-[98%] min-h-screen">
       {user ? (
         <div>
           {/* Seções específicas para cada tipo de usuário */}
@@ -60,13 +59,6 @@ export default function Dashboard() {
             {user.role === 'STUDENT' && <StudentSection />}
           </div>
 
-          {/* Componente de informações do usuário */}
-          <UserInfo user={user} />
-
-          {/* Exibir token apenas como exemplo */}
-          <div className="mt-4 text-black text-center">
-            <strong>Token:</strong> {localStorage.getItem('token')}
-          </div>
         </div>
       ) : (
         <p className="text-center">Nenhum dado encontrado para este usuário.</p>
@@ -74,3 +66,8 @@ export default function Dashboard() {
     </div>
   );
 }
+//<div className="mt-4 text-black text-center">
+          
+          
+    //      </div>
+  //<strong>Token:</strong> {localStorage.getItem('token')}

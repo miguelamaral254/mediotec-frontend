@@ -38,7 +38,7 @@ const ProfessorLinks: React.FC<ProfessorLinksProps> = ({ isNavbarOpen }) => {
         className={`overflow-hidden transition-max-height duration-300 ease-in-out ${isSemesterDropdownOpen ? 'max-h-80' : 'max-h-0'}`}
       >
         <div className="flex flex-col gap-1 pl-6 bg-blue-400">
-          <Link href="/auth/dashboard/professor-dashboard" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
+          <Link href="/auth/dashboard/professor/schedules" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
             <FaBook className="mr-2" />
             Minhas Aulas
           </Link>

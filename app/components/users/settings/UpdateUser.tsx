@@ -1,3 +1,5 @@
+// components/users/UpdateUser.tsx
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -7,18 +9,18 @@ import { getCurrentUserByCpf, updateUser } from '@/app/services/updateUserServic
 import { User } from '@/app/interfaces/User';
 import { useRouter } from 'next/navigation';
 
-const UpdateUserInfo = () => {
+const UpdateUser = () => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const cpf = localStorage.getItem('cpf');
-  const router = useRouter(); 
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (cpf) {
         try {
           const cleanedCpf = cpf.replace(/\D/g, '');
-          const data = await getCurrentUserByCpf(cleanedCpf); 
+          const data = await getCurrentUserByCpf(cleanedCpf);
           setUser(data);
         } catch (err) {
           if (err instanceof Error) {
@@ -35,29 +37,43 @@ const UpdateUserInfo = () => {
 
   const handleUpdate = async () => {
     if (user) {
-      try {
-        // Adicionando verificação para evitar undefined
-        const cleanedPhone = (user.phone ?? '').replace(/\D/g, ''); 
-        const updatedData = { ...user, phone: cleanedPhone }; 
-        
-        await updateUser(cpf!.replace(/\D/g, ''), updatedData); 
-        Swal.fire({
-          icon: 'success',
-          title: 'Usuário Atualizado!',
-          text: 'Os dados do usuário foram atualizados com sucesso.',
-        });
+      // Pergunta de confirmação
+      const result = await Swal.fire({
+        title: 'Você tem certeza?',
+        text: 'Os dados do usuário serão atualizados!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, atualizar!',
+        cancelButtonText: 'Cancelar',
+      });
 
-        router.push('/auth/dashboard');
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
+      if (result.isConfirmed) {
+        try {
+          // Remove caracteres não numéricos do telefone
+          const cleanedPhone = (user.phone ?? '').replace(/\D/g, '');
+          const updatedData = { ...user, phone: cleanedPhone };
+
+          await updateUser(cpf!.replace(/\D/g, ''), updatedData);
           Swal.fire({
-            icon: 'error',
-            title: 'Erro',
-            text: err.message,
+            icon: 'success',
+            title: 'Usuário Atualizado!',
+            text: 'Os dados do usuário foram atualizados com sucesso.',
           });
-        } else {
-          setError('Erro desconhecido');
+
+          router.push('/auth/dashboard');
+        } catch (err) {
+          if (err instanceof Error) {
+            setError(err.message);
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro',
+              text: err.message,
+            });
+          } else {
+            setError('Erro desconhecido');
+          }
         }
       }
     }
@@ -83,7 +99,7 @@ const UpdateUserInfo = () => {
             value={user.name}
             onChange={handleChange}
           />
-          
+
           <label className="block text-sm font-medium mt-4">Email:</label>
           <input
             type="email"
@@ -129,4 +145,4 @@ const UpdateUserInfo = () => {
   );
 };
 
-export default UpdateUserInfo;
+export default UpdateUser;

@@ -35,7 +35,7 @@ const ProfessorLessonLookup = () => {
       fetchProfessors();
     } else if (user?.role === 'PROFESSOR') {
       setCpf(user.cpf);
-      fetchLessons(user.cpf); // Fetch lessons for the logged-in professor
+      fetchLessons(user.cpf); 
     }
   }, [user]);
 
@@ -43,7 +43,7 @@ const ProfessorLessonLookup = () => {
   const fetchLessons = async (selectedCpf: string) => {
     setError(null);
     setLessons([]);  
-    setIsModalOpen(true); // Open modal
+    setIsModalOpen(true); 
 
     try {
       const lessonsData = await getLessonsByProfessorCpf(selectedCpf);
@@ -68,7 +68,7 @@ const ProfessorLessonLookup = () => {
 
   const handleSearch = (selectedCpf: string) => {
     setCpf(selectedCpf);
-    fetchLessons(selectedCpf); // Fetch lessons for selected professor
+    fetchLessons(selectedCpf); 
   };
 
   const handleCloseModal = () => {
@@ -76,8 +76,8 @@ const ProfessorLessonLookup = () => {
   };
 
   return (
-    <div className="bg-gray-200 rounded-lg px-14 shadow-md min-w-full max-w-4xl mx-auto mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consulta de Lições do Professor</h2>
+    <div className="bg-gray-200 rounded-lg px-14 shadow-md w-[70%] mx-auto mt-10 p-10">
+      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Grade de horário do Professor</h2>
 
       {user?.role === 'ADMIN' && (
         <div className="mb-4">
@@ -111,7 +111,7 @@ const ProfessorLessonLookup = () => {
 
       <LessonList lessons={lessons} isOpen={isModalOpen} onRequestClose={handleCloseModal} userRole={user?.role ?? ''} />
       
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>} {/* Mensagem de erro */}
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>} 
     </div>
   );
 };

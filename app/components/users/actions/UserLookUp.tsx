@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { getParentByCpf, getProfessorByCpf, getStudentByCpf, getAllUsers, getCoordinationByCpf } from '@/app/services/userConsultService';
 import { User } from '@/app/interfaces/User';
-import UserDetailModal from './UserDetailModal';
+
 import { FaPencilAlt, FaEye } from 'react-icons/fa';
 import { updateUser } from '@/app/services/updateUserService';
+import UserDetailModal from './UserDetailModal';
 import UserEditModal from './UserEditModal';
+
 
 const UserLookUp = () => {
   const [cpf, setCpf] = useState('');
