@@ -1,10 +1,12 @@
+import { ResponseGrade } from "../interfaces/ResponseGrade";
+
 export enum Concept {
-    A = 'A', // 9-10
-    B = 'B', // 7-8.9
-    C = 'C', // 5-6.9
-    D = 'D', // 4-4.9
-    E = 'E', // 2-3.9
-    F = 'F', // 0-1.9
+    A = 'A',
+    B = 'B',
+    C = 'C',
+    D = 'D',
+    E = 'E',
+    F = 'F',
 }
 
 export function fromScore(score: number): Concept {
@@ -14,4 +16,39 @@ export function fromScore(score: number): Concept {
     else if (score >= 4) return Concept.D;
     else if (score >= 2) return Concept.E;
     else return Concept.F;
+}
+
+export function calculateFinalAverageAndSituation(grades: ResponseGrade[]): { average: number | null; finalAverage: number | null; situation: string | null } {
+    const av1 = grades.find((grade) => grade.evaluationType === 'AV1')?.evaluation;
+    const av2 = grades.find((grade) => grade.evaluationType === 'AV2')?.evaluation;
+    const av3 = grades.find((grade) => grade.evaluationType === 'AV3')?.evaluation;
+    const av4 = grades.find((grade) => grade.evaluationType === 'AV4')?.evaluation;
+    const recovery = grades.find((grade) => grade.evaluationType === 'RECOVERY')?.evaluation;
+
+    const allGradesAvailable = av1 !== undefined && av2 !== undefined && av3 !== undefined && av4 !== undefined;
+
+    let average: number | null = null;
+    let finalAverage: number | null = null;
+    let situation: string | null = null;
+
+    if (allGradesAvailable) {
+        const total = (Number(av1) + Number(av2) + Number(av3) + Number(av4));
+        const gradesAverage = total / 4;
+        average = Number(gradesAverage.toFixed(2));
+
+        const recoveryScore = recovery !== undefined ? Number(recovery) : 0;
+
+        if (gradesAverage > 7) {
+            finalAverage = gradesAverage;
+            situation = fromScore(finalAverage);
+        } else if (recoveryScore > 0) {
+            finalAverage = (gradesAverage + recoveryScore) / 2;
+            situation = fromScore(finalAverage);
+        } else {
+            finalAverage = null;
+            situation = null;
+        }
+    }
+
+    return { average, finalAverage, situation };
 }

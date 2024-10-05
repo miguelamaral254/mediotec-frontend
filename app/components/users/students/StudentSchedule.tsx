@@ -3,41 +3,44 @@ import Modal from 'react-modal';
 import { StudentLessonResponse } from '@/app/interfaces/StudentLessonResponse'; 
 
 
-const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
 
 const weekDayMap: { [key: string]: string } = {
-  MONDAY: 'Monday',
-  TUESDAY: 'Tuesday',
-  WEDNESDAY: 'Wednesday',
-  THURSDAY: 'Thursday',
-  FRIDAY: 'Friday',
-  SATURDAY: 'Saturday',
-  SUNDAY: 'Sunday',
+  MONDAY: 'Segunda',
+  TUESDAY: 'Terça',
+  WEDNESDAY: 'Quarta',
+  THURSDAY: 'Quinta',
+  FRIDAY: 'Sexta',
+  SATURDAY: 'Sábado',
+  
 };
 
 // Mapeamento de horários
 const timeMap: { [key: string]: string } = {
-  SEVEN_THIRTY: '07:30',
-  EIGHT_TWENTY: '08:20',
-  NINE_TEN: '09:10',
-  TEN_OH_OH: '10:00',
-  TEN_FIFTY: '10:50',
-  ELEVEN_FORTY: '11:40',
-  THIRTEEN_THIRTY: '13:30',
-  FOURTEEN_TWENTY: '14:20',
-  FIFTEEN_TEN: '15:10',
-  SIXTEEN_OH_OH: '16:00',
+  SEVEN_THIRTY: '07:30',      // 07:30
+  EIGHT_TWENTY: '08:20',      // 08:20
+  NINE_TEN: '09:10',          // 09:10
+  NINE_THIRTY: '09:30',       // 09:30
+  TEN_TWENTY: '10:20',        // 10:20
+  ELEVEN_TEN: '11:10',        // 11:10
+  TWELVE_O_CLOCK: '12:00',    // 12:00
+  ONE_THIRTY: '13:30',        // 13:30
+  FOURTEEN_TWENTY: '14:20',    // 14:20
+  FIFTEEN_TEN: '15:10',       // 15:10
+  FIFTEEN_THIRTY: '15:30',    // 15:30
+  FOUR_TEN: '16:10',      // 16:10
+  FIVE_THIRTY: '17:00'        // 17:00
 };
 
 // Lista de horários
 const times = [
-  '07:30', '08:20', '09:10', '10:00', '10:50', '11:40',
-  '13:30', '14:20', '15:10', '16:00',
+ '07:30', '08:20', '09:10','09:30', '10:20', '11:10', '12:00',
+  '13:30', '14:20', '15:10', '15:30','16:10','17:00'
 ];
 
 interface StudentScheduleProps {
-  lessons: StudentLessonResponse[]; // Altere isso para o tipo correto
+  lessons: StudentLessonResponse[];
   isOpen: boolean;
   onRequestClose: () => void;
 }
@@ -67,10 +70,10 @@ const StudentSchedule: React.FC<StudentScheduleProps> = ({ lessons, isOpen, onRe
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="Horário do Aluno"
-      className="fixed inset-0 z-50 ml-8 flex items-center justify-center" // Modal occupies full screen
-      overlayClassName="fixed inset-0 bg-black bg-opacity-75" // Overlay styles
+      className="fixed inset-0 z-50 ml-8 flex items-center justify-center" 
+      overlayClassName="fixed inset-0 bg-black bg-opacity-75" 
     >
-      <div className="bg-white max-h-[90%] w-full p-4 overflow-auto flex flex-col"> {/* Container for modal content */}
+      <div className="bg-white max-h-[90%] w-full p-4 overflow-auto flex flex-col"> 
         <div className="flex justify-end">
           <button onClick={onRequestClose} className="bg-red-500 text-white rounded px-4 py-2">
             Fechar
@@ -102,7 +105,7 @@ const StudentSchedule: React.FC<StudentScheduleProps> = ({ lessons, isOpen, onRe
                         </div>
                       ))
                     ) : (
-                      <div className="text-sm text-gray-500">Sem aula</div>
+                      <div className="text-sm text-gray-500">Sem aulas</div>
                     )}
                   </td>
                 ))}

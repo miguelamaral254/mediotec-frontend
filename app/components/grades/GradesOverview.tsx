@@ -1,18 +1,17 @@
 import React from 'react';
-import { ResponseGrade } from '../../interfaces/ResponseGrade'; // Ajuste o caminho conforme necessário
+import { ResponseGrade } from '../../interfaces/ResponseGrade'; 
 import { Discipline } from '../../interfaces/Discipline';
-import { fromScore } from '../../utils/concept'; // Ajuste o caminho conforme necessário
+import { fromScore, Concept } from '../../utils/concept'; 
 
 interface GradesOverviewProps {
   discipline: Discipline; 
   grades: ResponseGrade[]; 
-  onClose: () => void; // Caso precise desta função
+  onClose: () => void; 
 }
 
 const GradesOverview: React.FC<GradesOverviewProps> = ({ grades }) => {
-  // Check if grades are available
   if (!grades || grades.length === 0) {
-    return <div>No grades available.</div>; // Optional: Display a message if no grades are provided
+    return <div>No grades available.</div>; 
   }
 
   const av1 = grades.find(grade => grade.evaluationType === 'AV1')?.evaluation || 0;
@@ -21,22 +20,20 @@ const GradesOverview: React.FC<GradesOverviewProps> = ({ grades }) => {
   const av4 = grades.find(grade => grade.evaluationType === 'AV4')?.evaluation || 0;
   const recovery = grades.find(grade => grade.evaluationType === 'RECOVERY')?.evaluation || null;
 
-  // Check if all four grades are available
   const allGradesAvailable = av1 > 0 && av2 > 0 && av3 > 0 && av4 > 0;
 
-  // Calculate average and situation only if all grades are available
   let average = 'N/A';
   let situation = 'N/A';
   if (allGradesAvailable) {
-    average = ((av1 + av2 + av3 + av4) / 4).toFixed(2); // Usando toFixed para formatar a média
+    average = ((av1 + av2 + av3 + av4) / 4).toFixed(2);
     situation = parseFloat(average) < 7 ? 'Reprovado' : 'Aprovado';
   }
 
-  const av1Concept = av1 > 0 ? fromScore(av1) : '';
-  const av2Concept = av2 > 0 ? fromScore(av2) : '';
-  const av3Concept = av3 > 0 ? fromScore(av3) : '';
-  const av4Concept = av4 > 0 ? fromScore(av4) : '';
-  const averageConcept = allGradesAvailable ? fromScore(parseFloat(average)) : '';
+  const av1Concept: Concept = av1 > 0 ? fromScore(av1) : Concept.F; 
+  const av2Concept: Concept = av2 > 0 ? fromScore(av2) : Concept.F; 
+  const av3Concept: Concept = av3 > 0 ? fromScore(av3) : Concept.F; 
+  const av4Concept: Concept = av4 > 0 ? fromScore(av4) : Concept.F; 
+  const averageConcept: Concept = allGradesAvailable ? fromScore(parseFloat(average)) : Concept.F; 
 
   return (
     <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
