@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { DisciplineWithClass } from '../interfaces/DisciplineWithClass';
 import { ProfessorLessonResponse } from '../interfaces/ProfessorLessonResponse';
+import { StudentLessonResponse } from '../interfaces/StudentLessonResponse';
+import { User } from '../interfaces/User';
 //import { LessonDetails } from '../components/users/professors/LessonDetails';
 
 const BASE_URL =  process.env.NEXT_PUBLIC_API_URL; 
@@ -90,7 +92,28 @@ export const getLessonsByProfessorCpf = async (cpf: string): Promise<ProfessorLe
     throw error;
   }
 };
+export const getLessonsByStudentCpf = async (cpf: string): Promise<StudentLessonResponse[]> => {
+  try {
+    const response = await axios.get(`${BASE_URL}/student/${cpf}/lessons`);
+    return response.data; 
+  } catch (error) {
+    console.error('Erro ao buscar lições do aluno:', error);
+    throw error;
+  }
+};
+export const getAllStudents = async (): Promise<User[]> => {
+  try {
+    const response = await axios.get(`${BASE_URL}/student`);
+    return response.data; 
+  } catch (error) {
+    console.error("Erro ao buscar todos os alunos:", error);
+    throw error;
+  }
+};
+
+
 /*
+getLessonsByStudentCpf
 export const getLessonsByProfessorCpf = async (cpf: string): Promise<LessonDetails[]> => {
   const response = await fetch(`sua-api/endpoint/${cpf}`);
   const data = await response.json();

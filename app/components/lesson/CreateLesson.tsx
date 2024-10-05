@@ -6,7 +6,7 @@ import { getAllDiscipline } from '@/app/services/disciplineService';
 import { getAllClasses } from '@/app/services/schoolClassService';
 import { getAllProfessors } from '@/app/services/userConsultService';
 import Swal from 'sweetalert2';
-import { Lesson, Schedule, Week } from '../../interfaces/Lesson'; // Importar Week
+import { Lesson, Schedule, Week } from '../../interfaces/Lesson';
 import { Discipline } from '../../interfaces/Discipline';
 import { SchoolClass } from '../../interfaces/SchoolClass';
 import { User } from '../../interfaces/User';
@@ -19,7 +19,7 @@ const CreateLesson = () => {
   const [startTime, setStartTime] = useState<Schedule | null>(null);
   const [endTime, setEndTime] = useState<Schedule | null>(null);
   const [room, setRoom] = useState<string>('');
-  const [weekDay, setWeekDay] = useState<Week | null>(null); // Novo estado para o dia da semana
+  const [weekDay, setWeekDay] = useState<Week | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [disciplines, setDisciplines] = useState<Discipline[]>([]);
   const [schoolClasses, setSchoolClasses] = useState<SchoolClass[]>([]);
@@ -31,7 +31,7 @@ const CreateLesson = () => {
         const data = await getAllDiscipline();
         setDisciplines(data);
       } catch (err) {
-        console.error("Erro ao buscar disciplinas:", err);
+        console.error('Erro ao buscar disciplinas:', err);
         Swal.fire({
           icon: 'error',
           title: 'Erro',
@@ -45,7 +45,7 @@ const CreateLesson = () => {
         const data = await getAllClasses();
         setSchoolClasses(data);
       } catch (err) {
-        console.error("Erro ao buscar turmas:", err);
+        console.error('Erro ao buscar turmas:', err);
         Swal.fire({
           icon: 'error',
           title: 'Erro',
@@ -59,7 +59,7 @@ const CreateLesson = () => {
         const data = await getAllProfessors();
         setProfessors(data);
       } catch (err) {
-        console.error("Erro ao buscar professores:", err);
+        console.error('Erro ao buscar professores:', err);
         Swal.fire({
           icon: 'error',
           title: 'Erro',
@@ -89,17 +89,17 @@ const CreateLesson = () => {
     }
 
     try {
-      const newLesson: Lesson = {
+      const newLesson: Omit<Lesson, 'id'> = {
         name,
         schoolClass: { id: schoolClassId },
         discipline: { id: disciplineId },
         professor: {
           cpf: professorCpf,
-          name: ''
+          name: '' 
         },
-        weekDay, 
-        startTime, 
-        endTime,   
+        weekDay,
+        startTime,
+        endTime,
         room,
       };
       console.log('Dados da nova aula a serem enviados:', newLesson);
@@ -119,9 +119,24 @@ const CreateLesson = () => {
       setStartTime(null);
       setEndTime(null);
       setRoom('');
-      setWeekDay(null); // Resetar o dia da semana
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro ao criar aula';
+      setWeekDay(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      let errorMessage = 'Erro ao criar aula.';
+
+      // Capturar e verificar o erro da resposta do axios
+      if (err.response) {
+        const { data } = err.response;
+        // Se a resposta tiver uma mensagem de erro, utilize-a
+        if (data && data.message) {
+          errorMessage = data.message;
+        } else if (data && data.error) {
+          errorMessage = data.error;
+        }
+      } else if (err instanceof Error) {
+        errorMessage = err.message; // Erro genérico
+      }
+
       setError(errorMessage);
       Swal.fire({
         icon: 'error',
@@ -232,19 +247,20 @@ const CreateLesson = () => {
             <option value="SEVEN_THIRTY">07:30</option>
             <option value="EIGHT_TWENTY">08:20</option>
             <option value="NINE_TEN">09:10</option>
-            <option value="TEN_O_CLOCK">10:00</option>
-            <option value="TEN_FORTY">10:40</option>
-            <option value="ELEVEN_THIRTY">11:30</option>
-            <option value="TWELVE_TWENTY">12:20</option>
-            <option value="ONE_O_CLOCK">13:00</option>
-            <option value="ONE_FORTY">13:40</option>
-            <option value="TWO_THIRTY">14:30</option>
-            <option value="THREE_TWENTY">15:20</option>
-            <option value="FOUR_O_CLOCK">16:00</option>
-            <option value="FOUR_FORTY">16:40</option>
-            <option value="FIVE_THIRTY">17:30</option>
-            <option value="SIX_TWENTY">18:20</option>
-            <option value="SEVEN_TEN">19:10</option>
+            
+            <option value="NINE_THIRTY">09:30</option> 
+            <option value="TEN_TWENTY">10:20</option>
+            <option value="ELEVEN_TEN">11:10</option>
+            <option value="TWELVE_O_CLOCK">12:00</option>
+            <option value="ONE_THIRTY">13:30</option>
+            <option value="FOURTEEN_TWENTY">14:20</option>
+            <option value="FIFTEEN_TEN">15:10</option>
+            
+            <option value="FIFTEEN_THIRTY">15:30</option>
+            <option value="FOUR_TEN">16:10</option>
+            <option value="FIVE_THIRTY">17:00</option>
+
+            
           </select>
         </div>
 
@@ -257,21 +273,23 @@ const CreateLesson = () => {
             required 
           >
             <option value="" disabled>Selecione um horário de fim</option>
+            <option value="SEVEN_THIRTY">07:30</option>
             <option value="EIGHT_TWENTY">08:20</option>
             <option value="NINE_TEN">09:10</option>
-            <option value="TEN_O_CLOCK">10:00</option>
-            <option value="TEN_FORTY">10:40</option>
-            <option value="ELEVEN_THIRTY">11:30</option>
-            <option value="TWELVE_TWENTY">12:20</option>
-            <option value="ONE_O_CLOCK">13:00</option>
-            <option value="ONE_FORTY">13:40</option>
-            <option value="TWO_THIRTY">14:30</option>
-            <option value="THREE_TWENTY">15:20</option>
-            <option value="FOUR_O_CLOCK">16:00</option>
-            <option value="FOUR_FORTY">16:40</option>
-            <option value="FIVE_THIRTY">17:30</option>
-            <option value="SIX_TWENTY">18:20</option>
-            <option value="SEVEN_TEN">19:10</option>
+            
+            <option value="NINE_THIRTY">09:30</option> 
+            <option value="TEN_TWENTY">10:20</option>
+            <option value="ELEVEN_TEN">11:10</option>
+            <option value="TWELVE_O_CLOCK">12:00</option>
+            <option value="ONE_THIRTY">13:30</option>
+            <option value="FOURTEEN_TWENTY">14:20</option>
+            <option value="FIFTEEN_TEN">15:10</option>
+            
+            <option value="FIFTEEN_THIRTY">15:30</option>
+            <option value="FOUR_TEN">16:10</option>
+            <option value="FIVE_THIRTY">17:00</option>
+
+
           </select>
         </div>
 

@@ -33,7 +33,7 @@ export const updateUser = async (cpf: string, userData: User) => {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data?.message || 'Erro ao atualizar usuário');
     }
-    console.error("Erro desconhecido:", error); // Adicione logging para erros desconhecidos
+    console.error("Erro desconhecido:", error); 
     throw new Error('Erro desconhecido');
   }
 };

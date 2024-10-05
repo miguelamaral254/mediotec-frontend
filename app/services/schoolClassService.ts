@@ -10,7 +10,7 @@ export const createClass = async (classData: Omit<SchoolClass, 'id'>): Promise<S
     return response.data;
   } catch (error) {
     console.error('Error creating class:', error);
-    throw error; // Aqui, você pode optar por lançar erros personalizados se quiser
+    throw error; 
   }
 };
 

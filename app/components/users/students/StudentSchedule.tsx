@@ -1,49 +1,49 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { ProfessorLessonResponse } from '@/app/interfaces/ProfessorLessonResponse';
+import { StudentLessonResponse } from '@/app/interfaces/StudentLessonResponse'; 
 
-const daysOfWeek = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+
+const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
 
 const weekDayMap: { [key: string]: string } = {
-  MONDAY: 'Segunda',
-  TUESDAY: 'Terça',
-  WEDNESDAY: 'Quarta',
-  THURSDAY: 'Quinta',
-  FRIDAY: 'Sexta',
-  SATURDAY: 'Sábado',
-  SUNDAY: 'Domingo',
+  MONDAY: 'Monday',
+  TUESDAY: 'Tuesday',
+  WEDNESDAY: 'Wednesday',
+  THURSDAY: 'Thursday',
+  FRIDAY: 'Friday',
+  SATURDAY: 'Saturday',
+  SUNDAY: 'Sunday',
 };
 
+// Mapeamento de horários
 const timeMap: { [key: string]: string } = {
-  SEVEN_THIRTY: '07:30',      // 07:30
-  EIGHT_TWENTY: '08:20',      // 08:20
-  NINE_TEN: '09:10',          // 09:10
-  NINE_THIRTY: '09:30',       // 09:30
-  TEN_TWENTY: '10:20',        // 10:20
-  ELEVEN_TEN: '11:10',        // 11:10
-  TWELVE_O_CLOCK: '12:00',    // 12:00
-  ONE_THIRTY: '13:30',        // 13:30
-  FOURTEEN_TWENTY: '14:20',    // 14:20
-  FIFTEEN_TEN: '15:10',       // 15:10
-  FIFTEEN_THIRTY: '15:30',    // 15:30
-  FOUR_TEN: '16:10',      // 16:10
-  FIVE_THIRTY: '17:00'        // 17:00
+  SEVEN_THIRTY: '07:30',
+  EIGHT_TWENTY: '08:20',
+  NINE_TEN: '09:10',
+  TEN_OH_OH: '10:00',
+  TEN_FIFTY: '10:50',
+  ELEVEN_FORTY: '11:40',
+  THIRTEEN_THIRTY: '13:30',
+  FOURTEEN_TWENTY: '14:20',
+  FIFTEEN_TEN: '15:10',
+  SIXTEEN_OH_OH: '16:00',
 };
 
+// Lista de horários
 const times = [
-  '07:30', '08:20', '09:10','09:30', '10:20', '11:10', '12:00',
-  '13:30', '14:20', '15:10', '15:30','16:10','17:00'
+  '07:30', '08:20', '09:10', '10:00', '10:50', '11:40',
+  '13:30', '14:20', '15:10', '16:00',
 ];
 
-interface LessonListProps {
-  lessons: ProfessorLessonResponse[];
+interface StudentScheduleProps {
+  lessons: StudentLessonResponse[]; // Altere isso para o tipo correto
   isOpen: boolean;
   onRequestClose: () => void;
-  userRole: string;
 }
 
-const LessonList: React.FC<LessonListProps> = ({ lessons, isOpen, onRequestClose, userRole }) => {
-  const scheduleMap: { [key: string]: { [key: string]: ProfessorLessonResponse[] } } = {};
+const StudentSchedule: React.FC<StudentScheduleProps> = ({ lessons, isOpen, onRequestClose }) => {
+  const scheduleMap: { [key: string]: { [key: string]: StudentLessonResponse[] } } = {};
 
   daysOfWeek.forEach((day) => {
     scheduleMap[day] = {};
@@ -66,19 +66,17 @@ const LessonList: React.FC<LessonListProps> = ({ lessons, isOpen, onRequestClose
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      contentLabel="Lista de Aulas"
-      className="fixed inset-0 z-50 ml-8 flex items-center justify-center" 
-      overlayClassName="fixed inset-0 bg-black bg-opacity-75" 
+      contentLabel="Horário do Aluno"
+      className="fixed inset-0 z-50 ml-8 flex items-center justify-center" // Modal occupies full screen
+      overlayClassName="fixed inset-0 bg-black bg-opacity-75" // Overlay styles
     >
-      <div className="bg-white max-h-[90%] w-full p-4 overflow-auto flex flex-col">
-        {userRole === 'ADMIN' && (
-          <div className="flex justify-end">
-            <button onClick={onRequestClose} className="bg-red-500 text-white rounded px-4 py-2">
-              Fechar
-            </button>
-          </div>
-        )}
-        <h2 className="text-lg font-bold mb-4">Lista de Aulas</h2>
+      <div className="bg-white max-h-[90%] w-full p-4 overflow-auto flex flex-col"> {/* Container for modal content */}
+        <div className="flex justify-end">
+          <button onClick={onRequestClose} className="bg-red-500 text-white rounded px-4 py-2">
+            Fechar
+          </button>
+        </div>
+        <h2 className="text-lg font-bold mb-4">Horário do Aluno</h2>
         <table className="min-w-full table-auto border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
@@ -99,6 +97,7 @@ const LessonList: React.FC<LessonListProps> = ({ lessons, isOpen, onRequestClose
                         <div key={lesson.id} className="mt-1">
                           <div className="text-sm font-medium">{lesson.discipline.name}</div>
                           <div className="text-sm font-medium">{lesson.schoolClass.code}</div>
+                          <div className="text-sm font-medium">{lesson.professorResponseDTO.name}</div>
                           <div className="text-xs">{lesson.room}</div>
                         </div>
                       ))
@@ -116,4 +115,4 @@ const LessonList: React.FC<LessonListProps> = ({ lessons, isOpen, onRequestClose
   );
 };
 
-export default LessonList;
+export default StudentSchedule;
