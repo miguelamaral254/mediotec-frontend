@@ -5,37 +5,20 @@ import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import {
-  FaHome,
-  FaUsers,
-  FaCog,
-  FaSignOutAlt,
-  FaBook,
-  FaChalkboardTeacher,
-  FaGraduationCap,
-  FaCalendarAlt,
-} from 'react-icons/fa';
+import { FaHome, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import NavbarHeader from './NavbarHeader';
 import logo from '../../../public/images/logo_mediotec.png';
 import avatar from '../../../public/images/avatar.png';
+import AdminLinks from './AdminLinks';
+import ProfessorLinks from './ProfessorLinks';
+import StudentLinks from './StudentLinks';
 
 const Navbar: React.FC = () => {
   const { user, setUser } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isManageDropdownOpen, setIsManageDropdownOpen] = useState(false);
-  const [isSemesterDropdownOpen, setIsSemesterDropdownOpen] = useState(false);
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false); // Novo estado para controlar a navbar
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const manageDropdownRef = useRef<HTMLDivElement>(null);
-  const semesterDropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-
-  const toggleManageDropdown = () => {
-    setIsManageDropdownOpen((prev) => !prev);
-  };
-
-  const toggleSemesterDropdown = () => {
-    setIsSemesterDropdownOpen((prev) => !prev);
-  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -44,15 +27,11 @@ const Navbar: React.FC = () => {
     router.push('/');
   };
 
+  // Fecha a sidebar ao clicar fora dela
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target as Node)
-      ) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         setIsSidebarOpen(false);
-        setIsManageDropdownOpen(false);
-        setIsSemesterDropdownOpen(false);
       }
     };
 
@@ -62,24 +41,19 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleMouseLeaveSidebar = () => {
-      setIsSidebarOpen(false);
-      setIsManageDropdownOpen(false);
-      setIsSemesterDropdownOpen(false);
-    };
+  const handleMouseEnter = () => {
+    setIsSidebarOpen(true);
+    setIsNavbarOpen(true); // Define a navbar como aberta
+  };
 
-    const sidebar = sidebarRef.current;
-    if (sidebar) {
-      sidebar.addEventListener('mouseleave', handleMouseLeaveSidebar);
-    }
-
-    return () => {
-      if (sidebar) {
-        sidebar.removeEventListener('mouseleave', handleMouseLeaveSidebar);
+  const handleMouseLeave = () => {
+    setTimeout(() => {
+      if (sidebarRef.current && !sidebarRef.current.matches(':hover')) {
+        setIsSidebarOpen(false);
+        setIsNavbarOpen(false); // Define a navbar como fechada
       }
-    };
-  }, [sidebarRef]);
+    }, 200);
+  };
 
   return (
     <>
@@ -87,12 +61,8 @@ const Navbar: React.FC = () => {
         <div
           ref={sidebarRef}
           className={`fixed top-0 left-0 h-full w-[20rem] text-white bg-blue-700 shadow-xl z-40 flex flex-col justify-between transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[18rem]'}`}
-          onMouseEnter={() => setIsSidebarOpen(true)}
-          onMouseLeave={() => {
-            setIsSidebarOpen(false);
-            setIsManageDropdownOpen(false);
-            setIsSemesterDropdownOpen(false);
-          }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           <div>
             <div className="p-4 mb-4">
@@ -121,131 +91,9 @@ const Navbar: React.FC = () => {
                 Home
               </Link>
 
-              {user?.role === 'ADMIN' && (
-                <>
-                  <button
-                    onClick={toggleManageDropdown}
-                    className="toggle-manage-dropdown flex items-center justify-between w-full p-3 font-semibold text-xl hover:bg-blue-600 transition-colors rounded-lg"
-                  >
-                    <div className="flex items-center">
-                      <FaUsers className="mr-2" />
-                      Gerenciar
-                    </div>
-                  </button>
-
-                  <div
-                    ref={manageDropdownRef}
-                    className={`overflow-hidden transition-max-height duration-300 ease-in-out ${isManageDropdownOpen ? 'max-h-80' : 'max-h-0'}`}
-                  >
-                    <div className="flex flex-col gap-1 pl-6 bg-blue-400">
-                      <Link href="/auth/dashboard/manage-users" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <FaUsers className="mr-2" />
-                        Usuários
-                      </Link>
-
-                      <Link href="/auth/dashboard/manage-schooclasses" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <FaChalkboardTeacher className="mr-2" />
-                        Turmas
-                      </Link>
-
-                      <Link href="/auth/dashboard/manage-discipline" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <FaBook className="mr-2" />
-                        Disciplinas
-                      </Link>
-
-                      <Link href="/auth/dashboard/manage-lessons" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <FaBook className="mr-2" />
-                        Aulas
-                      </Link>
-
-                      <Link href="/auth/dashboard/manage-grades" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <FaBook className="mr-2" />
-                        Conceitos
-                      </Link>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {user?.role === 'PROFESSOR' && (
-                <>
-                  <button
-                    onClick={toggleSemesterDropdown}
-                    className="toggle-semester-dropdown flex items-center justify-between w-full p-3 font-semibold text-xl hover:bg-blue-600 transition-colors rounded-lg"
-                  >
-                    <div className="flex items-center">
-                      <FaBook className="mr-2" />
-                      Semestre
-                    </div>
-                  </button>
-
-                  <div
-                    ref={semesterDropdownRef}
-                    className={`overflow-hidden transition-max-height duration-300 ease-in-out ${isSemesterDropdownOpen ? 'max-h-80' : 'max-h-0'}`}
-                  >
-                    <div className="flex flex-col gap-1 pl-6 bg-blue-400">
-                      <Link href="/auth/dashboard/professor-dashboard" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <FaBook className="mr-2" />
-                        Grade de horários
-                      </Link>
-                    </div>
-                  </div>
-                </>
-              )}
-               {user?.role === 'ADMIN' && (
-                <>
-                  <button
-                    onClick={toggleSemesterDropdown}
-                    className="toggle-semester-dropdown flex items-center justify-between w-full p-3 font-semibold text-xl hover:bg-blue-600 transition-colors rounded-lg"
-                  >
-                    <div className="flex items-center">
-                      <FaBook className="mr-2" />
-                      Semestre
-                    </div>
-                  </button>
-
-                  <div
-                    ref={semesterDropdownRef}
-                    className={`overflow-hidden transition-max-height duration-300 ease-in-out ${isSemesterDropdownOpen ? 'max-h-80' : 'max-h-0'}`}
-                  >
-                    <div className="flex flex-col gap-1 pl-6 bg-blue-400">
-                      <Link href="/auth/dashboard/professor-dashboard" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-                        <FaBook className="mr-2" />
-                        Grade de horários
-                      </Link>
-                    </div>
-                  </div>
-                </>
-              )}
-              {user?.role === 'STUDENT' && (
-  <>
-    <button
-      onClick={toggleSemesterDropdown}
-      className="toggle-semester-dropdown flex items-center justify-between w-full p-3 font-semibold text-xl hover:bg-blue-600 transition-colors rounded-lg"
-    >
-      <div className="flex items-center">
-        <FaBook className="mr-2" />
-        Semestre
-      </div>
-    </button>
-
-    <div
-      ref={semesterDropdownRef}
-      className={`overflow-hidden transition-max-height duration-300 ease-in-out ${isSemesterDropdownOpen ? 'max-h-80' : 'max-h-0'}`}
-    >
-      <div className="flex flex-col gap-1 pl-6 bg-blue-400">
-        <Link href="/auth/dashboard/student-dashboard/grades" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-          <FaGraduationCap className="mr-2" />
-          Conceitos
-        </Link>
-        <Link href="/auth/dashboard/student-dashboard/schedules" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-          <FaCalendarAlt className="mr-2" />
-          Quadro de Horário
-        </Link>
-      </div>
-    </div>
-  </>
-)}
+              {user.role === 'ADMIN' && <AdminLinks isNavbarOpen={isNavbarOpen} />}
+              {user.role === 'PROFESSOR' && <ProfessorLinks isNavbarOpen={isNavbarOpen} />}
+              {user.role === 'STUDENT' && <StudentLinks isNavbarOpen={isNavbarOpen} />}
             </nav>
           </div>
 
