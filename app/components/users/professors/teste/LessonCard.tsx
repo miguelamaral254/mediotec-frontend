@@ -31,7 +31,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ lesson }) => {
         {showStudents ? 'Esconder Alunos' : 'Ver Alunos'}
       </button>
 
-      {showStudents && <StudentsList schoolClassId={lesson.schoolClass.id} />}
+      {showStudents && <StudentsList schoolClassId={lesson.schoolClass.id} disciplineId={lesson.discipline.id}   />}
     </div>
   );
 };

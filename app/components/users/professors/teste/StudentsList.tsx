@@ -3,11 +3,13 @@ import { getStudentsInClass } from '../../../../services/schoolClassService';
 import { User } from '@/app/interfaces/User';
 import AssignGradeToStudent from './AssignGradeToStudent';
 
+
 interface StudentsListProps {
   schoolClassId: number;  
+  disciplineId: number; 
 }
 
-const StudentsList: React.FC<StudentsListProps> = ({ schoolClassId }) => {
+const StudentsList: React.FC<StudentsListProps> = ({ schoolClassId, disciplineId }) => {
   const [students, setStudents] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,8 +53,8 @@ const StudentsList: React.FC<StudentsListProps> = ({ schoolClassId }) => {
               </button>
               {studentCpfForAssign === student.cpf && (
                 <AssignGradeToStudent 
-                  studentCpf={studentCpfForAssign!} // Usando o operador de asserção não nula
-                  disciplineId={schoolClassId}
+                  studentCpf={studentCpfForAssign!} 
+                  disciplineId={disciplineId}
                 />
               )}
             </li>
