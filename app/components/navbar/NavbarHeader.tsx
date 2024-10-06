@@ -12,7 +12,6 @@ const NavbarHeader: React.FC = () => {
     <div className="p-4 text-white text-center">
       {user ? (
         <div>
-          {/* Nome do Usuário e Role */}
           <p className="text-lg font-semibold">{`Bem vindo, ${user.name}`}</p>
           <p className="text-sm">{`Perfil: ${mapRoleToPortuguese(user.role ?? '')}`}</p>
         </div>

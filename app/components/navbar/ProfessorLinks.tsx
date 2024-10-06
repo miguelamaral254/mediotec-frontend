@@ -2,8 +2,9 @@ import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { FaBook } from 'react-icons/fa';
 
+
 interface ProfessorLinksProps {
-  isNavbarOpen: boolean; // Nova propriedade para controlar a visibilidade do dropdown
+  isNavbarOpen: boolean; 
 }
 
 const ProfessorLinks: React.FC<ProfessorLinksProps> = ({ isNavbarOpen }) => {
@@ -14,7 +15,6 @@ const ProfessorLinks: React.FC<ProfessorLinksProps> = ({ isNavbarOpen }) => {
     setIsSemesterDropdownOpen((prev) => !prev);
   };
 
-  // Fechar o dropdown se a navbar estiver fechada
   React.useEffect(() => {
     if (!isNavbarOpen) {
       setIsSemesterDropdownOpen(false);
@@ -23,6 +23,7 @@ const ProfessorLinks: React.FC<ProfessorLinksProps> = ({ isNavbarOpen }) => {
 
   return (
     <>
+    
       <button
         onClick={toggleSemesterDropdown}
         className="toggle-semester-dropdown flex items-center justify-between w-full p-3 font-semibold text-xl hover:bg-blue-600 transition-colors rounded-lg"

@@ -35,7 +35,6 @@ const LandingPage = () => {
           <Image 
             src={Banner} 
             alt="Banner do Portal do Aluno"
-            layout="responsive" 
             width={700} 
             height={300} 
             className="rounded-lg" 

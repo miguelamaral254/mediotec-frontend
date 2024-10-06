@@ -22,7 +22,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Reseta o erro antes de tentar fazer login
+    setError(null); 
 
     try {
       const cleanedCPF = formData.cpf.replace(/\D/g, ''); // Remove caracteres especiais do CPF
@@ -31,16 +31,15 @@ const LoginForm = () => {
       const userData = await getUserData(cleanedCPF);
 
       if (!userData.active) {
-        // Exibe SweetAlert se o usuário estiver inativo
         Swal.fire({
           icon: 'error',
           title: 'Usuário inativo',
           text: 'Usuário inativo, entre em contato com a instituição.',
         });
-        return; // Interrompe o processo de login
+        return; 
       }
 
-      // Se o usuário estiver ativo, faz o login
+      
       const response = await login(cleanedCPF, formData.password);
       localStorage.setItem('token', response.token);
       localStorage.setItem('cpf', cleanedCPF);
@@ -61,7 +60,7 @@ const LoginForm = () => {
           height={200} 
         />
       </div>
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
+      <h1 className="text-2xl font-semibold mb-8">Login</h1>
 
       <div className="mb-4 w-full">
         <label htmlFor="cpf" className="block mb-2 font-medium">CPF</label>
@@ -89,7 +88,7 @@ const LoginForm = () => {
       </div>
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
-      <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+      <button type="submit" className="w-full bg-[#4666AF] text-white hover:bg-[#2b4e8a] font-semibold p-2 rounded">
         Entrar
       </button>
     </form>
