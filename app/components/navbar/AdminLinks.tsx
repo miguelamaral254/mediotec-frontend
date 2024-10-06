@@ -91,10 +91,7 @@ const AdminLinks: React.FC<AdminLinksProps> = ({ isNavbarOpen }) => {
             <FaBook className="mr-2" />
             Aulas
           </Link>
-          <Link href="/auth/dashboard/manage-grades" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
-            <FaBook className="mr-2" />
-            Conceitos
-          </Link>
+         
         </div>
       </div>
 
