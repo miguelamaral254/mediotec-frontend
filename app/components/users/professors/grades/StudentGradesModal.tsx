@@ -14,7 +14,7 @@ const StudentGradesModal: React.FC<StudentGradesModalProps> = ({ studentCpf, dis
   const [grades, setGrades] = useState<ResponseGrade[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [showAssignGradeModal, setShowAssignGradeModal] = useState<boolean>(false); // Controle para o modal de atribuição de notas
+  const [showAssignGradeModal, setShowAssignGradeModal] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchGrades = async () => {
@@ -38,8 +38,9 @@ const StudentGradesModal: React.FC<StudentGradesModalProps> = ({ studentCpf, dis
 
   if (loading) return <p>Carregando notas...</p>;
   if (error) return <p>{error}</p>;
-
-  if (grades.length === 0) return <p>Nenhuma nota encontrada.</p>;
+  if (grades.length === 0) return <p>Nenhuma nota encontrada.
+    <AssignGradeToStudent studentCpf={studentCpf} disciplineId={disciplineId} />
+  </p>;
 
   const { average, finalAverage, situation } = calculateFinalAverageAndSituation(grades);
   
@@ -105,7 +106,6 @@ const StudentGradesModal: React.FC<StudentGradesModalProps> = ({ studentCpf, dis
         </button>
       </div>
 
-    
       {showAssignGradeModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white rounded-lg p-6 w-96">

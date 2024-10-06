@@ -80,11 +80,8 @@ const AssignGradeToStudent: React.FC<AssignGradeToStudentProps> = ({ studentCpf,
           {error && <p className="text-red-500 text-sm">{error}</p>}
         </div>
 
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Atribuir Nota
+        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          Atribuir
         </button>
       </form>
     </div>
