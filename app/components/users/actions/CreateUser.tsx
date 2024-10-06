@@ -105,7 +105,7 @@ const CreateUser = () => {
       <form onSubmit={handleSubmit}>
         {/* Campos do formulário com base no tipo de usuário */}
         <div className="mb-4">
-          <label className="block mb-1">Nome:</label>
+          <label className="block text-xl mb-1">Nome:</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
         </div>
         <div className="mb-4">
@@ -120,26 +120,26 @@ const CreateUser = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Senha:</label>
+          <label className="block text-xl mb-1">Senha:</label>
           <input type="password" name="password" value={formData.password} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Email:</label>
+          <label className="block text-xl mb-1">Email:</label>
           <input type="email" name="email" value={formData.email} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
         </div>
         {/* Campos específicos baseados no tipo de usuário */}
         {(userType === 'STUDENT' || userType === 'COORDINATION') && (
           <div>
             <div className="mb-4">
-              <label className="block mb-1">Data de Nascimento:</label>
+              <label className="block text-xl mb-1">Data de Nascimento:</label>
               <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
             </div>
             <div className="mb-4">
-              <label className="block mb-1">Endereço:</label>
+              <label className="block text-xl mb-1">Endereço:</label>
               <input type="text" name="address" value={formData.address} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
             </div>
             <div className="mb-4">
-              <label className="block mb-1">Telefone:</label>
+              <label className="block text-xl mb-1">Telefone:</label>
               <InputMask
                 mask="(99) 99999-9999"
                 name="phone"
@@ -150,7 +150,7 @@ const CreateUser = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-1">Matrícula:</label>
+              <label className="block text-xl mb-1">Matrícula:</label>
               <InputMask
                 mask="999999999"
                 name="registration"
@@ -165,7 +165,7 @@ const CreateUser = () => {
         {userType === 'PARENT' && (
           <div>
             <div className="mb-4">
-              <label className="block mb-1">Data de Nascimento:</label>
+              <label className="block text-xl mb-1">Data de Nascimento:</label>
               <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full" required />
             </div>
             <div className="mb-4">
@@ -238,7 +238,7 @@ const CreateUser = () => {
             </div>
           </div>
         )}
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        <button type="submit" className="bg-[#4666AF] font-bold hover:bg-blue-500 text-white py-2 px-4 rounded">
           Criar Usuário
         </button>
       </form>

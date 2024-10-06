@@ -139,7 +139,7 @@ const UserLookUp = () => {
 
   return (
     <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Usuário</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center text-gray-700">Consultar Usuário</h2>
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">Selecione o Tipo de Usuário:</label>
@@ -218,11 +218,11 @@ const UserLookUp = () => {
                 <span>{user.name}  
                   <span className={`inline-block w-3 h-3 rounded-full ml-2 ${user.active ? 'bg-green-500' : 'bg-red-500'}`} />
                 </span>
-                <div className="flex flex-col">
-                  <button onClick={() => openModal(user)} className="text-blue-600 flex gap-1 justify-center align-middle items-center hover:underline mb-1">
+                <div className="flex gap-2 flex-col">
+                  <button onClick={() => openModal(user)} className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition">
                     <FaEye /> Ver Detalhes
                   </button>
-                  <button onClick={() => openEditModal(user)} className="text-yellow-600 flex gap-1 justify-center align-middle items-center hover:underline">
+                  <button onClick={() => openEditModal(user)} className="text-[#9d31bd] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#9d31bd] hover:text-white transition">
                     <FaPencilAlt /> Editar
                   </button>
                 </div>
