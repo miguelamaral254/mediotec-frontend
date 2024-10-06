@@ -1,20 +1,23 @@
 import { useState, useEffect } from 'react';
 import { getStudentsInClass } from '../../../../services/schoolClassService';
 import { User } from '@/app/interfaces/User';
+import AssignGradeToStudent from './AssignGradeToStudent';
 
 interface StudentsListProps {
-  schoolClassId: number;  // Passamos o schoolClassId diretamente
+  schoolClassId: number;  
 }
 
 const StudentsList: React.FC<StudentsListProps> = ({ schoolClassId }) => {
   const [students, setStudents] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [studentCpfForAssign, setStudentCpfForAssign] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         const studentsData = await getStudentsInClass(schoolClassId);
+        console.log('Dados recebidos de getStudentsInClass:', studentsData);
         setStudents(studentsData);
       } catch (error) {
         setError('Erro ao buscar alunos');
@@ -38,9 +41,20 @@ const StudentsList: React.FC<StudentsListProps> = ({ schoolClassId }) => {
           <p>Nenhum aluno encontrado.</p>
         ) : (
           students.map((student) => (
-            <li key={student.id} className="py-2 flex justify-between">
+            <li key={student.cpf} className="py-2 flex justify-between">
               <span>{student.name}</span>
-              <button className="text-green-500 hover:underline">Atribuir Nota</button>
+              <button 
+                className="text-green-500 hover:underline" 
+                onClick={() => setStudentCpfForAssign(student.cpf)}
+              >
+                Atribuir Nota
+              </button>
+              {studentCpfForAssign === student.cpf && (
+                <AssignGradeToStudent 
+                  studentCpf={studentCpfForAssign!} // Usando o operador de asserção não nula
+                  disciplineId={schoolClassId}
+                />
+              )}
             </li>
           ))
         )}

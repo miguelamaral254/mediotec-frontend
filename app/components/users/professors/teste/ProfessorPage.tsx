@@ -1,25 +1,7 @@
 import { useState, useEffect } from 'react';
-
 import { getLessonsByProfessorCpf } from '@/app/services/userConsultService';
 import LessonCard from './LessonCard';
-
-interface Lesson {
-  id: number;
-  name: string;
-  discipline: {
-    name: string;
-  };
-  schoolClass: {
-    id: number,
-    letter: string;
-    shift: string;
-    year: string;
-  };
-  weekDay: string;
-  startTime: string;
-  endTime: string;
-  room: string;
-}
+import { Lesson } from '@/app/interfaces/Lesson';
 
 interface ProfessorPageProps {
   cpf: string;
@@ -32,6 +14,7 @@ const ProfessorPage: React.FC<ProfessorPageProps> = ({ cpf }) => {
     const fetchLessons = async () => {
       try {
         const data = await getLessonsByProfessorCpf(cpf);
+        console.log('Dados recebidos de getLessonsByProfessorCpf:', data);
         setLessons(data);
       } catch (error) {
         console.error('Erro ao buscar as aulas:', error);
