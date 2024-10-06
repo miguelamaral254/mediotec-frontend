@@ -60,20 +60,13 @@ const Navbar: React.FC = () => {
       {user && (
         <div
           ref={sidebarRef}
-          className={`fixed top-0 left-0 h-full w-[20rem] text-white bg-blue-700 shadow-xl z-40 flex flex-col justify-between transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[18rem]'}`}
+          className={`fixed top-0 left-0 h-full w-[20rem] text-white bg-[#1D1D1D] shadow-xl z-40 flex flex-col justify-between transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[18rem]'}`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           <div>
-            <div className="p-4 mb-4">
-              <div className="relative block w-full mb-4">
-                <Link href="/auth/dashboard">
-                  <Image src={logo} alt="Logo Mediotec" width={200} height={200} />
-                </Link>
-              </div>
-            </div>
 
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center mt-12 mb-8">
               <Image
                 src={avatar}
                 alt="Imagem Circular"
@@ -85,8 +78,8 @@ const Navbar: React.FC = () => {
 
             <NavbarHeader />
 
-            <nav className="flex flex-col gap-1 p-2 text-base font-normal text-white">
-              <Link href="/auth/dashboard" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
+            <nav className="flex flex-col gap-1 p-2 text-xl font-semibold text-white">
+              <Link href="/auth/dashboard" className="flex items-center p-3 rounded-lg hover:bg-[#4666AF]">
                 <FaHome className="mr-2" />
                 Home
               </Link>
@@ -98,12 +91,12 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-2 p-4">
-            <Link href="/auth/dashboard/settings" className="flex items-center p-3 rounded-lg hover:bg-blue-600">
+            <Link href="/auth/dashboard/settings" className="flex text-xl font-semibold items-center p-3 rounded-lg hover:bg-[#4666AF]">
               <FaCog className="mr-2" />
               Configurações
             </Link>
 
-            <button onClick={handleLogout} className="flex items-center p-3 rounded-lg hover:bg-blue-600">
+            <button onClick={handleLogout} className="flex items-center text-xl font-semibold p-3 rounded-lg hover:bg-[#4666AF]">
               <FaSignOutAlt className="mr-2" />
               Sair
             </button>

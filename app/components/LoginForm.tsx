@@ -61,7 +61,7 @@ const LoginForm = () => {
           height={200} 
         />
       </div>
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
+      <h1 className="text-2xl font-semibold mb-8">Login</h1>
 
       <div className="mb-4 w-full">
         <label htmlFor="cpf" className="block mb-2 font-medium">CPF</label>
@@ -89,7 +89,7 @@ const LoginForm = () => {
       </div>
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
-      <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+      <button type="submit" className="w-full bg-[#4666AF] text-white hover:bg-[#2b4e8a] font-semibold p-2 rounded">
         Entrar
       </button>
     </form>

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { FaBook } from 'react-icons/fa';
+import logo from '../../public/images/logo_mediotec.png';
 
 interface ProfessorLinksProps {
   isNavbarOpen: boolean; // Nova propriedade para controlar a visibilidade do dropdown
@@ -23,6 +24,7 @@ const ProfessorLinks: React.FC<ProfessorLinksProps> = ({ isNavbarOpen }) => {
 
   return (
     <>
+    
       <button
         onClick={toggleSemesterDropdown}
         className="toggle-semester-dropdown flex items-center justify-between w-full p-3 font-semibold text-xl hover:bg-blue-600 transition-colors rounded-lg"
