@@ -53,7 +53,7 @@ const   CreateDiscipline = () => {
       <h2 className="text-2xl font-bold mb-4">Criar Disciplina</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block mb-1">Nome da Disciplina:</label>
+          <label className="block text-xl mb-1">Nome da Disciplina:</label>
           <input
             type="text"
             name="name"
@@ -65,7 +65,7 @@ const   CreateDiscipline = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-1">Carga Horária:</label>
+          <label className="block text-xl mb-1">Carga Horária:</label>
           <input
             type="number"
             name="workload"
@@ -77,7 +77,7 @@ const   CreateDiscipline = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-1">Descrição:</label>
+          <label className="block text-xl mb-1">Descrição:</label>
           <textarea
             name="description"
             value={formData.description}
@@ -87,7 +87,7 @@ const   CreateDiscipline = () => {
           />
         </div>
 
-        <button type="submit" className=" w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded">
+        <button type="submit" className=" w-full bg-[#4666AF] hover:bg-blue-500 text-white p-2 rounded">
           Criar Disciplina
         </button>
       </form>

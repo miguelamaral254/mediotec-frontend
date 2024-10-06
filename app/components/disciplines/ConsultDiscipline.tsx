@@ -74,7 +74,7 @@ const ConsultDiscipline = () => {
 
   return (
     <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Disciplinas</h2>
+      <h2 className="text-2xl mb-4 text-center font-bold text-gray-700">Consultar Disciplinas</h2>
 
       <input
         type="text"
@@ -84,24 +84,24 @@ const ConsultDiscipline = () => {
         className="mb-4 border border-gray-300 rounded-md p-2 w-full"
       />
 
-      <h3 className="text-lg font-semibold mb-2">Disciplinas Disponíveis:</h3>
+      <h3 className="text-xl pb-4 font-semibold mb-2">Disciplinas Disponíveis:</h3>
       <div className="bg-white rounded-lg shadow">
         {filteredDisciplines.length === 0 ? (
           <p className="p-4 text-gray-500">Nenhuma disciplina encontrada.</p>
         ) : (
           filteredDisciplines.map((discipline) => (
-            <div key={discipline.id} className="p-4 border-b last:border-b-0 flex justify-between items-center">
+            <div key={discipline.id} className="p-4 border-b last:border-b-0 flex justify-between font-semibold text-[1.3rem] items-center">
               <span>{discipline.name}</span>
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2">
                 <button
                   onClick={() => openDetailModal(discipline)}
-                  className="text-blue-600 flex gap-1 justify-center items-center hover:underline"
+                  className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition"
                 >
                   <FaEye /> Ver Detalhes
                 </button>
                 <button
                   onClick={() => openEditModal(discipline)}
-                  className="text-green-600 flex gap-1 justify-center items-center hover:underline"
+                  className="text-[#9d31bd] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#9d31bd] hover:text-white transition"
                 >
                   <FaEdit /> Editar
                 </button>

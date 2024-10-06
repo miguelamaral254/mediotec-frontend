@@ -13,7 +13,7 @@ const ManageLessons = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100">
-      <div className="max-w-lg w-full bg-white shadow-md rounded-lg p-6">
+      <div className="max-w-lg w-full bg-white border-4 border-[#9d31bd] shadow-xl rounded-lg p-6">
         <h1 className="text-2xl font-bold mb-4 text-center">Gerenciar Aulas</h1>
         <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mb-4">
           <button
