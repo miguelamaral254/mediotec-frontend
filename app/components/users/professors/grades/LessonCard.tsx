@@ -18,12 +18,8 @@ const LessonCard: React.FC<LessonCardProps> = ({ lesson }) => {
   return (
     <div className="bg-white shadow-md rounded-lg p-4 hover:bg-gray-100 transition cursor-pointer">
       <h2 className="text-xl font-semibold">{lesson.name}</h2>
-      <p>Disciplina ID: {lesson.discipline.id}</p>
-      <p>Turma: {lesson.schoolClass.id}</p>
-      <p>
-        {lesson.weekDay}, {lesson.startTime} - {lesson.endTime}
-      </p>
-      <p>Sala: {lesson.room}</p>
+      <p>Disciplina: {lesson.discipline.name}</p>
+      <p>Turma: {lesson.schoolClass.code}</p>
       <button
         onClick={handleToggleStudents}
         className="mt-2 text-blue-500 hover:underline"

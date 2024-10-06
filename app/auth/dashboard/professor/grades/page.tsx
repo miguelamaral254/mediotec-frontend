@@ -4,13 +4,12 @@ import ProfessorPage from "@/app/components/users/professors/grades/ProfessorPag
 import { useEffect, useState } from 'react';
 
 const Grades = () => {
-  // Define o tipo do estado como `string | null`
   const [cpf, setCpf] = useState<string | null>(null);
 
   useEffect(() => {
     const storedCpf = localStorage.getItem('cpf');
     if (storedCpf) {
-      setCpf(storedCpf); // Agora aceita string
+      setCpf(storedCpf); 
     }
   }, []);
 

@@ -52,7 +52,6 @@ export default function Dashboard() {
     <div className="mx-auto px-4 sm:px-6 lg:px-8 pt-10 w-[98%] min-h-screen">
       {user ? (
         <div>
-          {/* Seções específicas para cada tipo de usuário */}
           <div className="mb-8">
             {user.role === 'ADMIN' && <AdminSection />}
             {user.role === 'PROFESSOR' && <ProfessorSection />}
