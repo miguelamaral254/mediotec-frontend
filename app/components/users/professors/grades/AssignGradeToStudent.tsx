@@ -4,25 +4,25 @@ import { createGrades } from '@/app/services/gradeService';
 import Swal from 'sweetalert2';
 
 interface AssignGradeToStudentProps {
-  studentCpf: string; // Alterado para studentCpf
+  studentCpf: string;
   disciplineId: number;
 }
 
 const AssignGradeToStudent: React.FC<AssignGradeToStudentProps> = ({ studentCpf, disciplineId }) => {
   const [evaluationType, setEvaluationType] = useState<string>('AV1');
-  const [gradeValue, setGradeValue] = useState<number | ''>(''); 
+  const [gradeValue, setGradeValue] = useState<number | ''>('');
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (gradeValue === '') {
       setError('Por favor, insira uma nota.');
       return;
     }
 
     const gradeData: CreateGradeDTO = {
-      studentCpf, // Usando studentCpf
+      studentCpf,
       disciplineId,
       evaluation: gradeValue,
       evaluationType,

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import { getUserData } from '@/app/services/authService';
 import { AdminSection } from '@/app/components/users/admin/AdminSection';
-import { ProfessorSection } from '@/app/components/users/professors/ProfessorSection';
+import { ProfessorSection } from '@/app/components/users/professors/schedules/ProfessorSection';
 import { ParentSection } from '@/app/components/users/parents/ParentSection';
 import { StudentSection } from '@/app/components/users/students/StudentSection';
 

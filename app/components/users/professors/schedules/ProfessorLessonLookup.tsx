@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import LessonList from './LessonList';
+
 import { ProfessorLessonResponse } from '@/app/interfaces/ProfessorLessonResponse';
 import { getLessonsByProfessorCpf, getAllProfessors } from '@/app/services/userConsultService';
 import { useAuth } from '@/app/context/AuthContext';
+import LessonList from './LessonList';
 
 interface Professor {
   cpf: string;

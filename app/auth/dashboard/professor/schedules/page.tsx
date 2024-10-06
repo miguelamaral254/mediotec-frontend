@@ -1,6 +1,8 @@
 'use client';
 
-import ProfessorLessonLookup from '@/app/components/users/professors/ProfessorLessonLookup';
+import ProfessorLessonLookup from "@/app/components/users/professors/schedules/ProfessorLessonLookup";
+
+
 
 
 const Schedules = () => {

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getLessonsByProfessorCpf } from '@/app/services/userConsultService';
-import LessonCard from './LessonCard';
+
 import { Lesson } from '@/app/interfaces/Lesson';
+import LessonCard from './LessonCard';
+
 
 interface ProfessorPageProps {
   cpf: string;
