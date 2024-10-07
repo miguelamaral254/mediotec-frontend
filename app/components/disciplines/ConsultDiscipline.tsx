@@ -101,7 +101,7 @@ const ConsultDiscipline = () => {
                 </button>
                 <button
                   onClick={() => openEditModal(discipline)}
-                  className="text-[#9d31bd] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#9d31bd] hover:text-white transition"
+                  className="text-[#DC3181] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition"
                 >
                   <FaEdit /> Editar
                 </button>

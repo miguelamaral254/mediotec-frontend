@@ -31,7 +31,7 @@ const Settings: React.FC<SettingsProps> = ({ user }) => {
 
   return (
     <div className="bg-gray-100 min-h-screen p-6">
-      <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
+      <section className="w-full ml-8 bg-white border-2 border-[#898989] shadow-xl rounded-lg p-6">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">Configurações da Conta</h2>
         <div className="flex space-x-4 mb-4">
           <button
@@ -42,7 +42,7 @@ const Settings: React.FC<SettingsProps> = ({ user }) => {
           </button>
           <button
             className={`py-2 px-4 rounded-md ${activeTab === 'update' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-            onClick={() => setActiveTab('update')}
+            onClick={() => setActiveTab('update')} 
           >
             Atualizar Informações
           </button>
