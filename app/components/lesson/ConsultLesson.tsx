@@ -70,7 +70,7 @@ const ConsultLesson = () => {
       <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Aula</h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Selecione a Aula:</label>
+        <label className="block text-xl py-2 text-gray-800">Selecione a Aula:</label>
         <select
           value={selectedLessonId || ''}
           onChange={(e) => setSelectedLessonId(Number(e.target.value))}
@@ -87,7 +87,7 @@ const ConsultLesson = () => {
 
       <button
         onClick={handleSearch}
-        className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
+        className="mt-4 w-full bg-[#4666AF] hover:bg-blue-500 transition text-white p-2 rounded-md"
       >
         Buscar
       </button>

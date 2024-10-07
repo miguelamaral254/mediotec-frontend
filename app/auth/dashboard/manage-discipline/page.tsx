@@ -14,14 +14,14 @@ const ManageDisciplines = () => {
     <div className="flex flex-col sm:flex-row justify-center space-x-0 sm:space-x-4 mb-4">
     <button 
   onClick={() => setAction('consult')} 
-  className="p-4 bg-[#9d31bd] hover:bg-purple-700 font-semibold text-white rounded w-full sm:w-auto text-lg"
+  className="p-4 transition bg-[#9d31bd] hover:bg-purple-700 font-semibold text-white rounded w-full sm:w-auto text-lg"
 >
   Consultar Disciplina
 </button>
 
     <button 
   onClick={() => setAction('create')} 
-  className="mb-2 sm:mb-0 p-4 bg-[#4666AF] font-semibold hover:bg-blue-500 text-white rounded w-full sm:w-auto text-lg"
+  className="mb-2 sm:mb-0 p-4 bg-[#4666AF] transition font-semibold hover:bg-blue-500 text-white rounded w-full sm:w-auto text-lg"
 >
   Criar Disciplina
 </button>

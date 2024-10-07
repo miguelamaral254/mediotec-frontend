@@ -131,7 +131,7 @@ const CreateClass = () => {
 
       <button
         onClick={handleCreate}
-        className="mt-4 w-full bg-blue-500 hover:bg-green-600 text-white p-2 rounded-md"
+        className="mt-4 w-full bg-[#4666AF] hover:bg-blue-500 transition text-white p-2 rounded-md"
       >
         Criar
       </button>
