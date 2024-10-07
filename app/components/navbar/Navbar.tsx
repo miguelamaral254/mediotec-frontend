@@ -12,10 +12,12 @@ import AdminLinks from './AdminLinks';
 import ProfessorLinks from './ProfessorLinks';
 import StudentLinks from './StudentLinks';
 
+
+
 const Navbar: React.FC = () => {
   const { user, setUser } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isNavbarOpen, setIsNavbarOpen] = useState(false); // Novo estado para controlar a navbar
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -62,8 +64,8 @@ const Navbar: React.FC = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
+          
           <div>
-
             <div className="flex justify-center mt-12 mb-8">
               <Image
                 src={avatar}
@@ -73,32 +75,28 @@ const Navbar: React.FC = () => {
                 className="rounded-full bg-white"
               />
             </div>
-
             <NavbarHeader />
-
             <nav className="flex flex-col gap-1 p-2 text-xl font-semibold text-white">
               <Link href="/auth/dashboard" className="flex items-center p-3 rounded-lg hover:bg-[#4666AF]">
                 <FaHome className="mr-2" />
                 Home
               </Link>
-
               {user.role === 'ADMIN' && <AdminLinks isNavbarOpen={isNavbarOpen} />}
               {user.role === 'PROFESSOR' && <ProfessorLinks isNavbarOpen={isNavbarOpen} />}
               {user.role === 'STUDENT' && <StudentLinks isNavbarOpen={isNavbarOpen} />}
             </nav>
           </div>
-
           <div className="flex flex-col gap-2 p-4">
             <Link href="/auth/dashboard/settings" className="flex text-xl font-semibold items-center p-3 rounded-lg hover:bg-[#4666AF]">
               <FaCog className="mr-2" />
               Configurações
             </Link>
-
             <button onClick={handleLogout} className="flex items-center text-xl font-semibold p-3 rounded-lg hover:bg-[#4666AF]">
               <FaSignOutAlt className="mr-2" />
               Sair
             </button>
           </div>
+          
         </div>
       )}
     </>
