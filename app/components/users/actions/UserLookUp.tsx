@@ -222,7 +222,7 @@ const UserLookUp = () => {
                   <button onClick={() => openModal(user)} className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition">
                     <FaEye /> Ver Detalhes
                   </button>
-                  <button onClick={() => openEditModal(user)} className="text-[#9d31bd] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#9d31bd] hover:text-white transition">
+                  <button onClick={() => openEditModal(user)} className="text-[#DC3181] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition">
                     <FaPencilAlt /> Editar
                   </button>
                 </div>

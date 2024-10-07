@@ -11,12 +11,12 @@ const ManageSchoolClasses = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100">
-  <div className="max-w-lg w-full bg-white border-4 border-[#9d31bd] shadow-xl rounded-lg p-6">
+  <div className="w-full ml-8 bg-white border-2 border-[#898989] shadow-xl rounded-lg p-6">
     <h1 className="text-2xl font-bold mb-4 text-center">Gerenciar Turmas</h1>
     <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mb-4 justify-center">
       <button
         onClick={() => setAction('consult')}
-        className="p-4 bg-[#9d31bd] transition hover:bg-purple-700 font-semibold text-white rounded w-full sm:w-auto text-lg"
+        className="p-4 bg-[#E8E259] transition hover:bg-[#F5EA21] font-semibold text-white rounded w-full sm:w-auto text-lg"
       >
         Consultar Turmas
       </button>
