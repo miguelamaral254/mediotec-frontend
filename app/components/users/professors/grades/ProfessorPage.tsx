@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { getLessonsByProfessorCpf } from '@/app/services/userConsultService';
 
-import { Lesson } from '@/app/interfaces/Lesson';
+
 import LessonCard from './LessonCard';
+import { LessonResponseDTO } from '@/app/interfaces/LessonResponseDTO';
 
 
 interface ProfessorPageProps {
@@ -10,7 +11,7 @@ interface ProfessorPageProps {
 }
 
 const ProfessorPage: React.FC<ProfessorPageProps> = ({ cpf }) => {
-  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [lessons, setLessons] = useState<LessonResponseDTO[]>([]);
 
   useEffect(() => {
     const fetchLessons = async () => {
