@@ -93,18 +93,18 @@ const SchoolClassLookUp  = () => {
           <p className="p-4 text-gray-500">Nenhuma classe encontrada.</p>
         ) : (
           filteredClasses.map((schoolClass) => (
-            <div key={schoolClass.id} className="p-4 border-b last:border-b-0 flex justify-between items-center">
+            <div key={schoolClass.id} className="p-4 border-b text-xl last:border-b-0 flex justify-between items-center">
               <span>{schoolClass.code}</span>
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2">
                 <button
                   onClick={() => openDetailModal(schoolClass)}
-                  className="text-blue-600 flex gap-1 justify-center items-center hover:underline"
+                  className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition"
                 >
                   <FaEye /> Ver Detalhes
                 </button>
                 <button
                   onClick={() => openEditModal(schoolClass)}
-                  className="text-green-600 flex gap-1 justify-center items-center hover:underline"
+                  className="text-[#9d31bd] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#9d31bd] hover:text-white transition"
                 >
                   <FaEdit /> Editar
                 </button>

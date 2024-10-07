@@ -90,7 +90,7 @@ const CreateUser = () => {
   };
 
   return (
-    <div className="bg-gray-200 rounded-lg p-10 shadow-md text-black">
+    <div className="bg-gray-200 rounded-lg p-10 shadow-md text-black max-w-xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">Criar Usuário</h2>
       <select
         value={userType}
@@ -238,7 +238,7 @@ const CreateUser = () => {
             </div>
           </div>
         )}
-        <button type="submit" className="bg-[#4666AF] font-bold hover:bg-blue-500 text-white py-2 px-4 rounded">
+        <button type="submit" className="bg-[#4666AF] transition w-full font-bold hover:bg-blue-500 text-white py-2 px-4 rounded">
           Criar Usuário
         </button>
       </form>

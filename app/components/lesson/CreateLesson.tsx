@@ -147,7 +147,7 @@ const CreateLesson = () => {
   };
 
   return (
-    <div className="p-4">
+<div className="bg-gray-200 rounded-lg p-10 shadow-md text-black max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Criar Aula</h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <form onSubmit={(e) => {
@@ -155,7 +155,7 @@ const CreateLesson = () => {
         handleCreate();
       }}>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Nome da Aula:</label>
+          <label className="block text-xl text-gray-700">Nome da Aula:</label>
           <input
             type="text"
             value={name}
@@ -166,7 +166,7 @@ const CreateLesson = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Turma:</label>
+          <label className="block text-xl text-gray-700">Turma:</label>
           <select
             value={schoolClassId || ''}
             onChange={(e) => setSchoolClassId(Number(e.target.value))}
@@ -183,7 +183,7 @@ const CreateLesson = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Disciplina:</label>
+          <label className="block text-xl text-gray-700">Disciplina:</label>
           <select
             value={disciplineId || ''}
             onChange={(e) => setDisciplineId(Number(e.target.value))}
@@ -200,7 +200,7 @@ const CreateLesson = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Professor (CPF):</label>
+          <label className="block text-xl text-gray-700">Professor (CPF):</label>
           <select
             value={professorCpf}
             onChange={(e) => setProfessorCpf(e.target.value)}
@@ -217,7 +217,7 @@ const CreateLesson = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Dia da Semana:</label>
+          <label className="block text-xl text-gray-700">Dia da Semana:</label>
           <select
             value={weekDay || ''}
             onChange={(e) => setWeekDay(e.target.value as Week)} // Enviar como enum
@@ -236,7 +236,7 @@ const CreateLesson = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Início:</label>
+          <label className="block text-xl text-gray-700">Início:</label>
           <select
             value={startTime || ''}
             onChange={(e) => setStartTime(e.target.value as Schedule)} // Enviar como enum
@@ -265,7 +265,7 @@ const CreateLesson = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Fim:</label>
+          <label className="block text-xl text-gray-700">Fim:</label>
           <select
             value={endTime || ''}
             onChange={(e) => setEndTime(e.target.value as Schedule)} // Enviar como enum
@@ -294,7 +294,7 @@ const CreateLesson = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Sala:</label>
+          <label className="block text-xl text-gray-700">Sala:</label>
           <input
             type="text"
             value={room}
@@ -306,7 +306,7 @@ const CreateLesson = () => {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+          className="bg-[#4666AF] hover:bg-blue-500 transition text-white w-full font-bold py-2 px-4 rounded"
         >
           Criar Aula
         </button>

@@ -170,7 +170,7 @@ const UserLookUp = () => {
         />
       </div>
 
-      <button onClick={handleConsult} className={`bg-blue-600 text-white rounded px-4 py-2 w-full ${!cpf ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!cpf}>
+      <button onClick={handleConsult} className={`bg-[#4666AF] hover:bg-blue-500 transition text-white rounded px-4 py-2 w-full ${!cpf ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!cpf}>
         Consultar
       </button>
 
