@@ -38,15 +38,15 @@ const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) 
         <div>
             <div
                 id="drawer-contact"
-                className="fixed top-0 right-0 z-90 h-screen p-4 overflow-y-auto transition-transform bg-white w-80 dark:bg-gray-800"
+                className="fixed top-0 right-0 z-90 h-screen p-4 overflow-y-auto transition-transform w-80 bg-[#1D1D1D]"
                 tabIndex={-1}
                 aria-labelledby="drawer-contact-label"
             >
                 <h5
                     id="drawer-label"
-                    className="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400"
+                    className="flex justify-center items-center mb-12 text-base font-semibold text-white text-xl uppercase"
                 >
-                    Contato
+                    Notificação
                 </h5>
                 <button
                     type="button"
@@ -60,7 +60,7 @@ const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) 
                 </button>
                 <form onSubmit={handleSubmit} className="mb-6">
                     <div className="mb-6">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Papel:</label>
+                        <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Receptor:</label>
                         <select
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
@@ -75,7 +75,7 @@ const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) 
                         </select>
                     </div>
                     <div className="mb-6">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mensagem:</label>
+                        <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Mensagem:</label>
                         <textarea
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
@@ -85,7 +85,7 @@ const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) 
                     </div>
                     <button
                         type="submit"
-                        className="text-white bg-blue-700 hover:bg-blue-800 w-full focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 block"
+                        className="text-white bg-[#4666AF] hover:bg-blue-500 transition w-full focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 focus:outline-none dark:focus:ring-blue-800 block"
                     >
                         Enviar Mensagem
                     </button>

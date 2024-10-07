@@ -64,7 +64,7 @@ const CreateClass = () => {
       <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Criar Turma</h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Código:</label>
+        <label className="block text-xl text-gray-700">Código:</label>
         <input
           type="text"
           value={code}
@@ -76,7 +76,7 @@ const CreateClass = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Ano:</label>
+        <label className="block text-xl text-gray-700">Ano:</label>
         <select 
           value={year} 
           onChange={(e) => setYear(e.target.value as 'FIRST' | 'SECOND' | 'THIRD')}
@@ -89,7 +89,7 @@ const CreateClass = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Letra da Turma:</label>
+        <label className="block text-xl text-gray-700">Letra da Turma:</label>
         <select 
           value={letter} 
           onChange={(e) => setLetter(e.target.value as LetterEnum)} // Atualiza o estado da letra
@@ -105,7 +105,7 @@ const CreateClass = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Turno:</label>
+        <label className="block text-xl text-gray-700">Turno:</label>
         <select 
           value={shift} 
           onChange={(e) => setShift(e.target.value as 'MORNING' | 'AFTERNOON' | 'EVENING')}
@@ -118,7 +118,7 @@ const CreateClass = () => {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Curso Técnico:</label>
+        <label className="block text-xl text-gray-700">Curso Técnico:</label>
         <select 
           value={technicalCourse} 
           onChange={(e) => setTechnicalCourse(e.target.value as 'TDS' | 'TLS')}
