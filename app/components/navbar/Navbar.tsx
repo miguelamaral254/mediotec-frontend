@@ -75,7 +75,7 @@ const Navbar: React.FC = () => {
                 className="rounded-full bg-white"
               />
             </div>
-            <NavbarHeader />
+            <NavbarHeader isNavbarOpen={isNavbarOpen} />
             <nav className="flex flex-col gap-1 p-2 text-xl font-semibold text-white">
               <Link href="/auth/dashboard" className="flex items-center p-3 rounded-lg hover:bg-[#4666AF]">
                 <FaHome className="mr-2" />

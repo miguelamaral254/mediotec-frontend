@@ -2,13 +2,14 @@ import { Notification } from '@/app/interfaces/Notification';
 import { notificationService } from '@/app/services/notificationService';
 import React, { useEffect, useState } from 'react';
 import { FaBell } from 'react-icons/fa';
-import NotificationItem from './NotificationItem'; // Importando o novo componente
+import NotificationItem from './NotificationItem'; // Importing the NotificationItem component
 
 interface NotificationBellProps {
     userCpf: string;
+    isNavbarOpen: boolean; // Added to handle dropdown visibility
 }
 
-const NotificationBell: React.FC<NotificationBellProps> = ({ userCpf }) => {
+const NotificationBell: React.FC<NotificationBellProps> = ({ userCpf, isNavbarOpen }) => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -36,6 +37,13 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ userCpf }) => {
     useEffect(() => {
         fetchNotifications();
     }, [userCpf]);
+
+    useEffect(() => {
+        // Close dropdown when navbar closes
+        if (!isNavbarOpen) {
+            setDropdownOpen(false);
+        }
+    }, [isNavbarOpen]);
 
     const handleDropdownToggle = () => {
         setDropdownOpen(!dropdownOpen);
