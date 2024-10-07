@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import StudentsList from './StudentsList';
-import { Lesson } from '@/app/interfaces/Lesson';
+
+import { LessonResponseDTO } from '@/app/interfaces/LessonResponseDTO';
 
 interface LessonCardProps {
-  lesson: Lesson;
+  lesson: LessonResponseDTO;
 }
 
 const LessonCard: React.FC<LessonCardProps> = ({ lesson }) => {

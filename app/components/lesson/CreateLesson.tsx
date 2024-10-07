@@ -91,7 +91,7 @@ const CreateLesson = () => {
     try {
       const newLesson: Omit<Lesson, 'id'> = {
         name,
-        schoolClass: { id: schoolClassId },
+        schoolClass: { id: schoolClassId,  },
         discipline: { id: disciplineId },
         professor: {
           cpf: professorCpf,

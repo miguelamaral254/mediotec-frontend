@@ -28,8 +28,8 @@ export enum Week {
 export interface Lesson {
   id?: number;
   name: string;
-  schoolClass: { id: number, code: string  };
-  discipline: { id: number, name: string };
+  schoolClass: { id: number };
+  discipline: { id: number };
   professor: {
     cpf: string;
     name: string;
