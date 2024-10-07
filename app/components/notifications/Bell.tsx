@@ -45,7 +45,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ userCpf }) => {
     const unreadCount = unreadNotifications.length;
 
     return (
-        <div className="relative justify-end">
+        <div className="relative">
             <button onClick={handleDropdownToggle} className="text-gray-100 relative">
                 <FaBell className="text-xl" />
                 {unreadCount > 0 && (
@@ -53,7 +53,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ userCpf }) => {
                 )}
             </button>
             {dropdownOpen && (
-                <div className="absolute right-0 bg-white border text-black border-gray-300 rounded shadow-lg mt-2 w-64 z-10">
+                <div className="absolute right-0 top-8 transform bg-white border text-black border-gray-300 rounded shadow-lg w-64 z-10">
                     {notifications.length === 0 ? (
                         <p className="p-4 text-gray-600">Nenhuma notificação.</p>
                     ) : (

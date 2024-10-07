@@ -1,8 +1,12 @@
 import { notificationService } from '@/app/services/notificationService';
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 
+interface NotificationFormProps {
+    setIsDrawerOpen: (isOpen: boolean) => void;
+}
 
-const NotificationForm = () => {
+const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) => {
     const [role, setRole] = useState('');
     const [message, setMessage] = useState('');
 
@@ -10,38 +14,84 @@ const NotificationForm = () => {
         e.preventDefault();
         try {
             await notificationService.sendNotification({ role, message });
-            alert('Notificação enviada com sucesso!');
+            Swal.fire({
+                title: 'Sucesso!',
+                text: 'Notificação enviada com sucesso!',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            });
             setRole('');
             setMessage('');
+            setIsDrawerOpen(false);
         } catch (error) {
             console.error('Erro ao enviar notificação:', error);
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Ocorreu um erro ao enviar a notificação.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="p-4 border rounded">
-            <h2 className="text-lg font-bold">Enviar Notificação</h2>
-            <div className="mb-4">
-                <label className="block">Papel:</label>
-                <input
-                    type="text"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="border rounded w-full p-2"
-                    required
-                />
+        <div>
+            <div
+                id="drawer-contact"
+                className="fixed top-0 right-0 z-90 h-screen p-4 overflow-y-auto transition-transform bg-white w-80 dark:bg-gray-800"
+                tabIndex={-1}
+                aria-labelledby="drawer-contact-label"
+            >
+                <h5
+                    id="drawer-label"
+                    className="inline-flex items-center mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400"
+                >
+                    Contato
+                </h5>
+                <button
+                    type="button"
+                    onClick={() => setIsDrawerOpen(false)}
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 right-2.5 inline-flex items-center justify-center"
+                >
+                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span className="sr-only">Fechar menu</span>
+                </button>
+                <form onSubmit={handleSubmit} className="mb-6">
+                    <div className="mb-6">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Papel:</label>
+                        <select
+                            value={role}
+                            onChange={(e) => setRole(e.target.value)}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required
+                        >
+                            <option value="" disabled>Selecione um perfil</option>
+                            <option value="STUDENT">Alunos</option>
+                            <option value="ADMIN">Coordenação</option>
+                            <option value="PROFESSOR">Professores</option>
+                            <option value="PARENT">Pais</option>
+                        </select>
+                    </div>
+                    <div className="mb-6">
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mensagem:</label>
+                        <textarea
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="text-white bg-blue-700 hover:bg-blue-800 w-full focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 block"
+                    >
+                        Enviar Mensagem
+                    </button>
+                </form>
             </div>
-            <div className="mb-4">
-                <label className="block">Mensagem:</label>
-                <textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    className="border rounded w-full p-2"
-                    required
-                />
-            </div>
-            <button type="submit" className="bg-blue-500 text-white p-2 rounded">Enviar</button>
-        </form>
+        </div>
     );
 };
 

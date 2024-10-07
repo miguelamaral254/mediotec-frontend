@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { FaUsers, FaChalkboardTeacher, FaBook } from 'react-icons/fa';
 
+
 interface AdminLinksProps {
   isNavbarOpen: boolean;
 }
@@ -111,6 +112,7 @@ const AdminLinks: React.FC<AdminLinksProps> = ({ isNavbarOpen }) => {
           </Link>
         </div>
       </div>
+       
     </>
   );
 };
