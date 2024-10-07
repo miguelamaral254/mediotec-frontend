@@ -26,7 +26,7 @@ export enum Week {
 
 
 export interface Lesson {
-  id?: number;
+  id?: number ;
   name: string;
   schoolClass: { id: number };
   discipline: { id: number };
