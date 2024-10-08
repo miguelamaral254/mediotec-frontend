@@ -1,7 +1,7 @@
 import { Schedule, Week } from "./Lesson";
 
 export interface LessonResponseDTO {
-    id?: number;
+    id?: number |  undefined;
     name: string;
     schoolClass: { id: number, code: string  };
     discipline: { id: number, name: string };

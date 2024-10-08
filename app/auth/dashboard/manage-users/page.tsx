@@ -10,8 +10,8 @@ const ManageUsers = () => {
   const [action, setAction] = useState<'create' | 'consult'>('consult');
 
   return (
-    <div className="flex items-center justify-center min-h-screen ml-6 p-4 sm:p-8 bg-gray-100">
-  <div className="w-full bg-white border-2 border-[#898989] shadow-xl rounded-lg p-8 pl-8">
+    <div className="flex items-center justify-center ml-6 p-4 sm:p-8 bg-gray-100">
+  <div className="w-[50%] ml-8 bg-white shadow-xl rounded-lg p-14">
     <h1 className="text-2xl font-bold mb-4 text-center">Gerenciar Usuários</h1>
     <div className="flex flex-col items-center space-y-4 mb-4">
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">

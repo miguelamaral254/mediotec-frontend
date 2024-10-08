@@ -10,11 +10,6 @@ export const AdminSection = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 pt-3 pb-4">
-        <div className="flex justify-center">
-          <Image src={logo} alt="Logo Mediotec" width={150} height={40} />
-        </div>
-      </div>
       <div className="fixed bottom-5 right-5 z-60">
         <div className="relative">
           <button 
