@@ -10,6 +10,12 @@ export enum LetterEnum {
   F = 'F',
 }
 
+export enum YearEnum {
+  FIRST = 'FIRST',
+  SECOND = 'SECOND',
+  THIRD = 'THIRD',
+}
+
 export interface SchoolClass {
   createdAt: string | number | Date;
   id: number; 
@@ -17,7 +23,7 @@ export interface SchoolClass {
   date: string; 
   shift: 'MORNING' | 'AFTERNOON' | 'EVENING'; 
   technicalCourse: 'TDS' | 'TLS';
-  year: 'FIRST' | 'SECOND' | 'THIRD'; 
+  year: YearEnum; 
   letter: LetterEnum; 
   students?: User[]; 
 }

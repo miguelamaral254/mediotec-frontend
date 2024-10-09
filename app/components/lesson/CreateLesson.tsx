@@ -53,7 +53,7 @@ const CreateLesson = () => {
         });
       }
     };
-
+    
     const fetchProfessors = async () => {
       try {
         const data = await getAllProfessors();
@@ -76,7 +76,6 @@ const CreateLesson = () => {
   const handleCreate = async () => {
     setError(null);
 
-    // Verifique se todos os campos necessários foram preenchidos
     if (!name || schoolClassId === null || disciplineId === null || !professorCpf || !startTime || !endTime || !room || weekDay === null) {
       const errorMessage = 'Por favor, preencha todos os campos.';
       setError(errorMessage);
@@ -91,11 +90,11 @@ const CreateLesson = () => {
     try {
       const newLesson: Omit<Lesson, 'id'> = {
         name,
-        schoolClass: { id: schoolClassId,  },
+        schoolClass: { id: schoolClassId },
         discipline: { id: disciplineId },
         professor: {
           cpf: professorCpf,
-          name: '' 
+          name: ''
         },
         weekDay,
         startTime,
@@ -111,7 +110,6 @@ const CreateLesson = () => {
         text: 'Aula criada com sucesso!',
       });
 
-      // Resetar os campos do formulário
       setName('');
       setSchoolClassId(null);
       setDisciplineId(null);
@@ -124,17 +122,15 @@ const CreateLesson = () => {
     } catch (err: any) {
       let errorMessage = 'Erro ao criar aula.';
 
-      // Capturar e verificar o erro da resposta do axios
       if (err.response) {
         const { data } = err.response;
-        // Se a resposta tiver uma mensagem de erro, utilize-a
         if (data && data.message) {
           errorMessage = data.message;
         } else if (data && data.error) {
           errorMessage = data.error;
         }
       } else if (err instanceof Error) {
-        errorMessage = err.message; // Erro genérico
+        errorMessage = err.message;
       }
 
       setError(errorMessage);
@@ -145,9 +141,17 @@ const CreateLesson = () => {
       });
     }
   };
-
+  const yearMapping = {
+    FIRST: 1,
+    SECOND: 2,
+    THIRD: 3,
+    FOURTH: 4,
+    FIFTH: 5,
+    SIXTH: 6,
+    // Adicione mais conforme necessário
+  };
   return (
-<div className="bg-gray-200 rounded-lg p-10 shadow-md text-black max-w-xl mx-auto">
+    <div className="bg-gray-200 rounded-lg p-10 shadow-md text-black max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Criar Aula</h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <form onSubmit={(e) => {
@@ -165,22 +169,20 @@ const CreateLesson = () => {
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-xl text-gray-700">Turma:</label>
-          <select
-            value={schoolClassId || ''}
-            onChange={(e) => setSchoolClassId(Number(e.target.value))}
-            className="border rounded-md p-2 w-full text-gray-700"
-            required
-          >
-            <option value="" disabled>Selecione uma turma</option>
-            {schoolClasses.map((schoolClass) => (
-              <option key={schoolClass.id} value={schoolClass.id}>
-                {schoolClass.letter} {schoolClass.year}
-              </option>
-            ))}
-          </select>
-        </div>
+        <select
+  value={schoolClassId || ''}
+  onChange={(e) => setSchoolClassId(Number(e.target.value))}
+  className="border rounded-md p-2 w-full text-gray-700"
+  required
+>
+  <option value="" disabled>Selecione uma turma</option>
+  {schoolClasses.map((schoolClass) => (
+    <option key={schoolClass.id} value={schoolClass.id}>
+      {schoolClass.letter} {yearMapping[schoolClass.year]}° {/* Mapear a string para o número */}
+    </option>
+  ))}
+</select>
+
 
         <div className="mb-4">
           <label className="block text-xl text-gray-700">Disciplina:</label>
@@ -220,7 +222,7 @@ const CreateLesson = () => {
           <label className="block text-xl text-gray-700">Dia da Semana:</label>
           <select
             value={weekDay || ''}
-            onChange={(e) => setWeekDay(e.target.value as Week)} // Enviar como enum
+            onChange={(e) => setWeekDay(e.target.value as Week)}
             className="border rounded-md p-2 w-full text-gray-700"
             required 
           >
@@ -239,7 +241,7 @@ const CreateLesson = () => {
           <label className="block text-xl text-gray-700">Início:</label>
           <select
             value={startTime || ''}
-            onChange={(e) => setStartTime(e.target.value as Schedule)} // Enviar como enum
+            onChange={(e) => setStartTime(e.target.value as Schedule)}
             className="border rounded-md p-2 w-full text-gray-700"
             required 
           >
@@ -247,19 +249,16 @@ const CreateLesson = () => {
             <option value="SEVEN_THIRTY">07:30</option>
             <option value="EIGHT_TWENTY">08:20</option>
             <option value="NINE_TEN">09:10</option>
-            
-            <option value="NINE_THIRTY">09:30</option> 
+            <option value="NINE_THIRTY">09:30</option>
             <option value="TEN_TWENTY">10:20</option>
             <option value="ELEVEN_TEN">11:10</option>
             <option value="TWELVE_O_CLOCK">12:00</option>
             <option value="ONE_THIRTY">13:30</option>
             <option value="FOURTEEN_TWENTY">14:20</option>
             <option value="FIFTEEN_TEN">15:10</option>
-            
-            <option value="FIFTEEN_THIRTY">15:30</option>
-            <option value="FOUR_TEN">16:10</option>
-            <option value="FIVE_THIRTY">17:00</option>
-
+            <option value="FIFTEEN_TEN">15:30</option>
+            <option value="FOURTEEN_TEN">16:10</option>
+            <option value="SEVENTEEN_O_CLOCK">17:00</option>
             
           </select>
         </div>
@@ -268,28 +267,24 @@ const CreateLesson = () => {
           <label className="block text-xl text-gray-700">Fim:</label>
           <select
             value={endTime || ''}
-            onChange={(e) => setEndTime(e.target.value as Schedule)} // Enviar como enum
+            onChange={(e) => setEndTime(e.target.value as Schedule)}
             className="border rounded-md p-2 w-full text-gray-700"
             required 
           >
             <option value="" disabled>Selecione um horário de fim</option>
-            <option value="SEVEN_THIRTY">07:30</option>
             <option value="EIGHT_TWENTY">08:20</option>
             <option value="NINE_TEN">09:10</option>
-            
-            <option value="NINE_THIRTY">09:30</option> 
+            <option value="NINE_THIRTY">09:30</option>
             <option value="TEN_TWENTY">10:20</option>
             <option value="ELEVEN_TEN">11:10</option>
             <option value="TWELVE_O_CLOCK">12:00</option>
             <option value="ONE_THIRTY">13:30</option>
             <option value="FOURTEEN_TWENTY">14:20</option>
             <option value="FIFTEEN_TEN">15:10</option>
-            
             <option value="FIFTEEN_THIRTY">15:30</option>
-            <option value="FOUR_TEN">16:10</option>
-            <option value="FIVE_THIRTY">17:00</option>
-
-
+            <option value="FOURTEEN_TEN">16:10</option>
+            <option value="SEVENTEEN_O_CLOCK">17:00</option>
+            
           </select>
         </div>
 
@@ -304,10 +299,7 @@ const CreateLesson = () => {
           />
         </div>
 
-        <button
-          type="submit"
-          className="bg-[#4666AF] hover:bg-blue-500 transition text-white w-full font-bold py-2 px-4 rounded"
-        >
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
           Criar Aula
         </button>
       </form>

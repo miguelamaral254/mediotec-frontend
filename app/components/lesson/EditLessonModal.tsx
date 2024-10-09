@@ -303,8 +303,10 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, lessonId, onUpda
             <option value="FIFTEEN_TEN">15:10</option>
             
             <option value="FIFTEEN_THIRTY">15:30</option>
-            <option value="FOUR_TEN">16:10</option>
-            <option value="FIVE_THIRTY">17:00</option>
+            <option value="FOURTEEN_TEN ">16:10</option>
+            <option value="SEVENTEEN_O_CLOCK">17:00</option>
+
+            
 
             
           </select>
@@ -319,7 +321,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, lessonId, onUpda
             required 
           >
             <option value="" disabled>Selecione um horário de fim</option>
-            <option value="SEVEN_THIRTY">07:30</option>
             <option value="EIGHT_TWENTY">08:20</option>
             <option value="NINE_TEN">09:10</option>
             
@@ -332,8 +333,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, lessonId, onUpda
             <option value="FIFTEEN_TEN">15:10</option>
             
             <option value="FIFTEEN_THIRTY">15:30</option>
-            <option value="FOUR_TEN">16:10</option>
-            <option value="FIVE_THIRTY">17:00</option>
+            <option value="FOURTEEN_TEN ">16:10</option>
+            <option value="SEVENTEEN_O_CLOCK">17:00</option>
+
 
 
           </select>
