@@ -155,7 +155,7 @@ const CreateLesson = () => {
         handleCreate();
       }}>
         <div className="mb-4">
-          <label className="block text-xl text-gray-700">Nome da Aula:</label>
+          <label className="block text-xl text-gray-700">Código da Aula:</label>
           <input
             type="text"
             value={name}

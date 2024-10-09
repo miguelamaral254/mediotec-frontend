@@ -138,7 +138,7 @@ const UserLookUp = () => {
   };
 
   return (
-    <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
+    <div className="bg-gray-200 rounded-lg p-6 shadow-md w-full mx-auto mt-10">
       <h2 className="text-2xl font-bold mb-4 text-center text-gray-700">Consultar Usuário</h2>
 
       <div className="mb-4">

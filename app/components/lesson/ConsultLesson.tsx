@@ -96,15 +96,15 @@ const ConsultLesson = () => {
       <table className="w-full mb-4">
         <thead>
           <tr>
-            <th className="border px-4 py-2">ID</th>
-            <th className="border px-4 py-2">Name</th>
-            <th className="border px-4 py-2">Actions</th>
+          
+            <th className="border px-4 py-2">Código</th>
+            <th className="border px-4 py-2">Ações</th>
           </tr>
         </thead>
         <tbody>
           {lessons.map((lesson) => (
             <tr key={lesson.id}>
-              <td className="border px-4 py-2">{lesson.id}</td>
+             
               <td className="border px-4 py-2">{lesson.name}</td>
               <td className="border px-4 py-2">
                 <div className="flex gap-2 flex-col">
