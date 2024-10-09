@@ -11,7 +11,7 @@ const ManageSchoolClasses = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 bg-gray-100">
-  <div className="w-full ml-8 bg-white border-2 border-[#898989] shadow-xl rounded-lg p-6">
+  <div className="w-[50%] ml-8 bg-white shadow-xl rounded-lg p-14">
     <h1 className="text-2xl font-bold mb-4 text-center">Gerenciar Turmas</h1>
     <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mb-4 justify-center">
       <button

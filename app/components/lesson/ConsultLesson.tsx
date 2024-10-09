@@ -5,6 +5,7 @@ import { ResponseLesson } from '@/app/interfaces/ResponseLesson';
 import EditModal from './EditLessonModal';
 import LessonDetailsModal from './LessonDetailsModal';
 import { Lesson } from '@/app/interfaces/Lesson';
+import { FaPencilAlt, FaEye } from 'react-icons/fa';
 
 const ConsultLesson = () => {
   const [lessons, setLessons] = useState<ResponseLesson[]>([]);
@@ -106,18 +107,20 @@ const ConsultLesson = () => {
               <td className="border px-4 py-2">{lesson.id}</td>
               <td className="border px-4 py-2">{lesson.name}</td>
               <td className="border px-4 py-2">
-                <button
-                  onClick={() => handleEdit(lesson.id)}
-                  className="bg-yellow-500 text-white rounded-md px-2 py-1"
-                >
-                  Edit
-                </button>
+                <div className="flex gap-2 flex-col">
                 <button
                   onClick={() => handleDetails(lesson)}
-                  className="bg-blue-500 text-white rounded-md px-2 py-1 ml-2"
-                >
-                  Details
+                  className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition"
+                  >
+                  <FaEye /> Ver Detalhes
                 </button>
+                <button
+                  onClick={() => handleEdit(lesson.id)}
+                  className="text-[#DC3181] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition"
+                  >
+                  <FaPencilAlt />Editar
+                </button>
+                </div>
               </td>
             </tr>
           ))}
