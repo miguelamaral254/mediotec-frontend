@@ -6,8 +6,8 @@ import { User } from '../interfaces/User'; // Importar a interface User
 
 // Definir a interface do contexto de autenticação
 interface AuthContextType {
-  cpf: any;
-  user: User | null;  // O usuário pode ser 'null' inicialmente
+  cpf: string | null;  // Define cpf as a string or null
+  user: User | null;   // O usuário pode ser 'null' inicialmente
   setUser: (user: User | null) => void;
   logout: () => void;
 }
@@ -17,25 +17,30 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);  // Estado de user pode ser 'null'
+  const [cpf, setCpf] = useState<string | null>(null);   // Estado de cpf
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const cpf = localStorage.getItem('cpf');
+    const storedCpf = localStorage.getItem('cpf');
 
-    // Verifica se o usuário está acessando a raiz do projeto
-    if (!token || !cpf) {
-      // Apenas redireciona para a página de login se não estiver na raiz
+    
+    if (storedCpf) {
+      setCpf(storedCpf);
+    }
+
+    
+    if (!token || !storedCpf) {
       const pathname = window.location.pathname;
       if (pathname !== '/') {
         router.push('/auth/login');
       }
-      return; // Sai da função se o usuário não estiver autenticado
+      return; 
     }
 
     const fetchUserData = async () => {
       try {
-        const data = await getUserData(cpf);
+        const data = await getUserData(storedCpf);
         setUser(data);
       } catch (error) {
         console.error('Erro ao carregar dados do usuário:', error);
@@ -50,11 +55,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('token');
     localStorage.removeItem('cpf');
     setUser(null);
+    setCpf(null);  
     router.push('/auth/login');
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, cpf, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -9,7 +9,7 @@ interface NavbarHeaderProps {
   isNavbarOpen: boolean;
 }
 
-const NavbarHeader: React.FC<NavbarHeaderProps> = ({ isNavbarOpen }) => {
+const NavbarHeader: React.FC<NavbarHeaderProps> = ({ }) => {
   const { user } = useAuth();
 
   return (
