@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { createClass } from '@/app/services/schoolClassService'; 
-import { SchoolClass, LetterEnum } from '../../interfaces/SchoolClass'; // Importando o enum LetterEnum
+import { SchoolClass, LetterEnum, YearEnum } from '../../interfaces/SchoolClass'; // Importando o enum LetterEnum e YearEnum
 import Swal from 'sweetalert2';
 
 const CreateClass = () => {
   const [code, setCode] = useState('');
   const [shift, setShift] = useState<'MORNING' | 'AFTERNOON' | 'EVENING'>('MORNING'); 
-  const [technicalCourse, setTechnicalCourse] = useState<'TDS' | 'TLS' >('TDS'); 
-  const [year, setYear] = useState<'FIRST' | 'SECOND' | 'THIRD'>('FIRST');
+  const [technicalCourse, setTechnicalCourse] = useState<'TDS' | 'TLS'>('TDS'); 
+  const [year, setYear] = useState<YearEnum>(YearEnum.FIRST); // Atualizado para usar YearEnum
   const [letter, setLetter] = useState<LetterEnum>(LetterEnum.A); // Novo estado para a letra
   const [error, setError] = useState<string | null>(null);
 
@@ -46,7 +46,7 @@ const CreateClass = () => {
       setCode('');
       setShift('MORNING');
       setTechnicalCourse('TDS');
-      setYear('FIRST');
+      setYear(YearEnum.FIRST); // Resetando para YearEnum.FIRST
       setLetter(LetterEnum.A); // Resetando a letra para A
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro ao criar turma';
@@ -79,12 +79,12 @@ const CreateClass = () => {
         <label className="block text-xl text-gray-700">Ano:</label>
         <select 
           value={year} 
-          onChange={(e) => setYear(e.target.value as 'FIRST' | 'SECOND' | 'THIRD')}
+          onChange={(e) => setYear(e.target.value as YearEnum)} // Atualizado para usar YearEnum
           className="border rounded-md p-2 w-full text-gray-700"
         >
-          <option value="FIRST">1º Ano</option>
-          <option value="SECOND">2º Ano</option>
-          <option value="THIRD">3º Ano</option>
+          <option value={YearEnum.FIRST}>1º Ano</option>
+          <option value={YearEnum.SECOND}>2º Ano</option>
+          <option value={YearEnum.THIRD}>3º Ano</option>
         </select>
       </div>
 
