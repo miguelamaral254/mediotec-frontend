@@ -2,12 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import Modal from 'react-modal';
-import { getSchoolClass, updateClass, addStudentToClass, removeStudentFromClass } from '@/app/services/schoolClassService';
-import { SchoolClass, LetterEnum } from '../../interfaces/SchoolClass';
+import {
+  getSchoolClass,
+  updateClass,
+  addStudentToClass,
+  removeStudentFromClass,
+} from '@/app/services/schoolClassService';
+import { SchoolClass, LetterEnum, YearEnum } from '../../interfaces/SchoolClass'; // Import YearEnum
 import { User } from '@/app/interfaces/User';
 import StudentGrid from './StudentGrid';
 import AddStudent from './AddStudent';
-import { translateEnum } from '@/app/utils/translateEnum'; 
+import { translateEnum } from '@/app/utils/translateEnum';
 
 interface SchoolClassEditModalProps {
   isOpen: boolean;
@@ -21,7 +26,6 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
   classId,
   isOpen,
   onRequestClose,
-  
   onUpdateClass,
 }) => {
   const [schoolClass, setSchoolClass] = useState<SchoolClass | null>(null);
@@ -30,7 +34,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [shift, setShift] = useState<'MORNING' | 'AFTERNOON' | 'EVENING'>('MORNING');
   const [technicalCourse, setTechnicalCourse] = useState<'TDS' | 'TLS'>('TDS');
-  const [year, setYear] = useState<'FIRST' | 'SECOND' | 'THIRD'>('FIRST');
+  const [year, setYear] = useState<YearEnum>(YearEnum.FIRST); // Use YearEnum here
   const [letter, setLetter] = useState<LetterEnum>(LetterEnum.A);
 
   useEffect(() => {
@@ -40,22 +44,22 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
   }, [classId]);
 
   const fetchSchoolClass = async (id: number) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const schoolClassData: SchoolClass = await getSchoolClass(id);
       setSchoolClass(schoolClassData);
       setCode(schoolClassData.code);
       setStudents(schoolClassData.students || []);
       setShift(schoolClassData.shift);
       setTechnicalCourse(schoolClassData.technicalCourse);
-      setYear(schoolClassData.year);
+      setYear(schoolClassData.year); // This line remains unchanged
       setLetter(schoolClassData.letter);
     } catch (error) {
-      console.error("Erro ao buscar a turma:", error);
+      console.error("Error fetching class data:", error);
       Swal.fire({
         icon: 'error',
-        title: 'Erro',
-        text: 'Não foi possível carregar os dados da turma.',
+        title: 'Error',
+        text: 'Unable to load class data. Please try again later.',
       });
     } finally {
       setLoading(false);
@@ -64,27 +68,25 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
 
   const handleUpdate = async () => {
     const result = await Swal.fire({
-      title: 'Tem certeza?',
-      text: 'Você deseja salvar as alterações na turma?',
+      title: 'Are you sure?',
+      text: 'Do you want to save changes to this class?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sim, salvar!',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Yes, save!',
+      cancelButtonText: 'Cancel',
     });
 
-    if (result.isConfirmed) {
+    if (result.isConfirmed && schoolClass) {
       try {
-        if (!schoolClass) return;
-
-        const updatedSchoolClass = {
+        const updatedSchoolClass: SchoolClass = {
           ...schoolClass,
           code: code.replace(/[^\w]/g, ''),
           students,
           shift,
           technicalCourse,
-          year,
+          year, // This line remains unchanged
           letter,
         };
 
@@ -92,17 +94,17 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
         await updateClass(schoolClass.id, updatedSchoolClass);
         Swal.fire({
           icon: 'success',
-          title: 'Sucesso',
-          text: 'Turma atualizada com sucesso!',
+          title: 'Success',
+          text: 'Class updated successfully!',
         });
-        onUpdateClass(updatedSchoolClass); // Atualiza a lista de classes no componente pai
-        onRequestClose(); // Fecha o modal
+        onUpdateClass(updatedSchoolClass);
+        onRequestClose();
       } catch (error) {
-        console.error("Erro ao atualizar a turma:", error);
+        console.error("Error updating class:", error);
         Swal.fire({
           icon: 'error',
-          title: 'Erro',
-          text: 'Erro ao atualizar a turma.',
+          title: 'Error',
+          text: 'Failed to update class. Please try again.',
         });
       } finally {
         setLoading(false);
@@ -116,15 +118,15 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
       setStudents((prevStudents) => prevStudents.filter((student) => student.cpf !== cpf));
       Swal.fire({
         icon: 'success',
-        title: 'Sucesso',
-        text: 'Estudante removido da turma!',
+        title: 'Success',
+        text: 'Student removed from the class!',
       });
     } catch (error) {
-      console.error('Erro ao remover o estudante:', error);
+      console.error('Error removing student:', error);
       Swal.fire({
         icon: 'error',
-        title: 'Erro',
-        text: 'Erro ao remover o estudante da turma.',
+        title: 'Error',
+        text: 'Failed to remove student from class. Please try again.',
       });
     }
   };
@@ -133,9 +135,18 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
     try {
       await addStudentToClass(classId, student.cpf);
       setStudents((prevStudents) => [...prevStudents, student]);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Student added to the class!',
+      });
     } catch (error) {
-      console.error('Erro ao adicionar o estudante:', error);
-      throw error;
+      console.error('Error adding student:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to add student. Please try again.',
+      });
     }
   };
 
@@ -159,25 +170,25 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
     >
       <div className="modal">
         <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
-          <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Editar Turma</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Edit Class</h2>
 
-          {loading && <p>Carregando...</p>}
+          {loading && <p>Loading...</p>}
 
           {schoolClass && (
             <div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Código da Turma:</label>
+                <label className="block text-sm font-medium text-gray-700">Class Code:</label>
                 <input
                   type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value.replace(/[^\w]/g, ''))}
-                  placeholder="Código da Turma"
+                  placeholder="Class Code"
                   className="border rounded-md p-2 w-full text-gray-700"
                 />
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Turno:</label>
+                <label className="block text-sm font-medium text-gray-700">Shift:</label>
                 <select
                   value={shift}
                   onChange={(e) => setShift(e.target.value as 'MORNING' | 'AFTERNOON' | 'EVENING')}
@@ -190,7 +201,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Curso Técnico:</label>
+                <label className="block text-sm font-medium text-gray-700">Technical Course:</label>
                 <select
                   value={technicalCourse}
                   onChange={(e) => setTechnicalCourse(e.target.value as 'TDS' | 'TLS')}
@@ -202,56 +213,52 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Ano:</label>
+                <label className="block text-sm font-medium text-gray-700">Year:</label>
                 <select
                   value={year}
-                  onChange={(e) => setYear(e.target.value as 'FIRST' | 'SECOND' | 'THIRD')}
+                  onChange={(e) => setYear(e.target.value as YearEnum)} // Change here
                   className="border rounded-md p-2 w-full text-gray-700"
                 >
-                  <option value="FIRST">{translateEnum('FIRST', 'year')}</option>
-                  <option value="SECOND">{translateEnum('SECOND', 'year')}</option>
-                  <option value="THIRD">{translateEnum('THIRD', 'year')}</option>
+                  <option value={YearEnum.FIRST}>{translateEnum(YearEnum.FIRST, 'year')}</option>
+                  <option value={YearEnum.SECOND}>{translateEnum(YearEnum.SECOND, 'year')}</option>
+                  <option value={YearEnum.THIRD}>{translateEnum(YearEnum.THIRD, 'year')}</option>
                 </select>
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Letra:</label>
+                <label className="block text-sm font-medium text-gray-700">Letter:</label>
                 <select
                   value={letter}
                   onChange={(e) => setLetter(e.target.value as LetterEnum)}
                   className="border rounded-md p-2 w-full text-gray-700"
                 >
-                  <option value="A">{translateEnum('A', 'letter')}</option>
-                  <option value="B">{translateEnum('B', 'letter')}</option>
-                  <option value="C">{translateEnum('C', 'letter')}</option>
-                  <option value="D">{translateEnum('D', 'letter')}</option>
-                  <option value="E">{translateEnum('E', 'letter')}</option>
-                  <option value="F">{translateEnum('F', 'letter')}</option>
+                  {Object.values(LetterEnum).map((letter) => (
+                    <option key={letter} value={letter}>
+                      {translateEnum(letter, 'letter')}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              {/* Componente para adicionar novos estudantes */}
-              <AddStudent onAddStudent={handleAddStudent} />
-
-              {/* Componente de Grade dos Estudantes */}
               <StudentGrid students={students} onRemoveStudent={handleRemoveStudent} />
-
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={handleUpdate}
-                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md transition-all duration-300"
-                >
-                  Salvar Alterações
-                </button>
-                <button
-                  onClick={onRequestClose}
-                  className="ml-4 bg-gray-400 hover:bg-gray-500 text-white py-2 px-4 rounded-lg shadow-md transition-all duration-300"
-                >
-                  Cancelar
-                </button>
-              </div>
+              <AddStudent onAddStudent={handleAddStudent} />
             </div>
           )}
+
+          <div className="mt-6 flex justify-between">
+            <button
+              onClick={handleUpdate}
+              className="bg-blue-500 text-white py-2 px-4 rounded-lg mr-2"
+            >
+              Save Changes
+            </button>
+            <button
+              onClick={onRequestClose}
+              className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </Modal>
