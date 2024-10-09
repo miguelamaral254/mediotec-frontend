@@ -48,16 +48,16 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="mx-auto px-4 sm:px-6 lg:px-8 pt-10 w-full min-h-screen flex flex-col">
+    <div className="mx-auto w-full min-h-screen flex flex-col">
       {user ? (
         <div className="flex flex-col lg:flex-row w-full flex-grow">
-          <div className='mb-8 w-full lg:w-3/4'>
+          <div className='w-full lg:w-3/4 p-4'> {/* Added padding for better spacing */}
             {user.role === 'ADMIN' && <AdminSection />}
             {user.role === 'PROFESSOR' && <ProfessorSection />}
             {user.role === 'PARENT' && <ParentSection />}
             {user.role === 'STUDENT' && <StudentSection />}
           </div>
-          <div className='bg-gray-200 w-full lg:w-1/4'>
+          <div className='border border-l-black w-full lg:w-1/4 md:w-1/3 p-2'> {/* Responsive widths */}
             <NotificationTab />
           </div>
         </div>

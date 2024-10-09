@@ -5,30 +5,28 @@ import { notificationService } from '@/app/services/notificationService';
 import { Notification } from '@/app/interfaces/Notification';
 
 const NotificationTab: React.FC = () => {
-  const { user } = useAuth(); // Assuming you can access user directly from useAuth
+  const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [fetched, setFetched] = useState<boolean>(false);
 
   const fetchNotifications = async () => {
-    if (user && user.cpf) {
+    if (user && user.cpf && !fetched) {
       setLoading(true);
       setError(null);
       try {
         const data = await notificationService.getNotificationsForUser(user.cpf);
-        console.log('Fetched notifications:', data); // Debugging line
-
-        // Ordenando as notificações da mais nova para a mais velha
         const sortedNotifications = data.sort((a: { timestamp: string | number | Date; }, b: { timestamp: string | number | Date; }) => 
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
-
         setNotifications(sortedNotifications);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         setError('Erro ao buscar notificações.');
-        console.error('Error fetching notifications:', err);
       } finally {
         setLoading(false);
+        setFetched(true);
       }
     }
   };
@@ -48,18 +46,17 @@ const NotificationTab: React.FC = () => {
 
   useEffect(() => {
     fetchNotifications();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]); // Fetch notifications when the user changes
+  }, [user]);
 
   return (
-    <div className="flex flex-col p-4">
+    <div className="flex flex-col w-full p-4 mx-auto">
       <h2 className="text-2xl font-semibold">Notificações</h2>
       {loading ? (
         <p className="text-gray-600">Carregando notificações...</p>
       ) : error ? (
         <p className="text-red-600">{error}</p>
       ) : (
-        <div className="grid grid-cols-1 gap-4 mt-4">
+        <div className="grid grid-cols-1 gap-3 mt-4">
           {notifications.length > 0 ? (
             notifications.map(notification => (
               <NotificationItem

@@ -7,29 +7,91 @@ interface NotificationFormProps {
 }
 
 const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) => {
-    const [role, setRole] = useState('');
+    const [roles, setRoles] = useState<{ [key: string]: boolean }>({
+        STUDENT: false,
+        ADMIN: false,
+        PROFESSOR: false,
+        PARENT: false,
+    });
     const [message, setMessage] = useState('');
+    const [header, setHeader] = useState('');
+
+    const handleCheckboxChange = (role: string) => {
+        setRoles((prev) => ({
+            ...prev,
+            [role]: !prev[role],
+        }));
+    };
+
+    const handleSelectAll = (isChecked: boolean) => {
+        setRoles({
+            STUDENT: isChecked,
+            ADMIN: isChecked,
+            PROFESSOR: isChecked,
+            PARENT: isChecked,
+        });
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const selectedRoles = Object.keys(roles).filter((role) => roles[role]);
+
+        if (selectedRoles.length === 0) {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Por favor, selecione pelo menos um receptor.',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+            });
+            return;
+        }
+
+        const notificationRequests = selectedRoles.map((role) => ({
+            role,
+            message,
+            header,
+        }));
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const loadingSwal = Swal.fire({
+            title: 'Carregando...',
+            text: 'Enviando notificações...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         try {
-            await notificationService.sendNotification({ role, message });
+            for (const request of notificationRequests) {
+                await notificationService.sendNotification(request);
+            }
+
+            Swal.close();
+
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Notificação enviada com sucesso!',
                 icon: 'success',
-                confirmButtonText: 'Ok'
+                confirmButtonText: 'Ok',
             });
-            setRole('');
+            setRoles({
+                STUDENT: false,
+                ADMIN: false,
+                PROFESSOR: false,
+                PARENT: false,
+            });
             setMessage('');
+            setHeader('');
             setIsDrawerOpen(false);
         } catch (error) {
             console.error('Erro ao enviar notificação:', error);
+            Swal.close();
             Swal.fire({
                 title: 'Erro!',
                 text: 'Ocorreu um erro ao enviar a notificação.',
                 icon: 'error',
-                confirmButtonText: 'Ok'
+                confirmButtonText: 'Ok',
             });
         }
     };
@@ -60,19 +122,82 @@ const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) 
                 </button>
                 <form onSubmit={handleSubmit} className="mb-6">
                     <div className="mb-6">
-                        <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Receptor:</label>
-                        <select
-                            value={role}
-                            onChange={(e) => setRole(e.target.value)}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Cabeçalho:</label>
+                        <input
+                            type="text"
+                            value={header}
+                            onChange={(e) => setHeader(e.target.value)}
+                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required
-                        >
-                            <option value="" disabled>Selecione um perfil</option>
-                            <option value="STUDENT">Alunos</option>
-                            <option value="ADMIN">Coordenação</option>
-                            <option value="PROFESSOR">Professores</option>
-                            <option value="PARENT">Pais</option>
-                        </select>
+                        />
+                    </div>
+                    <div className="mb-6">
+                        <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Enviar para:</label>
+                        <div className="flex flex-col">
+                            <div className="flex items-center mb-2">
+                                <input
+                                    type="checkbox"
+                                    id="select-all"
+                                    onChange={(e) => handleSelectAll(e.target.checked)}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                />
+                                <label htmlFor="select-all" className="ml-2 text-sm text-gray-900 dark:text-white">
+                                    Todos
+                                </label>
+                            </div>
+                            <div className="flex items-center mb-2">
+                                <input
+                                    type="checkbox"
+                                    id="STUDENT"
+                                    checked={roles.STUDENT}
+                                    onChange={() => handleCheckboxChange('STUDENT')}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    value="STUDENT"
+                                />
+                                <label htmlFor="STUDENT" className="ml-2 text-sm text-gray-900 dark:text-white">
+                                    Alunos
+                                </label>
+                            </div>
+                            <div className="flex items-center mb-2">
+                                <input
+                                    type="checkbox"
+                                    id="ADMIN"
+                                    checked={roles.ADMIN}
+                                    onChange={() => handleCheckboxChange('ADMIN')}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    value="ADMIN"
+                                />
+                                <label htmlFor="ADMIN" className="ml-2 text-sm text-gray-900 dark:text-white">
+                                    Coordenação
+                                </label>
+                            </div>
+                            <div className="flex items-center mb-2">
+                                <input
+                                    type="checkbox"
+                                    id="PROFESSOR"
+                                    checked={roles.PROFESSOR}
+                                    onChange={() => handleCheckboxChange('PROFESSOR')}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    value="PROFESSOR"
+                                />
+                                <label htmlFor="PROFESSOR" className="ml-2 text-sm text-gray-900 dark:text-white">
+                                    Professores
+                                </label>
+                            </div>
+                            <div className="flex items-center mb-2">
+                                <input
+                                    type="checkbox"
+                                    id="PARENT"
+                                    checked={roles.PARENT}
+                                    onChange={() => handleCheckboxChange('PARENT')}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    value="PARENT"
+                                />
+                                <label htmlFor="PARENT" className="ml-2 text-sm text-gray-900 dark:text-white">
+                                    Pais
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div className="mb-6">
                         <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Mensagem:</label>
