@@ -44,7 +44,7 @@ const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) 
             >
                 <h5
                     id="drawer-label"
-                    className="flex justify-center items-center mb-12 text-base font-semibold text-white text-xl uppercase"
+                    className="flex justify-center items-center mb-12 text-base font-semibold text-white uppercase"
                 >
                     Notificação
                 </h5>

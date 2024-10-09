@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAuth } from '@/app/context/AuthContext';
 import { mapRoleToPortuguese } from '@/app/utils/roleMapper';
-import NotificationBell from '../notifications/Bell';
+
 
 interface NavbarHeaderProps {
   isNavbarOpen: boolean;
@@ -17,7 +17,6 @@ const NavbarHeader: React.FC<NavbarHeaderProps> = ({ isNavbarOpen }) => {
       {user ? (
         <div>
           <div className='flex p-4 justify-end'>
-            <NotificationBell userCpf={user.cpf} isNavbarOpen={isNavbarOpen} />
           </div>
           <p className="text-lg font-semibold">{`Bem vindo, ${user.name}`}</p>
           <p className="text-sm">{`Perfil: ${mapRoleToPortuguese(user.role ?? '')}`}</p>
@@ -30,3 +29,4 @@ const NavbarHeader: React.FC<NavbarHeaderProps> = ({ isNavbarOpen }) => {
 };
 
 export default NavbarHeader;
+//<NotificationBell userCpf={user.cpf} isNavbarOpen={isNavbarOpen} />

@@ -1,9 +1,10 @@
 import Image from 'next/image';
-import logo from "@/public/images/logo_mediotec.png";
 import adminSvg from "@/public/images/admin.svg";
-import NotificationForm from '../../notifications/NotificationForm';
-import { FiMail } from 'react-icons/fi';
 import React, { useState } from 'react';
+
+import { FiMail } from 'react-icons/fi';
+import NotificationForm from '../../notifications/NotificationForm';
+import NotificationTab from '../../notifications/NotificationTab';
 
 export const AdminSection = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -13,12 +14,12 @@ export const AdminSection = () => {
       <div className="fixed bottom-5 right-5 z-60">
         <div className="relative">
           <button 
-            onClick={() => setIsDrawerOpen(true)} // Abre o drawer diretamente
+            onClick={() => setIsDrawerOpen(true)}
             className="flex items-center justify-center w-28 h-28 bg-blue-700 text-white rounded-full shadow-lg hover:bg-blue-800 focus:outline-none"
           >
             <FiMail size={48} />
           </button>
-          {isDrawerOpen && <NotificationForm setIsDrawerOpen={setIsDrawerOpen} />} {/* Passa a função de controle do drawer */}
+          {isDrawerOpen && <NotificationForm setIsDrawerOpen={setIsDrawerOpen} />}
         </div>
       </div>
       <div className="flex justify-center pt-32">
@@ -32,7 +33,7 @@ export const AdminSection = () => {
           <Image src={adminSvg} alt="Logo Mediotec" width={900} height={60} />
         </div>
       </div>
-      <div className='bg-red-500'></div>
+     
     </>
   );
 };

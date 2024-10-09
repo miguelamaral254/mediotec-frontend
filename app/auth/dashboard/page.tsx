@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-
 import { useAuth } from '@/app/context/AuthContext';
 import { getUserData } from '@/app/services/authService';
 import { AdminSection } from '@/app/components/users/admin/AdminSection';
 import { ProfessorSection } from '@/app/components/users/professors/schedules/ProfessorSection';
 import { ParentSection } from '@/app/components/users/parents/ParentSection';
 import { StudentSection } from '@/app/components/users/students/StudentSection';
-
+import NotificationTab from '@/app/components/notifications/NotificationTab';
 
 export default function Dashboard() {
   const { user, setUser } = useAuth();
@@ -49,16 +48,18 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="mx-auto px-4 sm:px-6 lg:px-8 pt-10 w-[98%] min-h-screen">
+    <div className="mx-auto px-4 sm:px-6 lg:px-8 pt-10 w-full min-h-screen flex flex-col">
       {user ? (
-        <div>
-          <div className="mb-8">
+        <div className="flex flex-col lg:flex-row w-full flex-grow">
+          <div className='mb-8 w-full lg:w-3/4'>
             {user.role === 'ADMIN' && <AdminSection />}
             {user.role === 'PROFESSOR' && <ProfessorSection />}
             {user.role === 'PARENT' && <ParentSection />}
             {user.role === 'STUDENT' && <StudentSection />}
           </div>
-
+          <div className='bg-gray-200 w-full lg:w-1/4'>
+            <NotificationTab />
+          </div>
         </div>
       ) : (
         <p className="text-center">Nenhum dado encontrado para este usuário.</p>
@@ -66,8 +67,3 @@ export default function Dashboard() {
     </div>
   );
 }
-//<div className="mt-4 text-black text-center">
-          
-          
-    //      </div>
-  //<strong>Token:</strong> {localStorage.getItem('token')}

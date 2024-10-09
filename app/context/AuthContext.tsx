@@ -6,6 +6,7 @@ import { User } from '../interfaces/User'; // Importar a interface User
 
 // Definir a interface do contexto de autenticação
 interface AuthContextType {
+  cpf: any;
   user: User | null;  // O usuário pode ser 'null' inicialmente
   setUser: (user: User | null) => void;
   logout: () => void;
