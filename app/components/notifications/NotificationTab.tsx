@@ -4,7 +4,7 @@ import NotificationItem from './NotificationItem';
 import { notificationService } from '@/app/services/notificationService';
 import { Notification } from '@/app/interfaces/Notification';
 
-const NotificationTab: React.FC = () => {
+const NotificationTab: React.FC<{ isMobile: boolean; onClose: () => void }> = ({ isMobile }) => {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -17,12 +17,13 @@ const NotificationTab: React.FC = () => {
       setError(null);
       try {
         const data = await notificationService.getNotificationsForUser(user.cpf);
-        const sortedNotifications = data.sort((a: { timestamp: string | number | Date; }, b: { timestamp: string | number | Date; }) => 
-          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        const sortedNotifications = data.sort(
+          (a: { timestamp: string | number | Date }, b: { timestamp: string | number | Date }) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
         setNotifications(sortedNotifications);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
+        console.log(err);
         setError('Erro ao buscar notificações.');
       } finally {
         setLoading(false);
@@ -34,10 +35,8 @@ const NotificationTab: React.FC = () => {
   const handleReadNotification = async (id: number) => {
     try {
       await notificationService.updateNotificationReadStatus({ id, read: true });
-      setNotifications(prevNotifications =>
-        prevNotifications.map(notification =>
-          notification.id === id ? { ...notification, read: true } : notification
-        )
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) => (notification.id === id ? { ...notification, read: true } : notification))
       );
     } catch (error) {
       console.error('Erro ao atualizar status de notificação:', error);
@@ -49,7 +48,11 @@ const NotificationTab: React.FC = () => {
   }, [user]);
 
   return (
-    <div className="flex flex-col w-full p-4 mx-auto">
+    <div
+      className={`${
+        isMobile ? 'absolute top-16 right-0 border p-5 bg-gray-300 border-gray-200 w-80 rounded-md shadow-lg' : 'fixed right-0 top-0 h-full bg-gray-100 border border-l-black w-full md:w-2/3 lg:w-80 p-4'
+      }`}
+    >
       <h2 className="text-2xl font-semibold">Notificações</h2>
       {loading ? (
         <p className="text-gray-600">Carregando notificações...</p>
@@ -58,18 +61,16 @@ const NotificationTab: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 gap-3 mt-4">
           {notifications.length > 0 ? (
-            notifications.map(notification => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                onRead={handleReadNotification}
-              />
+            notifications.map((notification) => (
+              <NotificationItem key={notification.id} notification={notification} onRead={handleReadNotification} />
             ))
           ) : (
             <p className="text-gray-600">Nenhuma notificação.</p>
           )}
         </div>
       )}
+      
+      
     </div>
   );
 };
