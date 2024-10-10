@@ -97,26 +97,26 @@ const ConsultLesson = () => {
         <thead>
           <tr>
           
-            <th className="border px-4 py-2">Código</th>
-            <th className="border px-4 py-2">Ações</th>
+            <th className="border font-semibold text-lg px-4 py-2">Código</th>
+            <th className="border font-semibold text-lg px-4 py-2">Ações</th>
           </tr>
         </thead>
         <tbody>
           {lessons.map((lesson) => (
             <tr key={lesson.id}>
              
-              <td className="border px-4 py-2">{lesson.name}</td>
+              <td className="border px-4 text-xl py-2">{lesson.name}</td>
               <td className="border px-4 py-2">
-                <div className="flex gap-2 flex-col">
+                <div className="flex gap-2 w-[40%] ml-auto flex-col">
                 <button
                   onClick={() => handleDetails(lesson)}
-                  className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition"
+                  className="text-blue-600 border-2 text-lg border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition"
                   >
                   <FaEye /> Ver Detalhes
                 </button>
                 <button
                   onClick={() => handleEdit(lesson.id)}
-                  className="text-[#DC3181] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition"
+                  className="text-[#DC3181]  text-lg flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition"
                   >
                   <FaPencilAlt />Editar
                 </button>

@@ -35,19 +35,19 @@ const Settings: React.FC<SettingsProps> = ({ user }) => {
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">Configurações da Conta</h2>
         <div className="flex space-x-4 mb-4">
           <button
-            className={`py-2 px-4 rounded-md ${activeTab === 'info' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`py-2 px-4 rounded-md ${activeTab === 'info' ? 'bg-[#4666AF] text-white' : 'bg-gray-200'}`}
             onClick={() => setActiveTab('info')}
           >
             Informações do Usuário
           </button>
           <button
-            className={`py-2 px-4 rounded-md ${activeTab === 'update' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`py-2 px-4 rounded-md ${activeTab === 'update' ? 'bg-[#4666AF] text-white' : 'bg-gray-200'}`}
             onClick={() => setActiveTab('update')} 
           >
             Atualizar Informações
           </button>
           <button
-            className={`py-2 px-4 rounded-md ${activeTab === 'preferences' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`py-2 px-4 rounded-md ${activeTab === 'preferences' ? 'bg-[#4666AF] text-white' : 'bg-gray-200'}`}
             onClick={() => setActiveTab('preferences')}
           >
             Preferências

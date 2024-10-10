@@ -13,7 +13,7 @@ const ManageLessons = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-8 bg-gray-100">
       <div className="w-full max-w-3xl bg-white shadow-xl rounded-lg p-10">
-        <h1 className="text-2xl font-bold mb-6 text-center">Gerenciar Aulas</h1>
+        <h1 className="text-4xl font-semibold mb-8 text-center text-gray-700">Gerenciar Aulas</h1>
         
         <div className="flex justify-around mb-6">
           <button
