@@ -56,17 +56,21 @@ const StudentDisciplineLookup = () => {
   };
 
   return (
-    <div className="bg-gray-200 rounded-lg p-6  ml-8 w-full mx-auto mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-700">Conceitos</h2>
+    <div className="bg-white shadow-lg rounded-lg p-6 w-[45%] h-[60vh] mx-auto mt-10 overflow-y-auto">
+    <h2 className="text-4xl font-semibold mb-4 text-gray-700 text-center">Conceitos</h2>
+  
+    {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+  
+    {student && (
+      <div className="mt-6 bg-white p-4 rounded-lg text-gray-700">
+        <DisciplineList disciplines={disciplines} cpf={cpf || ''} />
+      </div>
+    )}
+  </div>
+  
 
-      {error && <p className="text-red-500 mt-2">{error}</p>}
 
-      {student && (
-        <div className="mt-6 bg-white p-4 rounded-lg shadow-lg text-gray-700">
-          <DisciplineList disciplines={disciplines} cpf={cpf || ''} /> 
-        </div>
-      )}
-    </div>
+  
   );
 };
 

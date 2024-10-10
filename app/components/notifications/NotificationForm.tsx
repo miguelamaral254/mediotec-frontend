@@ -141,7 +141,7 @@ const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) 
                                     onChange={(e) => handleSelectAll(e.target.checked)}
                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                                 />
-                                <label htmlFor="select-all" className="ml-2 text-sm text-gray-900 dark:text-white">
+                                <label htmlFor="select-all" className="ml-2 rounded text-sm text-gray-900 dark:text-white">
                                     Todos
                                 </label>
                             </div>

@@ -16,7 +16,7 @@ export const AdminSection = () => {
         <div className="relative">
           <button
             onClick={() => setIsDrawerOpen(true)}
-            className="flex items-center justify-center w-28 h-28 bg-blue-700 text-white rounded-full shadow-lg hover:bg-blue-800 focus:outline-none"
+            className="flex items-center justify-center w-28 h-28 bg-[#4666AF] text-white rounded-full shadow-lg hover:bg-blue-500 focus:outline-none"
           >
             <FiMail size={48} />
           </button>

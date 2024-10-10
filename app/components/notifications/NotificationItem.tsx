@@ -60,7 +60,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onRea
                 <h2 className='font-bold'>{notification.header}</h2>
                 <h3 className="font-semibold">{expanded ? notification.message : (notification.read ? 'Mensagem aberta' : 'Nova mensagem')}</h3>
             </div>
-            <span className="text-white p-3 bg-[#4666AF] text-center rounded-2xl text-sm">
+            <span className="text-white p-3 bg-[#4666AF] rounded-2xl text-sm">
                 {formatTimestamp(notification.timestamp)}
             </span>
         </div>

@@ -71,49 +71,49 @@ const StudentSchedule: React.FC<StudentScheduleProps> = ({ lessons, isOpen, onRe
       className="fixed inset-0 z-50 ml-8 flex items-center justify-center" 
       overlayClassName="fixed inset-0 bg-black bg-opacity-75" 
     >
-      <div className="bg-white max-h-[90%] w-full p-4 overflow-auto flex flex-col"> 
-        {userRole === 'ADMIN' && ( // Mostra o botão apenas se o userRole for 'ADMIN'
-          <div className="flex justify-end">
-            <button onClick={onRequestClose} className="bg-red-500 text-white rounded px-4 py-2">
-              Fechar
-            </button>
-          </div>
-        )}
-        <h2 className="text-lg font-bold mb-4">Horário do Aluno</h2>
-        <table className="min-w-full table-auto border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
-              <th className="border border-gray-300 p-4">Horário</th>
-              {daysOfWeek.map((day) => (
-                <th key={day} className="border border-gray-300 p-4">{day}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {times.map((time) => (
-              <tr key={time}>
-                <td className="border border-gray-300 p-4 text-center">{time}</td>
-                {daysOfWeek.map((day) => (
-                  <td key={`${day}-${time}`} className="border border-gray-300 p-4 text-center">
-                    {scheduleMap[day][time].length > 0 ? (
-                      scheduleMap[day][time].map((lesson) => (
-                        <div key={lesson.id} className="mt-1">
-                          <div className="text-sm font-medium">{lesson.discipline.name}</div>
-                          <div className="text-sm font-medium">{lesson.schoolClass.code}</div>
-                          <div className="text-sm font-medium">{lesson.professorResponseDTO.name}</div>
-                          <div className="text-xs">{lesson.room}</div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-sm text-gray-500">Sem aulas</div>
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+     <div className="bg-white max-h-[90%] w-full p-4 overflow-auto flex flex-col mx-auto my-4 rounded-lg shadow-lg max-w-5xl">
+  {userRole === 'ADMIN' && (
+    <div className="flex justify-end">
+      <button onClick={onRequestClose} className="bg-red-500 hover:bg-red-600 transition-colors text-white rounded px-4 py-2">
+        Fechar
+      </button>
+    </div>
+  )}
+  <h2 className="text-lg font-bold mb-4 text-center text-gray-800">Horário do Aluno</h2>
+  <table className="min-w-full table-auto border-collapse border border-gray-300 rounded-lg">
+    <thead>
+      <tr className="bg-[#4666AF] text-white uppercase text-sm">
+        <th className="border border-gray-300 p-4">Horário</th>
+        {daysOfWeek.map((day) => (
+          <th key={day} className="border border-gray-300 p-4">{day}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {times.map((time) => (
+        <tr key={time} className="odd:bg-white even:bg-gray-50">
+          <td className="border border-gray-300 p-4 text-center text-sm text-gray-700 font-medium">{time}</td>
+          {daysOfWeek.map((day) => (
+            <td key={`${day}-${time}`} className="border border-gray-300 p-4 text-center">
+              {scheduleMap[day][time].length > 0 ? (
+                scheduleMap[day][time].map((lesson) => (
+                  <div key={lesson.id} className="mt-1">
+                    <div className="text-sm font-medium text-gray-800">{lesson.discipline.name}</div>
+                    <div className="text-xs text-gray-600">{lesson.schoolClass.code}</div>
+                    <div className="text-xs text-gray-500">{lesson.professorResponseDTO.name}</div>
+                    <div className="text-xs text-gray-500">{lesson.room}</div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-sm text-gray-500">Sem aulas</div>
+              )}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
     </Modal>
   );
 };
