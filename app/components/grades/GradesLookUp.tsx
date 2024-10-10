@@ -1,5 +1,3 @@
-// components/assessiments/StudentDisciplineLookup.tsx
-
 import { useState } from 'react';
 import { getStudentByCpf, getDisciplinesByStudentCpf } from '../../services/userConsultService';
 import Swal from 'sweetalert2';
@@ -63,7 +61,7 @@ const GradesLookUp = () => {
         <div className="mt-6 bg-white p-4 rounded-lg shadow-lg text-gray-700">
           <h3 className="text-xl font-bold mb-2">Aluno: {student.name}</h3>
           
-          <Disciplines disciplines={disciplines} cpf={cpf} /> {/* Passando o CPF como prop */}
+          <Disciplines disciplines={disciplines} cpf={cpf} /> 
         </div>
       )}
     </div>

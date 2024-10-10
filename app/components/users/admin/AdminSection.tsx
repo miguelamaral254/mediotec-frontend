@@ -31,12 +31,7 @@ export const AdminSection = () => {
         {isDrawerOpen && (
           <div className="h-full">
             <NotificationForm setIsDrawerOpen={setIsDrawerOpen} />
-            <button
-              className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
-              onClick={() => setIsDrawerOpen(false)}
-            >
-              Fechar
-            </button>
+            
           </div>
         )}
       </div>

@@ -5,6 +5,8 @@ import { ProfessorLessonResponse } from '@/app/interfaces/ProfessorLessonRespons
 import { getLessonsByProfessorCpf, getAllProfessors } from '@/app/services/userConsultService';
 import { useAuth } from '@/app/context/AuthContext';
 import LessonList from './LessonList';
+import Link from 'next/link';
+import { FaHome } from 'react-icons/fa';
 
 interface Professor {
   cpf: string;
@@ -13,6 +15,7 @@ interface Professor {
 
 const ProfessorLessonLookup = () => {
   const { user } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cpf, setCpf] = useState('');
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [filteredProfessors, setFilteredProfessors] = useState<Professor[]>([]);
@@ -106,7 +109,10 @@ const ProfessorLessonLookup = () => {
 
       {user?.role === 'PROFESSOR' && (
         <div className="mb-4">
-          <p className="text-sm font-medium text-gray-700">CPF do Professor: {cpf}</p>
+          <Link href="/auth/dashboard" className="flex w-20 items-center p-3 bg-[#4666AF] rounded-lg hover:bg-blue-500">
+            <FaHome className="mr-2" />
+              Home
+          </Link>
         </div>
       )}
 

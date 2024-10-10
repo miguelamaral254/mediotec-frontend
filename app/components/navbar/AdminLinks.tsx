@@ -97,7 +97,7 @@ const AdminLinks: React.FC<AdminLinksProps> = ({ isNavbarOpen }) => {
       >
         <div className="flex items-center">
           <FaBook className="mr-2" />
-          Semestre
+          Consultar horários
         </div>
       </button>
 

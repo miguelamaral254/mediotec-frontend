@@ -29,7 +29,7 @@ const StudentLinks: React.FC<StudentLinksProps> = ({ isNavbarOpen }) => {
       >
         <div className="flex items-center">
           <FaBook className="mr-2" />
-          Semestre
+        Consultas
         </div>
       </button>
 

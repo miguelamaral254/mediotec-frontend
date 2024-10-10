@@ -30,7 +30,7 @@ const ProfessorLinks: React.FC<ProfessorLinksProps> = ({ isNavbarOpen }) => {
       >
         <div className="flex items-center">
           <FaBook className="mr-2" />
-          Semestre
+          Gerenciar
         </div>
       </button>
 
