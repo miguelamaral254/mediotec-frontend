@@ -12,8 +12,6 @@ import AdminLinks from './AdminLinks';
 import ProfessorLinks from './ProfessorLinks';
 import StudentLinks from './StudentLinks';
 
-
-
 const Navbar: React.FC = () => {
   const { user, setUser } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -55,6 +53,12 @@ const Navbar: React.FC = () => {
     }, 200);
   };
 
+  // Função para abrir a navbar ao tocar em dispositivos móveis
+  const handleTouch = () => {
+    setIsSidebarOpen(true);
+    setIsNavbarOpen(true);
+  };
+
   return (
     <>
       {user && (
@@ -64,7 +68,6 @@ const Navbar: React.FC = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          
           <div>
             <div className="flex justify-center mt-12 mb-8">
               <Image
@@ -96,7 +99,25 @@ const Navbar: React.FC = () => {
               Sair
             </button>
           </div>
-          
+        </div>
+      )}
+
+      {/* Ícones visíveis quando a sidebar está fechada */}
+      {!isSidebarOpen && user && (
+        <div 
+          className="fixed left-0 top-0 h-full w-20 flex flex-col items-center justify-center space-y-4 bg-[#1D1D1D] shadow-xl z-30" 
+          onMouseEnter={handleMouseEnter} // Adicionado para abrir a navbar ao passar o mouse
+          onClick={handleTouch} // Adicionado para abrir a navbar ao tocar
+        >
+          <Link href="/auth/dashboard" className="text-white hover:bg-[#4666AF] p-2 rounded">
+            <FaHome />
+          </Link>
+          <Link href="/auth/dashboard/settings" className="text-white hover:bg-[#4666AF] p-2 rounded">
+            <FaCog />
+          </Link>
+          <button onClick={handleLogout} className="text-white hover:bg-[#4666AF] p-2 rounded">
+            <FaSignOutAlt />
+          </button>
         </div>
       )}
     </>

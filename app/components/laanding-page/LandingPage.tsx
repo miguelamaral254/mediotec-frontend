@@ -1,10 +1,8 @@
-"use client"
+"use client";
 import Head from 'next/head';
-
 import Image from 'next/image';
 import BGI from "@/public/images/bg-site.webp";
 import Banner from "@/public/images/logo_mediotec.png";
-
 import LPNavbar from './LPNavbar';
 
 const LandingPage = () => {
@@ -37,7 +35,7 @@ const LandingPage = () => {
             alt="Banner do Portal do Aluno"
             width={700} 
             height={300} 
-            className="rounded-lg" 
+            className="rounded-lg w-full h-auto" // Added width and height responsive
           />
         </div>
       </main>
