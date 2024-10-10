@@ -70,7 +70,7 @@ const LessonList: React.FC<LessonListProps> = ({ lessons, isOpen, onRequestClose
       className="fixed inset-0 z-50 ml-8 flex items-center justify-center" 
       overlayClassName="fixed inset-0 bg-black bg-opacity-75" 
     >
-            <div className="bg-white max-h-[90%] w-full p-4 overflow-auto flex flex-col">
+      <div className="bg-white max-h-[90%] w-full p-4 overflow-auto flex flex-col mx-auto my-4 rounded-lg shadow-lg max-w-5xl">
         {userRole === 'ADMIN' && (
           <div className="flex justify-end">
             <button onClick={onRequestClose} className="bg-red-500 hover:bg-red-600 transition-colors text-white rounded px-4 py-2">
@@ -79,7 +79,7 @@ const LessonList: React.FC<LessonListProps> = ({ lessons, isOpen, onRequestClose
           </div>
         )}
         <h2 className="text-lg font-bold mb-4 text-center text-gray-800">Lista de Aulas</h2>
-        <table className="min-w-full table-auto border-collapse border border-gray-300 rounded-lg shadow-lg">
+        <table className="min-w-full table-auto border-collapse border border-gray-300 rounded-lg">
           <thead>
             <tr className="bg-[#4666AF] text-white uppercase text-sm">
               <th className="border border-gray-300 p-4">Horário</th>

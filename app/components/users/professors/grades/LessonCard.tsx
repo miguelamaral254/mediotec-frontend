@@ -17,7 +17,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ lesson }) => {
   console.log('Dados da lição:', lesson);
 
   return (
-<div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow transition cursor-pointer transform hover:-translate-y-1 transition-transform ease-in-out">
+<div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow transitioncursor-pointer transform hover:-translate-y-1 transition-transform ease-in-out">
   <h2 className="text-2xl font-bold text-gray-800 mb-2">{lesson.name}</h2>
   <p className="text-gray-600">📚 <span className="font-medium">Disciplina:</span> {lesson.discipline.name}</p>
   <p className="text-gray-600">🏫 <span className="font-medium">Turma:</span> {lesson.schoolClass.code}</p>
