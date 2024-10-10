@@ -23,27 +23,37 @@ export const StudentSection = () => (
   {/* Grid de funcionalidades */}
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-    {/* Grade de Horários */}
-    <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-transform transform hover:scale-105">
-      <h3 className="font-semibold text-xl text-gray-800 mb-2">🕒 Grade de Horários</h3>
-      <p className="text-gray-600 mb-4">Confira sua grade de horários e não perca nenhuma aula!</p>
-      <Link href="/auth/dashboard/student/schedules">
+{/* Grade de Horários */}
+<div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 flex flex-col">
+  <h3 className="font-semibold text-xl text-gray-800 mb-2">🕒 Grade de Horários</h3>
+  <p className="text-gray-600 mb-4">Confira sua grade de horários e não perca nenhuma aula!</p>
+  
+  {/* Espaço flexível para empurrar o botão para baixo */}
+  <div className="mt-auto">
+    <Link href="/auth/dashboard/student/schedules">
       <button className="w-full border-2 border-[#4666AF] text-[#4666AF] rounded-lg py-2 hover:bg-[#4666AF] hover:text-white transition duration-300">
         Ver grade de horários
       </button>
-      </Link>
-    </div>
+    </Link>
+  </div>
+</div>
+
 
     {/* Conceitos */}
-    <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-transform transform hover:scale-105">
-      <h3 className="font-semibold text-xl text-gray-800 mb-2">📚 Conceitos</h3>
-      <p className="text-gray-600 mb-4">Acompanhe suas notas e desempenho nas disciplinas.</p>
-      <Link href="/auth/dashboard/student/grades">
+    <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-transform transform hover:scale-105 flex flex-col">
+  <h3 className="font-semibold text-xl text-gray-800 mb-2">📚 Conceitos</h3>
+  <p className="text-gray-600 mb-4">Acompanhe suas notas e desempenho nas disciplinas.</p>
+  
+  {/* Espaço flexível para empurrar o botão para baixo */}
+  <div className="mt-auto">
+    <Link href="/auth/dashboard/student/grades">
       <button className="w-full border-2 border-[#4666AF] text-[#4666AF] rounded-lg py-2 hover:bg-[#4666AF] hover:text-white transition duration-300">
-       Ver meus conceitos
+        Ver meus conceitos
       </button>
-      </Link>
-    </div>
+    </Link>
+  </div>
+</div>
+
 
     {/* Disciplinas */}
     <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-transform transform hover:scale-105">
