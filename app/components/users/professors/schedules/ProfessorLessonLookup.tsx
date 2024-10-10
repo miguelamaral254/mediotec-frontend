@@ -77,11 +77,11 @@ const ProfessorLessonLookup = () => {
   };
 
   return (
-    <div className="bg-gray-200 border-4 border-[#9d31bd] shadow-xl rounded-lg px-14 w-full ml-12 mr-12 py-32 mx-auto mt-10 p-10">
+    <div className="bg-white shadow-xl rounded-lg px-14 w-full ml-12 mr-12 py-32 mx-auto mt-10 p-10">
       <h2 className="text-4xl font-semibold mb-8 text-center text-gray-700">Grade de horário do Professor</h2>
-
       {user?.role === 'ADMIN' && (
-        <div className="mb-4">
+        
+        <div className="mb-4 bg-gray-200 rounded-lg p-6">
           <label className="block text-xl mb-4 font-medium text-gray-700">Filtrar por Nome do Professor:</label>
           <input
             type="text"
@@ -95,7 +95,7 @@ const ProfessorLessonLookup = () => {
               <button
                 key={prof.cpf}
                 onClick={() => handleSearch(prof.cpf)}
-                className="flex justify-between p-3 w-full text-left text-gray-900 hover:bg-[#9d31bd] hover:text-white transition-colors duration-200"
+                className="flex justify-between p-3 w-full text-left text-gray-900 hover:bg-[#4666AF] hover:text-white transition-colors duration-200"
               >
                 {prof.name}
               </button>

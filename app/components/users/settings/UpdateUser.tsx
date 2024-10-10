@@ -86,7 +86,7 @@ const UpdateUser = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-gray-100 rounded-lg p-6 shadow-lg text-black">
+    <div className="w-[100%] bg-white rounded-lg p-6 shadow-lg text-black">
       <h2 className="text-2xl font-bold mb-4">Atualizar Informações</h2>
       {error && <p className="text-red-500">{error}</p>}
       {user && (
@@ -136,7 +136,7 @@ const UpdateUser = () => {
             onChange={handleChange}
           />
 
-          <button onClick={handleUpdate} className="w-full mt-4 p-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition duration-200">
+          <button onClick={handleUpdate} className="w-full mt-4 p-2 bg-[#4666AF] hover:bg-blue-500 transition text-white rounded duration-100">
             Atualizar Informações
           </button>
         </div>

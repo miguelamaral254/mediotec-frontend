@@ -11,7 +11,7 @@ const ManageSchoolClasses = () => {
   return (
     <div className="flex flex-col items-center justify-center p-4 sm:p-8 bg-gray-100 min-h-screen">
       <div className="w-full max-w-3xl bg-white shadow-xl rounded-lg p-10">
-        <h1 className="text-2xl font-bold mb-6 text-center">Gerenciar Turmas</h1>
+        <h1 className="text-4xl font-semibold mb-8 text-center text-gray-700">Gerenciar Turmas</h1>
         
         <div className="flex justify-around mb-6">
           <button

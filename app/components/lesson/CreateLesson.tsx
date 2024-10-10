@@ -169,20 +169,22 @@ const CreateLesson = () => {
           />
         </div>
 
+        <div className="mb-4">
+        <label className="block text-xl text-gray-700">Turma:</label>        
         <select
-  value={schoolClassId || ''}
-  onChange={(e) => setSchoolClassId(Number(e.target.value))}
-  className="border rounded-md p-2 w-full text-gray-700"
-  required
->
-  <option value="" disabled>Selecione uma turma</option>
-  {schoolClasses.map((schoolClass) => (
-    <option key={schoolClass.id} value={schoolClass.id}>
-      {schoolClass.letter} {yearMapping[schoolClass.year]}° {/* Mapear a string para o número */}
-    </option>
-  ))}
-</select>
-
+          value={schoolClassId || ''}
+          onChange={(e) => setSchoolClassId(Number(e.target.value))}
+          className="border rounded-md p-2 w-full text-gray-700"
+          required
+        >
+          <option value="" disabled>Selecione uma turma</option>
+          {schoolClasses.map((schoolClass) => (
+            <option key={schoolClass.id} value={schoolClass.id}>
+              {schoolClass.letter} {yearMapping[schoolClass.year]}° {/* Mapear a string para o número */}
+            </option>
+          ))}
+        </select>
+        </div>
 
         <div className="mb-4">
           <label className="block text-xl text-gray-700">Disciplina:</label>
@@ -299,7 +301,7 @@ const CreateLesson = () => {
           />
         </div>
 
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
+        <button type="submit" className="bg-[#4666AF] w-full text-white p-2 rounded-md transition hover:bg-blue-500">
           Criar Aula
         </button>
       </form>
