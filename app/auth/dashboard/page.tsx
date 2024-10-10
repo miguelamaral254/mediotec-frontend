@@ -9,12 +9,28 @@ import { ProfessorSection } from '@/app/components/users/professors/schedules/Pr
 import { ParentSection } from '@/app/components/users/parents/ParentSection';
 import { StudentSection } from '@/app/components/users/students/StudentSection';
 import NotificationTab from '@/app/components/notifications/NotificationTab';
+import { MdClose, MdNotifications } from 'react-icons/md';
 
 export default function Dashboard() {
   const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // Define mobile based on screen width
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -48,17 +64,31 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="mx-auto w-full min-h-screen flex flex-col">
+    <div className=" ml-20 justify-end min-h-screen flex flex-col">
       {user ? (
-        <div className="flex flex-col lg:flex-row w-full flex-grow">
-          <div className='w-full lg:w-3/4 p-4'> {/* Added padding for better spacing */}
+        <div className="flex flex-col lg:flex-row w-full flex-grow p-4">
+          <div className="w-full lg:w-3/4 p-4">
             {user.role === 'ADMIN' && <AdminSection />}
             {user.role === 'PROFESSOR' && <ProfessorSection />}
             {user.role === 'PARENT' && <ParentSection />}
             {user.role === 'STUDENT' && <StudentSection />}
           </div>
-          <div className='border border-l-black w-full lg:w-1/4 md:w-1/3 p-2'> {/* Responsive widths */}
-            <NotificationTab />
+          <div className=" w-full lg:w-1/4 p-2">
+            {!isMobile ? (
+              <NotificationTab isMobile={false} onClose={() => {}} />
+            ) : (
+              <>
+                <button
+                  className="fixed top-4 right-4  text-white px-4 py-2 rounded-md z-50"
+                  onClick={() => setShowNotifications(!showNotifications)}
+                >
+                  {showNotifications ? <MdClose size={24} className='text-[#4666af]'/> : <MdNotifications size={24}  className='text-[#4666af]'/>}
+                </button>
+                {showNotifications && (
+                  <NotificationTab isMobile={true} onClose={() => setShowNotifications(false)} />
+                )}
+              </>
+            )}
           </div>
         </div>
       ) : (

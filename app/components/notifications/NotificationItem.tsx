@@ -48,7 +48,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onRea
     return (
         <div 
             ref={itemRef} 
-            className={`flex items-center border-b justify-around w-full p-4 hover:bg-gray-100 cursor-pointer ${notification.read ? 'text-gray-500' : 'text-black'} border border-gray-800 rounded-xl`}
+            className={`flex items-center border-b justify-between w-full p-4 hover:bg-gray-100 cursor-pointer ${notification.read ? 'text-gray-500' : 'text-black'} border border-gray-800 rounded-xl`}
             onClick={handleClick} 
             aria-expanded={expanded}
             aria-label={`Notificação: ${notification.message}`}
@@ -56,8 +56,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onRea
             <div className={`flex items-center justify-center w-10 h-10 rounded-full border ${notification.read ? 'border-gray-500' : 'border-blue-500'} bg-white`}>
                 {notification.read ? <TbMailOpened className="text-gray-500" size={20} /> : <FiMail className="text-blue-500" size={20} />}
             </div>
-            <div className="ml-4">
-                <h2 className='font-bold'>{notification.header}</h2> {/* Usando o cabeçalho da notificação */}
+            <div className="ml-4 flex-grow">
+                <h2 className='font-bold'>{notification.header}</h2>
                 <h3 className="font-semibold">{expanded ? notification.message : (notification.read ? 'Mensagem aberta' : 'Nova mensagem')}</h3>
             </div>
             <span className="text-white p-3 bg-blue-400 rounded-2xl text-sm">
