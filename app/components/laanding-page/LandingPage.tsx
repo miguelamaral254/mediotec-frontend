@@ -21,7 +21,7 @@ const LandingPage = () => {
             <li><a href="#">Contato</a></li>
             <li>
               <Link href="/auth/login">
-                <button className="bg-[#4666af text-white py-2 px-4 rounded hover:bg-[#4666af">
+                <button className="bg-[#4666af] text-white py-2 px-4 rounded hover:bg-blue-600">
                   Entrar
                 </button>
               </Link>
