@@ -50,7 +50,7 @@ const NotificationTab: React.FC<{ isMobile: boolean; onClose: () => void }> = ({
   return (
     <div
       className={`${
-        isMobile ? 'absolute top-16 right-0 border p-5 bg-gray-300 border-gray-200 w-80 rounded-md shadow-lg' : 'fixed right-0 top-0 h-full bg-gray-100 border border-l-black w-full md:w-2/3 lg:w-80 p-4'
+        isMobile ? 'absolute top-16 right-0 border p-5 bg-gray-300 border-gray-200 w-80 rounded-md shadow-lg' : 'z-10 fixed right-0 top-0 h-full bg-gray-100 border border-l-black w-full md:w-2/3 lg:w-80 p-4 z-60'
       }`}
     >
       <h2 className="text-2xl font-semibold">Notificações</h2>

@@ -135,18 +135,15 @@ const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) 
                         <label className="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Enviar para:</label>
                         <div className="flex flex-col">
                             <div className="flex items-center mb-2">
-                            <div className="flex items-center mb-2">
                                 <input
                                     type="checkbox"
                                     id="select-all"
                                     onChange={(e) => handleSelectAll(e.target.checked)}
-                                    className="appearance-none w-6 h-6 rounded-full border-2 border-gray-300 checked:bg-[#4666AF] checked:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                                 />
-                                <label htmlFor="select-all" className="ml-2 text-sm text-gray-900 dark:text-white cursor-pointer">
+                                <label htmlFor="select-all" className="ml-2 text-sm text-gray-900 dark:text-white">
                                     Todos
                                 </label>
-                                </div>
-
                             </div>
                             <div className="flex items-center mb-2">
                                 <input
@@ -154,53 +151,51 @@ const NotificationForm: React.FC<NotificationFormProps> = ({ setIsDrawerOpen }) 
                                     id="STUDENT"
                                     checked={roles.STUDENT}
                                     onChange={() => handleCheckboxChange('STUDENT')}
-                                    className="appearance-none w-6 h-6 rounded-full border-2 border-gray-300 checked:bg-[#4666AF] checked:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                                     value="STUDENT"
                                 />
-                                <label htmlFor="STUDENT" className="ml-2 text-sm text-gray-900 dark:text-white cursor-pointer">
+                                <label htmlFor="STUDENT" className="ml-2 text-sm text-gray-900 dark:text-white">
                                     Alunos
                                 </label>
-                                </div>
-
-                            <div className="flex items-center mb-2">
-                            <input
-                                type="checkbox"
-                                id="ADMIN"
-                                checked={roles.ADMIN}
-                                onChange={() => handleCheckboxChange('ADMIN')}
-                                className="appearance-none w-6 h-6 rounded-full border-2 border-gray-300 checked:bg-[#4666AF] checked:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                                value="ADMIN"
-                            />
-                            <label htmlFor="ADMIN" className="ml-2 text-sm text-gray-900 dark:text-white cursor-pointer">
-                                Coordenação
-                            </label>
                             </div>
                             <div className="flex items-center mb-2">
-                            <input
-                                type="checkbox"
-                                id="PROFESSOR"
-                                checked={roles.PROFESSOR}
-                                onChange={() => handleCheckboxChange('PROFESSOR')}
-                                className="appearance-none w-6 h-6 rounded-full border-2 border-gray-300 checked:bg-[#4666AF] checked:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                                value="PROFESSOR"
-                            />
-                            <label htmlFor="PROFESSOR" className="ml-2 text
-                            -sm text-gray-900 dark:text-white cursor-pointer">
-                                Professores
-                            </label>
+                                <input
+                                    type="checkbox"
+                                    id="ADMIN"
+                                    checked={roles.ADMIN}
+                                    onChange={() => handleCheckboxChange('ADMIN')}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    value="ADMIN"
+                                />
+                                <label htmlFor="ADMIN" className="ml-2 text-sm text-gray-900 dark:text-white">
+                                    Coordenação
+                                </label>
                             </div>
                             <div className="flex items-center mb-2">
-                            <input
-                                type="checkbox"
-                                id="PARENT"
-                                checked={roles.PARENT}
-                                onChange={() => handleCheckboxChange('PARENT')}
-                                className="appearance-none w-6 h-6 rounded-full border-2 border-gray-300 checked:bg-[#4666AF] checked:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                                value="PARENT"
-                            />
-                            <label htmlFor="PARENT" className="ml-2 text-sm text-gray-900 dark:text-white cursor-pointer">
-                                Pais
-                            </label>
+                                <input
+                                    type="checkbox"
+                                    id="PROFESSOR"
+                                    checked={roles.PROFESSOR}
+                                    onChange={() => handleCheckboxChange('PROFESSOR')}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    value="PROFESSOR"
+                                />
+                                <label htmlFor="PROFESSOR" className="ml-2 text-sm text-gray-900 dark:text-white">
+                                    Professores
+                                </label>
+                            </div>
+                            <div className="flex items-center mb-2">
+                                <input
+                                    type="checkbox"
+                                    id="PARENT"
+                                    checked={roles.PARENT}
+                                    onChange={() => handleCheckboxChange('PARENT')}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    value="PARENT"
+                                />
+                                <label htmlFor="PARENT" className="ml-2 text-sm text-gray-900 dark:text-white">
+                                    Pais
+                                </label>
                             </div>
                         </div>
                     </div>
