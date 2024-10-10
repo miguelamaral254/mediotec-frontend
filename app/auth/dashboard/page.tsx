@@ -79,10 +79,22 @@ export default function Dashboard() {
             ) : (
               <>
                 <button
-                  className="fixed top-4 right-4  text-white px-4 py-2 rounded-md z-50"
+                  className="fixed
+                  flex
+                  flex-col
+                  justify-center
+                  items-center 
+                  top-4 
+                  right-4 
+                    bg-[#4666af]
+                  text-white px-4 py-2 
+                  rounded-full
+                  h-10
+                  w-10
+                  z-50"
                   onClick={() => setShowNotifications(!showNotifications)}
                 >
-                  {showNotifications ? <MdClose size={24} className='text-[#4666af]'/> : <MdNotifications size={24}  className='text-[#4666af]'/>}
+                  {showNotifications ? <MdClose size={24} /> : <MdNotifications size={24} />}
                 </button>
                 {showNotifications && (
                   <NotificationTab isMobile={true} onClose={() => setShowNotifications(false)} />
