@@ -21,64 +21,76 @@ export const ProfessorSection = () => (
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-      <div className="bg-white rounded-lg w-[80%] shadow-md p-4">
+      <div className="bg-white flex-col h-full flex rounded-lg w-[80%] shadow-md p-4">
         <h3 className="font-semibold text-xl">Minhas Aulas</h3>
         <p className="mt-2 text-gray-600">
           Confira sua grade de aula.
         </p>
+        <div className="mt-auto">
         <button className="mt-4 border-2 border-[#4666AF] rounded-lg font-semibold p-2 text-[#4666AF] hover:bg-[#4666AF] hover:text-white transition">
           <Link href="/auth/dashboard/professor/schedules">Ver turmas</Link>
         </button>
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg w-[80%] shadow-md p-4">
+      <div className="bg-white rounded-lg flex-col h-full flex w-[80%] shadow-md p-4">
         <h3 className="font-semibold text-xl">Conceitos dos Alunos</h3>
         <p className="mt-2 text-gray-600">
           Acompanhe o desempenho dos alunos em suas disciplinas.
         </p>
+        <div className="mt-auto">
         <button className="mt-4 border-2 font-semibold border-[#4666AF] rounded-lg p-2 text-[#4666AF] hover:bg-[#4666AF] hover:text-white transition">
           <Link href="/auth/dashboard/professor-dashboard/grades">Ver conceitos</Link>
         </button>
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg w-[80%] shadow-md p-4">
+      <div className="bg-white rounded-lg flex-col h-full flex w-[80%] shadow-md p-4">
         <h3 className="font-semibold text-xl">Plano de Aula <span className="text-red-600"> WORK IN PROGRESS </span></h3>
         <p className="mt-2 text-gray-600">
           Organize e visualize seus planos de aula.
         </p>
+        <div className="mt-auto">  
         <button className="mt-4 border-2 font-semibold border-[#4666AF] rounded-lg p-2 text-[#4666AF] hover:bg-[#4666AF] hover:text-white transition">
           <Link href="/auth/dashboard/professor/lesson-plans">Ver planos</Link>
         </button>
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg w-[80%] shadow-md p-4">
+      <div className="bg-white flex-col h-full flex rounded-lg w-[80%] shadow-md p-4">
         <h3 className="font-semibold text-xl">Acesso ao Canvas <span className="text-red-600"> WORK IN PROGRESS </span> </h3>
         <p className="mt-2 text-gray-600">
           Mantenha-se atualizado sobre suas atividades e tarefas. 
         </p>
+        <div className="mt-auto">
         <button className="mt-4 mt-[2.5rem] font-semibold border-2 border-[#4666AF] rounded-lg p-2 text-[#4666AF] hover:bg-[#4666AF] hover:text-white transition">
           <Link href="/auth/dashboard/professor/canvas">Ver atividades</Link>
         </button>
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg w-[80%] shadow-md p-4">
+      <div className="bg-white flex-col h-full flex rounded-lg w-[80%] shadow-md p-4">
         <h3 className="font-semibold text-xl">Calendário Escolar <span className="text-red-600"> WORK IN PROGRESS </span></h3>
         <p className="mt-2 text-gray-600">
           Veja o calendário escolar e não perca nenhuma data importante.
         </p>
+        <div className="mt-auto"> 
         <button className="mt-4 border-2 border-[#4666AF] font-semibold rounded-lg p-2 text-[#4666AF] hover:bg-[#4666AF] hover:text-white transition">
           <Link href="/auth/dashboard/professor/calendar">Ver calendário</Link>
         </button>
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg w-[80%] shadow-md p-4">
+      <div className="bg-white flex-col h-full flex rounded-lg w-[80%] shadow-md p-4">
         <h3 className="font-semibold text-xl">Contato <span className="text-red-600"> WORK IN PROGRESS </span></h3>
         <p className="mt-2 text-gray-600">
           Entre em contato com a administração ou outros professores.
         </p>
+        <div className="mt-auto">
         <button className="mt-[2.5rem] border-2 border-[#4666AF] font-semibold rounded-lg p-2 text-[#4666AF] hover:bg-[#4666AF] hover:text-white transition">
-          <Link href="/auth/dashboard/professor/contact">Ver informações de contato</Link>
+          <Link href="/auth/dashboard/professor/contact">Ver contato</Link>
         </button>
+        </div>
       </div>
     </div>
   </div>

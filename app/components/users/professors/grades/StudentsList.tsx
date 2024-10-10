@@ -48,19 +48,18 @@ const StudentsList: React.FC<StudentsListProps> = ({ schoolClassId, disciplineId
 
   return (
     <div className="mt-4">
-      <h3 className="text-lg font-semibold">Alunos</h3>
-      <ul className="list-disc ml-5">
-        {
-          students.map((student) => (
-            <li key={student.cpf} className="py-2 flex justify-between">
-              <span>{student.name}</span>
-              <button 
-                className="text-blue-500 hover:underline" 
-                onClick={() => openModal(student.cpf)} 
-              >
-                Exibir Mais Informações
-              </button>
-            </li>
+      <h3 className="text-xl font-semibold text-gray-800 mb-2">Alunos</h3>
+  <ul className="list-disc ml-5 space-y-2">
+    {students.map((student) => (
+      <li key={student.cpf} className="py-2 flex justify-between items-center bg-gray-100 rounded-lg p-3 transition duration-200 hover:bg-gray-200">
+        <span className="text-gray-700 font-medium">{student.name}</span>
+        <button 
+          className="border-2 border-[#4666AF] text-[#4666AF] font-semibold rounded-lg px-4 py-1 transition-colors duration-200 hover:bg-[#4666AF] hover:text-white ml-4" // Adicionando ml-4 para margem à esquerda
+          onClick={() => openModal(student.cpf)} 
+        >
+          Info
+        </button>
+      </li>
           ))
         }
       </ul>
@@ -72,18 +71,19 @@ const StudentsList: React.FC<StudentsListProps> = ({ schoolClassId, disciplineId
         className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto" 
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" 
       >
-        <h2 className="text-xl font-bold mb-4">Informações do Aluno</h2>
+       <h2 className="text-2xl font-bold mb-4 text-gray-800">Informações do Aluno</h2>
         <StudentGradesModal 
           studentCpf={selectedStudentCpf!} 
-          disciplineId={disciplineId} onClose={function (): void {
-            throw new Error('Function not implemented.');
-          } }  />
+          disciplineId={disciplineId} 
+          onClose={closeModal} // Ajuste a função onClose
+        />
         <button 
           onClick={closeModal} 
-          className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+          className="mt-6 px-4 py-2 bg-[#4666AF] text-white rounded-lg hover:bg-blue-500 transition duration-200"
         >
           Fechar
         </button>
+
       </Modal>
     </div>
   );
