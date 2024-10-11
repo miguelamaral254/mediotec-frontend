@@ -14,7 +14,7 @@ Mediotech+ é um sistema web desenvolvido para coordenadores, professores e estu
 
 O projeto é composto por vários repositórios, onde cada um é responsável por diferentes aspectos do sistema. Abaixo, está uma lista dos repositórios e suas funções:
 
-- [Repositório Backend](https://github.com/miguelamaral254/api-mediotec): Esse é repositório que contém o Backend do projeto.
+- [Repositório Backend](https://github.com/miguelamaral254/mt-auth-service): Esse é repositório que contém o Backend do projeto.
 
 ## 🛠️ Construído com
 
@@ -66,6 +66,37 @@ O projeto é composto por vários repositórios, onde cada um é responsável po
 ## 🖇️ Colaborando
 
 Por favor, leia o [COLABORACAO.md](https://github.com/miguelamaral254/mediotec-frontend/blob/main/COLABORACAO.md) para obter detalhes sobre o nosso código de conduta e o processo para nos enviar pedidos de solicitação.
+
+## ⌨️ Como rodar o projeto
+
+Siga os passos abaixo para clonar o repositório, instalar as dependências e rodar o projeto localmente.
+
+### 1. Clonar o repositório
+
+Clone este repositório para o seu ambiente local usando o seguinte comando:
+
+bash
+git clone https://github.com/seu-usuario/seu-repositorio.git
+
+
+### 2. Instalar as dependências
+
+Navegue até o diretório do projeto e instale as dependências necessárias com o comando:
+
+bash
+cd seu-repositorio
+npm install
+
+
+### 3. Rodar o servidor de desenvolvimento
+
+Após instalar as dependências, inicie o servidor de desenvolvimento com:
+
+bash
+npm run dev
+
+
+O projeto estará rodando em `http://localhost:3000`. Acesse essa URL no seu navegador para visualizar o projeto.
 
 ## 📌 Versão
 
