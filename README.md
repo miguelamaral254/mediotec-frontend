@@ -1,5 +1,3 @@
-# READMEFRONTEND
-
 <div align="center">
 
 # Mediotec+
@@ -7,34 +5,67 @@
 </div>
 
 <div align="center">
-<img src="https://xmple.com/wallpaper/white-plain-single-one-colour-solid-color-1024x576-c-f1f0fe-f-24.svg" width="1200" height="300">
+<img src="https://i.ibb.co/nRV9jcj/Design-sem-nome.png">
 </div>
 
 ## 📜 Descrição
 
 Mediotech+ é um sistema web desenvolvido para coordenadores, professores e estudantes da escola Mediotec, que visa facilitar a organização e monitoramento de aulas, matérias, estudantes e notas. Esse repositório corresponde ao **Frontend** do projeto.
 
-O projeto é composto por vários repositórios, onde cada um é responsável por diferentes aspectos do sistema. Abaixo está uma lista dos repositórios e suas funções:
+O projeto é composto por vários repositórios, onde cada um é responsável por diferentes aspectos do sistema. Abaixo, está uma lista dos repositórios e suas funções:
 
-- [**Repositório mãe**](https://github.com/usuario/repositorio1): Esse repositório engloba o projeto como um todo, juntando Frontend e Backend.
-- [Repositório Backend](https://github.com/usuario/repositorio1): Esse é repositório que contém o Backend do projeto.
+- [Repositório Backend](https://github.com/miguelamaral254/api-mediotec): Esse é repositório que contém o Backend do projeto.
 
 ## 🛠️ Construído com
 
-<div style="display: flex;">
-<img src="https://ui-lib.com/blog/wp-content/uploads/2021/12/nextjs-boilerplate-logo.png" alt="NextJS" style="width: 48px; height: 48px;">
-<img src="https://www.svgrepo.com/show/452228/html-5.svg" alt="HTML5" style="width: 48px; height: 48px;">
-<img src="https://www.svgrepo.com/show/452185/css-3.svg" alt="CSS3" style="width: 48px; height: 48px;">
+<div style="display: flex; align-items: center; gap: 16px;">
+<a href="https://nextjs.org/" target="_blank">
+<img src="https://ui-lib.com/blog/wp-content/uploads/2021/12/nextjs-boilerplate-logo.png" alt="Next.js" style="width: 48px; height: 48px;">
+</a>
+
+<a href="https://reactjs.org/" target="_blank">
+<img src="https://www.svgrepo.com/show/493719/react-javascript-js-framework-facebook.svg" alt="React" style="width: 48px; height: 48px;">
+</a>
+
+<a href="https://axios-http.com/" target="_blank">
+<img src="https://user-images.githubusercontent.com/8939680/57233884-20344080-6fe5-11e9-8df3-0df1282e1574.png" alt="Axios" style="width: 64px; height: 48px;">
+</a>
+
+<a href="https://react-icons.github.io/react-icons" target="_blank">
+<img src="https://raw.githubusercontent.com/react-icons/react-icons/master/react-icons.svg" alt="React Icons" style="width: 48px; height: 48px;">
+</a>
+
+<a href="https://sweetalert2.github.io/" target="_blank">
+<img src="https://sweetalert2.github.io/images/SweetAlert2.png" alt="SweetAlert2" style="width: 88px; height: 48px;">
+</a>
+
+<a href="https://tailwindcss.com/" target="_blank">
+<img src="https://www.svgrepo.com/show/374118/tailwind.svg" alt="Tailwind CSS" style="width: 48px; height: 48px;">
+</a>
+
+<a href="https://www.typescriptlang.org/" target="_blank">
+<img src="https://www.svgrepo.com/show/303600/typescript-logo.svg" alt="TypeScript" style="width: 48px; height: 48px;">
+</a>
+
+<a href="https://eslint.org/" target="_blank">
+<img src="https://www.svgrepo.com/show/439151/eslint.svg" alt="ESLint" style="width: 48px; height: 48px;">
+</a>
+
 </div>
 
-- [NextJS](https://nextjs.org/) - Framework
-- [NPM](https://www.npmjs.com/) - Gerente de Dependências Frontend
-- [HTML](https://developer.mozilla.org/pt-BR/docs/Web/HTML) - Linguagem de marcação para estruturação do conteúdo
-- [CSS](https://developer.mozilla.org/pt-BR/docs/Web/CSS) - Linguagem de estilização para layout e design
+- [Next.js 14.2.12](https://nextjs.org/) - Framework para React que facilita a construção de aplicações web.
+- [React 18](https://reactjs.org/) - Biblioteca JavaScript para construir interfaces de usuário.
+- [Axios](https://axios-http.com/) - Biblioteca para fazer requisições HTTP.
+- [React Grid Layout](https://github.com/react-grid-layout/react-grid-layout) - Biblioteca de layout de grade para React.
+- [React Icons](https://www.npmjs.com/package/react-icons) - Conjunto de ícones para React.
+- [SweetAlert2](https://sweetalert2.github.io/) - Biblioteca para criar alertas bonitos e personalizados.
+- [Tailwind CSS](https://tailwindcss.com/) - Framework CSS utilitário para estilização rápida e responsiva.
+- [TypeScript](https://www.typescriptlang.org/) - Superconjunto do JavaScript que adiciona tipagem estática.
+- [ESLint](https://eslint.org/) - Ferramenta para identificar e corrigir problemas em código JavaScript.
 
 ## 🖇️ Colaborando
 
-Por favor, leia o [COLABORACAO.md](https://github.com/usuario/projeto/colaboracao) para obter detalhes sobre o nosso código de conduta e o processo para nos enviar pedidos de solicitação.
+Por favor, leia o [COLABORACAO.md](https://github.com/miguelamaral254/mediotec-frontend/blob/main/COLABORACAO.md) para obter detalhes sobre o nosso código de conduta e o processo para nos enviar pedidos de solicitação.
 
 ## 📌 Versão
 
@@ -53,7 +84,7 @@ Esses são os membros que ajudaram a desenvolver o projeto desde o seu início
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT - veja o arquivo [LICENSE.md](https://github.com/usuario/projeto/licenca) para detalhes.
+Este projeto está sob a licença MIT - veja o arquivo [LICENSE.md](https://github.com/miguelamaral254/mediotec-frontend/blob/main/LICENCE.md) para detalhes.
 
 ## 🎁 Agradecimentos
 
