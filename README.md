@@ -75,7 +75,7 @@ Siga os passos abaixo para clonar o repositório, instalar as dependências e ro
 
 Clone este repositório para o seu ambiente local usando o seguinte comando:
 
-bash
+
 git clone https://github.com/seu-usuario/seu-repositorio.git
 
 
@@ -83,7 +83,7 @@ git clone https://github.com/seu-usuario/seu-repositorio.git
 
 Navegue até o diretório do projeto e instale as dependências necessárias com o comando:
 
-bash
+
 cd seu-repositorio
 npm install
 
@@ -92,7 +92,7 @@ npm install
 
 Após instalar as dependências, inicie o servidor de desenvolvimento com:
 
-bash
+
 npm run dev
 
 
