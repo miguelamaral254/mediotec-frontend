@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAllDiscipline, updateDiscipline } from '@/app/services/disciplineService'; // Update import
+import { getAllDisciplines, updateDiscipline } from '@/app/services/disciplineService'; 
 import DisciplineDetailModal from './DisciplineDetailModal';
 import DisciplineEditModal from './DisciplineEditModal';
 import { FaEye, FaEdit } from 'react-icons/fa';
@@ -16,7 +16,7 @@ const ConsultDiscipline = () => {
   useEffect(() => {
     const fetchDisciplines = async () => {
       try {
-        const disciplines = await getAllDiscipline();
+        const disciplines = await getAllDisciplines();
         setAllDisciplines(disciplines);
         setFilteredDisciplines(disciplines);
       } catch (error) {
@@ -55,8 +55,7 @@ const ConsultDiscipline = () => {
   const onUpdateDiscipline = async (updatedDiscipline: Discipline) => {
     if (selectedDiscipline && selectedDiscipline.id !== undefined) {
       try {
-        await updateDiscipline(selectedDiscipline.id.toString(), updatedDiscipline); // Convert id to string
-        // Update the discipline in the list after successful update
+        await updateDiscipline(selectedDiscipline.id.toString(), updatedDiscipline);
         setFilteredDisciplines(prev =>
           prev.map(discipline =>
             discipline.id === updatedDiscipline.id ? updatedDiscipline : discipline
@@ -64,13 +63,12 @@ const ConsultDiscipline = () => {
         );
       } catch (error) {
         console.error("Erro ao atualizar disciplina:", error);
-        throw error; // Rethrow to handle it in DisciplineEditModal
+        throw error; 
       }
     } else {
-      console.error("Discipline ID is not defined");
+      console.error("ID da disciplina não está definido");
     }
   };
-  
 
   return (
     <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
@@ -111,19 +109,17 @@ const ConsultDiscipline = () => {
         )}
       </div>
 
-      {/* Modal de Detalhes */}
       <DisciplineDetailModal
         isOpen={detailModalIsOpen}
         onRequestClose={closeModals}
         selectedDiscipline={selectedDiscipline}
       />
 
-      {/* Modal de Edição */}
       <DisciplineEditModal
         isOpen={editModalIsOpen}
         onRequestClose={closeModals}
         selectedDiscipline={selectedDiscipline}
-        onUpdateDiscipline={onUpdateDiscipline} // Pass the update function here
+        onUpdateDiscipline={onUpdateDiscipline}
       />
     </div>
   );

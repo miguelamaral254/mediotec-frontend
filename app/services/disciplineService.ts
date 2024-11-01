@@ -1,26 +1,22 @@
-import axios from 'axios';
+import api from '../api/api';
 import { Discipline } from '../interfaces/Discipline'; 
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-
-
 export const createDiscipline = async (disciplineData: Omit<Discipline, 'id'>): Promise<Discipline> => {
-  const response = await axios.post<Discipline>(`${API_BASE_URL}/disciplines`, disciplineData);
+  const response = await api.post<Discipline>(`/disciplines`, disciplineData);
   return response.data;
 };
 
-export const getAllDiscipline = async (): Promise<Discipline[]> => { // Altera para retornar uma lista
-  const response = await axios.get<Discipline[]>(`${API_BASE_URL}/disciplines`); // Altera para buscar uma lista de disciplinas
+export const getAllDisciplines = async (): Promise<Discipline[]> => {
+  const response = await api.get<Discipline[]>(`/disciplines`);
   return response.data;
 };
 
 export const getDiscipline = async (id: string): Promise<Discipline> => {
-  const response = await axios.get<Discipline>(`${API_BASE_URL}/disciplines/${id}`);
+  const response = await api.get<Discipline>(`/disciplines/${id}`);
   return response.data;
 };
 
-
 export const updateDiscipline = async (id: string, disciplineData: Omit<Discipline, 'id'>): Promise<Discipline> => {
-  const response = await axios.put<Discipline>(`${API_BASE_URL}/disciplines/${id}`, disciplineData);
+  const response = await api.put<Discipline>(`/disciplines/${id}`, disciplineData);
   return response.data;
 };
