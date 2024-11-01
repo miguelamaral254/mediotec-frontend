@@ -1,12 +1,11 @@
 import axios from 'axios';
+import api from '../api/api';
 import { SchoolClass } from '../interfaces/SchoolClass';
-import { User } from '../interfaces/User'; 
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { User } from '../interfaces/User';
 
 export const createClass = async (classData: Omit<SchoolClass, 'id'>): Promise<SchoolClass> => {
   try {
-    const response = await axios.post<SchoolClass>(`${API_BASE_URL}/schoolclasses`, classData);
+    const response = await api.post<SchoolClass>('/schoolclasses', classData);
     return response.data;
   } catch (error) {
     console.error('Error creating class:', error);
@@ -16,7 +15,7 @@ export const createClass = async (classData: Omit<SchoolClass, 'id'>): Promise<S
 
 export const updateClass = async (classId: number, updatedData: Partial<SchoolClass>): Promise<SchoolClass> => {
   try {
-    const currentClassResponse = await axios.get<SchoolClass>(`${API_BASE_URL}/schoolclasses/${classId}`);
+    const currentClassResponse = await api.get<SchoolClass>(`/schoolclasses/${classId}`);
     const currentClassData = currentClassResponse.data;
 
     const updatedClassData: SchoolClass = {
@@ -24,17 +23,17 @@ export const updateClass = async (classId: number, updatedData: Partial<SchoolCl
       ...updatedData,
     };
 
-    const response = await axios.put<SchoolClass>(`${API_BASE_URL}/schoolclasses/${classId}`, updatedClassData);
+    const response = await api.put<SchoolClass>(`/schoolclasses/${classId}`, updatedClassData);
     return response.data;
   } catch (error) {
-    console.error('Erro ao atualizar turma:', error);
+    console.error('Error updating class:', error);
     throw error;
   }
 };
 
 export const getSchoolClass = async (id: number): Promise<SchoolClass> => {
   try {
-    const response = await axios.get<SchoolClass>(`${API_BASE_URL}/schoolclasses/${id}`);
+    const response = await api.get<SchoolClass>(`/schoolclasses/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching school class:', error);
@@ -42,29 +41,25 @@ export const getSchoolClass = async (id: number): Promise<SchoolClass> => {
   }
 };
 
-// Atualizado: adição de estudante utilizando a rota correta `/schoolclasses/addstudent`
-
 export const addStudentToClass = async (classId: number, studentCpf: string): Promise<void> => {
   try {
-    await axios.post(`${API_BASE_URL}/schoolclasses/addstudent`, {
+    await api.post('/schoolclasses/addstudent', {
       classId,
       cpf: studentCpf,
     });
   } catch (error) {
     console.error('Error adding student to class:', error);
-
-    // Verifica se o erro é do Axios
     if (axios.isAxiosError(error) && error.response?.status === 409) {
-      throw new Error('Este estudante já está na turma.'); // Lança um erro específico
+      throw new Error('Este estudante já está na turma.');
     } else {
-      throw new Error('Erro ao adicionar o estudante.');
+      throw new Error('Error adding student.');
     }
   }
 };
 
 export const removeStudentFromClass = async (classId: number, studentCpf: string): Promise<void> => {
   try {
-    await axios.delete(`${API_BASE_URL}/schoolclasses/${classId}/students/${studentCpf}`);
+    await api.delete(`/schoolclasses/${classId}/students/${studentCpf}`);
   } catch (error) {
     console.error('Error removing student from class:', error);
     throw error;
@@ -73,7 +68,7 @@ export const removeStudentFromClass = async (classId: number, studentCpf: string
 
 export const getStudentsInClass = async (classId: number): Promise<User[]> => {
   try {
-    const response = await axios.get<User[]>(`${API_BASE_URL}/schoolclasses/${classId}/students`);
+    const response = await api.get<User[]>(`/schoolclasses/${classId}/students`);
     return response.data;
   } catch (error) {
     console.error('Error fetching students in class:', error);
@@ -83,7 +78,7 @@ export const getStudentsInClass = async (classId: number): Promise<User[]> => {
 
 export const getAllClasses = async (): Promise<SchoolClass[]> => {
   try {
-    const response = await axios.get<SchoolClass[]>(`${API_BASE_URL}/schoolclasses`);
+    const response = await api.get<SchoolClass[]>('/schoolclasses');
     return response.data;
   } catch (error) {
     console.error('Error fetching all classes:', error);

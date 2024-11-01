@@ -1,7 +1,5 @@
-import axios from 'axios';
+import api from '../api/api';
 import { User } from '../interfaces/User';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const createUser = async (userType: string, userData: User) => {
   let endpoint = '';
@@ -16,14 +14,13 @@ export const createUser = async (userType: string, userData: User) => {
     case 'PROFESSOR':
       endpoint = '/professor/register';
       break;
-      case 'COORDINATION':
+    case 'COORDINATION':
       endpoint = '/coordination/register';
       break;
     default:
       throw new Error('Tipo de usuário inválido');
   }
 
-  const response = await axios.post(`${API_URL}${endpoint}`, userData);
+  const response = await api.post(endpoint, userData);
   return response.data;
 };
-

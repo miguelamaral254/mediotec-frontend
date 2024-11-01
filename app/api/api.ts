@@ -7,11 +7,10 @@ const api = axios.create({
   },
 });
 
-// Interceptor para adicionar o token ao cabeçalho Authorization
 api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token'); // Obtém o token do localStorage
+  const token = localStorage.getItem('token'); 
   if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`; // Adiciona o token ao cabeçalho
+    config.headers['Authorization'] = `Bearer ${token}`; 
   }
   return config;
 }, error => {

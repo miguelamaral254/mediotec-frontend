@@ -1,32 +1,28 @@
 import axios from 'axios';
-import { User } from '../interfaces/User'; 
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ;
+import api from '../api/api';
+import { User } from '../interfaces/User';
 
 export const updateUser = async (cpf: string, userData: User) => {
   try {
     let url = '';
     switch (userData.role) {
       case 'ADMIN':
-        url = `${API_BASE_URL}/coordination/update/${cpf}`;
+        url = `/coordination/update/${cpf}`;
         break;
-      
       case 'PARENT':
-        url = `${API_BASE_URL}/parent/update/${cpf}`;
+        url = `/parent/update/${cpf}`;
         break;
       case 'PROFESSOR':
-        url = `${API_BASE_URL}/professor/update/${cpf}`;
+        url = `/professor/update/${cpf}`;
         break;
       case 'STUDENT':
-        url = `${API_BASE_URL}/student/update/${cpf}`;
+        url = `/student/update/${cpf}`;
         break;
       default:
         throw new Error('Tipo de usuário inválido');
     }
 
-    
-
-    const response = await axios.put(url, userData);
+    const response = await api.put(url, userData);
     return response.data;
 
   } catch (error) {
@@ -43,19 +39,19 @@ export const getUserByCpf = async (cpf: string, userType: string) => {
     let url = '';
     switch (userType) {
       case 'PARENT':
-        url = `${API_BASE_URL}/parent/${cpf}`;
+        url = `/parent/${cpf}`;
         break;
       case 'PROFESSOR':
-        url = `${API_BASE_URL}/professor/${cpf}`;
+        url = `/professor/${cpf}`;
         break;
       case 'STUDENT':
-        url = `${API_BASE_URL}/student/${cpf}`;
+        url = `/student/${cpf}`;
         break;
       default:
         throw new Error('Tipo de usuário inválido');
     }
 
-    const response = await axios.get(url);
+    const response = await api.get(url);
     if (!response.data || response.data.role !== userType) {
       throw new Error('Usuário não encontrado ou não corresponde ao tipo selecionado.');
     }
@@ -68,10 +64,11 @@ export const getUserByCpf = async (cpf: string, userType: string) => {
     throw new Error('Erro desconhecido');
   }
 };
+
 export const getCurrentUserByCpf = async (cpf: string) => {
   try {
-    const url = `${API_BASE_URL}/user/${cpf}`; 
-    const response = await axios.get(url);
+    const url = `/user/${cpf}`;
+    const response = await api.get(url);
     if (!response.data) {
       throw new Error('Usuário não encontrado.');
     }
@@ -83,11 +80,11 @@ export const getCurrentUserByCpf = async (cpf: string) => {
     throw new Error('Erro desconhecido');
   }
 };
+
 export const updateCurrentUserInfo = async (cpf: string, userData: User) => {
   try {
-    const url = `${API_BASE_URL}/${userData.role?.toLowerCase()}/update/${cpf}`;
-
-    const response = await axios.put(url, userData);
+    const url = `/${userData.role?.toLowerCase()}/update/${cpf}`;
+    const response = await api.put(url, userData);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

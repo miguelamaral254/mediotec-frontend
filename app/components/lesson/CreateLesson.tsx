@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { createLesson } from '@/app/services/lessonService';
-import { getAllDiscipline } from '@/app/services/disciplineService';
 import { getAllClasses } from '@/app/services/schoolClassService';
 import { getAllProfessors } from '@/app/services/userConsultService';
 import Swal from 'sweetalert2';
@@ -10,6 +9,7 @@ import { Lesson, Schedule, Week } from '../../interfaces/Lesson';
 import { Discipline } from '../../interfaces/Discipline';
 import { SchoolClass } from '../../interfaces/SchoolClass';
 import { User } from '../../interfaces/User';
+import { getAllDisciplines } from '@/app/services/disciplineService';
 
 const CreateLesson = () => {
   const [name, setName] = useState<string>('');
@@ -28,7 +28,7 @@ const CreateLesson = () => {
   useEffect(() => {
     const fetchDisciplines = async () => {
       try {
-        const data = await getAllDiscipline();
+        const data = await getAllDisciplines();
         setDisciplines(data);
       } catch (err) {
         console.error('Erro ao buscar disciplinas:', err);
