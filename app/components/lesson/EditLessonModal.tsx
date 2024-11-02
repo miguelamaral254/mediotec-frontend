@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
 import { getLessonById } from '@/app/services/lessonService';
-import { getAllDiscipline } from '@/app/services/disciplineService';
 import { getAllClasses } from '@/app/services/schoolClassService';
 import { getAllProfessors } from '@/app/services/userConsultService';
 import { Schedule, Week } from '@/app/interfaces/Lesson';
@@ -11,6 +10,7 @@ import { Discipline } from '@/app/interfaces/Discipline';
 import { SchoolClass } from '@/app/interfaces/SchoolClass';
 import { User } from '@/app/interfaces/User';
 import { ResponseLesson } from '@/app/interfaces/ResponseLesson';
+import { getAllDisciplines } from '@/app/services/disciplineService';
 
 interface EditModalProps {
   isOpen: boolean;
@@ -36,7 +36,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, lessonId, onUpda
   useEffect(() => {
     const fetchDisciplines = async () => {
       try {
-        const data = await getAllDiscipline();
+        const data = await getAllDisciplines();
         setDisciplines(data);
       } catch (err) {
         console.error('Erro ao buscar disciplinas:', err);
