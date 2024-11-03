@@ -6,29 +6,42 @@ import UserFields from './create-users/UserFields';
 import ParentFields from './create-users/ParentFields';
 import StudentFields from './create-users/StudentFields';
 import ProfessorFields from './create-users/ProfessorFields';
-
+import { User } from '@/app/interfaces/User';
 
 const CreateUser = () => {
   const [userType, setUserType] = useState('STUDENT');
-  const [formData, setFormData] = useState({
-    id: '', parentCPF: '', name: '', cpf: '', password: '', active: true,
-    email: '', birthDate: '', address: '', phone: '', registration: '',
-    studentCPFs: '', expertiseArea: '', academicTitle: '',
+  const [formData, setFormData] = useState<User>({
+    id: null,
+    name: '',
+    cpf: '',
+    password: '',
+    active: true,
+    email: '',
+    birthDate: '',
+    address: '',
+    phone: '',
+    studentCpfs: [],
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await createUser(userType, formData);
       Swal.fire('Success', 'User created successfully!', 'success');
-    } catch (error) {
-      console.log(error)
+    } catch {
       Swal.fire('Error', 'An error occurred while creating the user.', 'error');
     }
+  };
+
+  const addStudentCpf = (student: User) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      studentCpfs: [...(prevState.studentCpfs || []), student.cpf], 
+    }));
   };
 
   return (
@@ -37,9 +50,9 @@ const CreateUser = () => {
       <UserTypeSelect userType={userType} setUserType={setUserType} />
       <UserFields formData={formData} handleChange={handleChange} />
       {['STUDENT', 'COORDINATION'].includes(userType) && <StudentFields formData={formData} handleChange={handleChange} />}
-      {userType === 'PARENT' && <ParentFields formData={formData} handleChange={handleChange} />}
+      {userType === 'PARENT' && <ParentFields formData={formData} handleChange={handleChange} setStudentData={addStudentCpf} />}
       {userType === 'PROFESSOR' && <ProfessorFields formData={formData} handleChange={handleChange} />}
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-4">Create User</button>
+      <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-4">Criar usuário</button>
     </form>
   );
 };

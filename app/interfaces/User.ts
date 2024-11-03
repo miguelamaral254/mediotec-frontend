@@ -2,9 +2,10 @@ import { Key } from "react";
 
 export interface User {
   id: Key | null | undefined;
-  parentCPF: string;
+  parentCPF?: string;
   cpf: string;
   name: string;
+  password?: string;
   email: string;
   role?: 'ADMIN' | 'PROFESSOR' | 'PARENT' | 'STUDENT';
   active: boolean;
@@ -12,7 +13,7 @@ export interface User {
   phone?: string;
   registration?: string;
   address?: string;
-  studentCPF?: string; 
-  expertiseArea?: string; 
-  academicTitle?: string;  
+  studentCpfs?: string[];
+  expertiseArea?: string;
+  academicTitle?: string;
 }
