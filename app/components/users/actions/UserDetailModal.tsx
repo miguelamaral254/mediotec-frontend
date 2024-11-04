@@ -106,12 +106,12 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({ isOpen, onRequestClos
                 className="bg-gray-200 border-none rounded-md p-2 w-full mt-1" 
               />
             </div>
-            {selectedUser.studentCPF && (
+            {selectedUser.studentCpfs && (
               <div className="mb-2">
                 <strong>CPF do Estudante:</strong>
                 <InputMask 
                   mask="999.999.999-99" 
-                  value={selectedUser.studentCPF || ''} 
+                  value={selectedUser.studentCpfs || ''} 
                   disabled 
                   className="bg-gray-200 border-none rounded-md p-2 w-full mt-1" 
                 />
