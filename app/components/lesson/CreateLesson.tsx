@@ -180,7 +180,7 @@ const CreateLesson = () => {
           <option value="" disabled>Selecione uma turma</option>
           {schoolClasses.map((schoolClass) => (
             <option key={schoolClass.id} value={schoolClass.id}>
-              {schoolClass.code} {yearMapping[schoolClass.year]}° {schoolClass.letter} {/* Mapear a string para o número */}
+              {schoolClass.code} {yearMapping[schoolClass.year]}° {schoolClass.letter} 
             </option>
           ))}
         </select>

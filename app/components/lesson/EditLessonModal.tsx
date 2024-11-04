@@ -221,7 +221,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, lessonId, onUpda
               <option value="" disabled>Selecione uma turma</option>
               {schoolClasses.map((schoolClass) => (
                 <option key={schoolClass.id} value={schoolClass.id}>
-                  {schoolClass.letter} {schoolClass.year}
+                  {schoolClass.code}  
                 </option>
               ))}
             </select>
