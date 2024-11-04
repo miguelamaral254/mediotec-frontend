@@ -78,13 +78,16 @@ export const UserInfo: React.FC<{ user: User }> = ({ user }) => {
           </>
         )}
 
-        {user.role === 'PARENT' && (
-          <div className="flex items-center border-b pb-3">
-            <strong className="mr-2 text-gray-600">CPF do Estudante:</strong> 
-            <InputMask mask="999.999.999-99" value={user.studentCPF} disabled className="border p-2 rounded-md" />
-          </div>
-        )}
+        
       </div>
     </div>
   );
 };
+{/*
+{user.role === 'PARENT' && (
+  <div className="flex items-center border-b pb-3">
+    <strong className="mr-2 text-gray-600">CPF do Estudante:</strong> 
+    <InputMask mask="999.999.999-99" value={user.studentCPF} disabled className="border p-2 rounded-md" />
+  </div>
+)}
+*/}
