@@ -1,17 +1,19 @@
-import { User } from '@/app/interfaces/User';
+
+import { Student } from '@/app/interfaces/Student';
 import { getStudentByCpf } from '@/app/services/userConsultService';
+
 import { formatCpf } from '@/app/utils/formatCpf ';
 import React, { useState } from 'react';
 import InputMask from 'react-input-mask';
 
 interface StudentLookupProps {
-  setStudentData: (data: User) => void;
+  setStudentData: (data: Student) => void;
 }
 
 const StudentLookup: React.FC<StudentLookupProps> = ({ setStudentData }) => {
   const [cpf, setCpf] = useState('');
   const [error, setError] = useState('');
-  const [student, setStudent] = useState<User | null>(null);
+  const [student, setStudent] = useState<Student | null>(null);
 
   const handleSearch = async () => {
     try {
@@ -29,7 +31,7 @@ const StudentLookup: React.FC<StudentLookupProps> = ({ setStudentData }) => {
 
   const clearSelection = () => {
     setStudent(null);
-    setStudentData({} as User);
+    setStudentData({} as Student);
   };
 
   return (

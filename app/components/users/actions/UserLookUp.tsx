@@ -2,16 +2,14 @@ import { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { getParentByCpf, getProfessorByCpf, getStudentByCpf, getAllUsers, getCoordinationByCpf } from '@/app/services/userConsultService';
 import { User } from '@/app/interfaces/User';
-
 import { FaPencilAlt, FaEye } from 'react-icons/fa';
 import { updateUser } from '@/app/services/updateUserService';
 import UserDetailModal from './UserDetailModal';
 import UserEditModal from './UserEditModal';
 
-
 const UserLookUp = () => {
   const [cpf, setCpf] = useState('');
-  const [userType, setUserType] = useState('ALL'); // Valor padrão 'ALL'
+  const [userType, setUserType] = useState('ALL');
   const [userData, setUserData] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
@@ -37,8 +35,7 @@ const UserLookUp = () => {
   const handleConsult = async () => {
     setError(null);
     setUserData(null);
-    setShowResults(false); 
-    
+    setShowResults(false);
     const cleanedCpf = cpf.replace(/\D/g, '');
   
     try {
@@ -57,7 +54,6 @@ const UserLookUp = () => {
           data = await getStudentByCpf(cleanedCpf);
           break;
         case 'ALL':
-          // Buscar todos os usuários e filtrar pelo CPF
           const allUsersData = await getAllUsers();
           data = allUsersData.find((user: { cpf: string; }) => user.cpf.replace(/\D/g, '') === cleanedCpf) || null;
           break;
@@ -71,12 +67,11 @@ const UserLookUp = () => {
       }
   
       setUserData(data);
-      setShowResults(true); // Mostrar resultados após consulta bem-sucedida
+      setShowResults(true);
     } catch (err) {
       setError('Erro ao buscar usuário: ' + (err instanceof Error ? err.message : ''));
     }
   };
-  
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value);
@@ -123,6 +118,7 @@ const UserLookUp = () => {
 
   const handleUpdateUser = async (user: User) => {
     try {
+      console.log(user)
       await updateUser(user.cpf, user);
       closeEditModal();
       const users = await getAllUsers();
@@ -134,7 +130,7 @@ const UserLookUp = () => {
 
   const closeResults = () => {
     setShowResults(false);
-    setCpf(''); 
+    setCpf('');
   };
 
   return (
@@ -148,7 +144,6 @@ const UserLookUp = () => {
           onChange={(e) => {
             const newValue = e.target.value;
             setUserType(newValue);
-            console.log('Novo tipo de usuário selecionado:', newValue);
           }}
           className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
         >
@@ -222,7 +217,7 @@ const UserLookUp = () => {
                   <button onClick={() => openModal(user)} className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition">
                     <FaEye /> Ver Detalhes
                   </button>
-                  <button onClick={() => openEditModal(user)} className="text-[#DC3181] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition">
+                  <button onClick={() => openEditModal(user)} className="text-[#DC3181] flex gap-1 justify-center items-center hover:underline">
                     <FaPencilAlt /> Editar
                   </button>
                 </div>
@@ -232,13 +227,10 @@ const UserLookUp = () => {
         </ul>
       </div>
 
-<UserDetailModal isOpen={modalIsOpen} onRequestClose={closeModal} selectedUser={selectedUser} />
-<UserEditModal isOpen={editModalIsOpen} onRequestClose={closeEditModal} selectedUser={selectedUser} onUpdateUser={handleUpdateUser} />
-      
-      
+      <UserDetailModal isOpen={modalIsOpen} onRequestClose={closeModal} selectedUser={selectedUser} />
+      <UserEditModal isOpen={editModalIsOpen} onRequestClose={closeEditModal} selectedUser={selectedUser} onUpdateUser={handleUpdateUser} />
     </div>
   );
 };
 
 export default UserLookUp;
-

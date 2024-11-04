@@ -5,10 +5,9 @@ export interface Student {
   password?: string;
   role: 'STUDENT';
   active: boolean;
-  createDate: string;
+  createDate: string; 
   registration?: string;
   birthDate?: string;
   address?: string;
   phone?: string;
 }
-

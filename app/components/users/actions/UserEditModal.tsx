@@ -5,12 +5,13 @@ import InputMask from 'react-input-mask';
 import StudentLookup from './create-users/StudentLookup';
 import { Parent } from '@/app/interfaces/Parent';
 import { Student } from '@/app/interfaces/Student';
+import { User } from '@/app/interfaces/User';
 
 interface UserEditModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  selectedUser: Parent | null;
-  onUpdateUser: (user: Parent) => Promise<void>;
+  selectedUser: User |Parent | null;
+  onUpdateUser: (user: User) => Promise<void>;
 }
 
 const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, selectedUser, onUpdateUser }) => {
@@ -36,7 +37,8 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
 
   const handleUpdate = async () => {
     if (selectedUser) {
-      const updatedUser: Parent = {
+      // Cria um objeto atualizado do usuário
+      const updatedUser: User = {
         ...selectedUser,
         name,
         email,
@@ -44,10 +46,8 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
         address,
         phone,
         active,
-        // Map students to their CPFs
-        studentCpfs: students.map(student => student.cpf),
+        studentCpfs: students.map(student => student.cpf), // Mapeia os CPFs dos alunos
       };
-      console.log(updatedUser)
 
       const confirmUpdate = await Swal.fire({
         title: 'Confirmação',

@@ -14,4 +14,5 @@ export interface Parent {
     address?: string;
     phone?: string;
     students: Student[];
-  }
+    studentCpfs?: string[]; 
+}

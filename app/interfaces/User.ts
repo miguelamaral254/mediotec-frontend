@@ -1,4 +1,5 @@
 import { Key } from "react";
+import { Student } from "./Student";
 
 export interface User {
   id: Key | null | undefined;
@@ -13,7 +14,8 @@ export interface User {
   phone?: string;
   registration?: string;
   address?: string;
-  studentCpfs?: string[];
+  students: Student[];
+  studentCpfs?: string[]; 
   expertiseArea?: string;
   academicTitle?: string;
 }
