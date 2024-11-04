@@ -170,14 +170,14 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
     >
       <div className="modal">
         <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
-          <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Edit Class</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Atualizar turma</h2>
 
           {loading && <p>Loading...</p>}
 
           {schoolClass && (
             <div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Class Code:</label>
+                <label className="block text-sm font-medium text-gray-700">Código da turma:</label>
                 <input
                   type="text"
                   value={code}
@@ -188,7 +188,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Shift:</label>
+                <label className="block text-sm font-medium text-gray-700">Turno:</label>
                 <select
                   value={shift}
                   onChange={(e) => setShift(e.target.value as 'MORNING' | 'AFTERNOON' | 'EVENING')}
@@ -201,7 +201,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Technical Course:</label>
+                <label className="block text-sm font-medium text-gray-700">Curso técnico:</label>
                 <select
                   value={technicalCourse}
                   onChange={(e) => setTechnicalCourse(e.target.value as 'TDS' | 'TLS')}
@@ -213,7 +213,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Year:</label>
+                <label className="block text-sm font-medium text-gray-700">Grau:</label>
                 <select
                   value={year}
                   onChange={(e) => setYear(e.target.value as YearEnum)} // Change here
@@ -226,7 +226,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Letter:</label>
+                <label className="block text-sm font-medium text-gray-700">Letra:</label>
                 <select
                   value={letter}
                   onChange={(e) => setLetter(e.target.value as LetterEnum)}
@@ -248,15 +248,15 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
           <div className="mt-6 flex justify-between">
             <button
               onClick={handleUpdate}
-              className="bg-blue-500 text-white py-2 px-4 rounded-lg mr-2"
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg mr-2"
             >
-              Save Changes
+              Salvar alterações
             </button>
             <button
               onClick={onRequestClose}
-              className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg"
+              className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
             >
-              Cancel
+              Cancelar
             </button>
           </div>
         </div>
