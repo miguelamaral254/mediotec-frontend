@@ -10,7 +10,7 @@ import { User } from '@/app/interfaces/User';
 interface UserEditModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  selectedUser: User |Parent | null;
+  selectedUser: User | Parent | null;
   onUpdateUser: (user: User) => Promise<void>;
 }
 
@@ -106,7 +106,7 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
         }
       }}
     >
-      <div className="p-6 w-full flex flex-col items-center">
+      <div className="mt-28 p-10 w-full flex flex-col items-center">
         <h3 className="text-xl font-bold mb-4 text-center">Editar Usuário:</h3>
 
         {selectedUser && (
@@ -156,9 +156,17 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
               <option value="Não">Não</option>
             </select>
 
-            <label className="block mb-2 mt-4 text-left">Alunos:</label>
+            
+            {selectedUser.role === 'PARENT' && (
+              <div className="mb-4">
+                <label className="block mb-1">Buscar CPF do Aluno:</label>
+                <StudentLookup setStudentData={(studentData) => addStudent(studentData)} />
+              </div>
+            )}
+
             {students.map((student, index) => (
               <div key={index} className="flex items-center mb-2">
+                <label className="block mb-2 mt-4 text-left">Alunos:</label>
                 <InputMask
                   mask="999.999.999-99"
                   value={student.cpf}
@@ -174,11 +182,6 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
                 </button>
               </div>
             ))}
-
-            <div className="mb-4">
-              <label className="block mb-1">Buscar CPF do Aluno:</label>
-              <StudentLookup setStudentData={(studentData) => addStudent(studentData)} />
-            </div>
 
             <div className="flex justify-center mt-4">
               <button

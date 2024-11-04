@@ -25,9 +25,8 @@ const LoginForm = () => {
     setError(null); 
 
     try {
-      const cleanedCPF = formData.cpf.replace(/\D/g, ''); // Remove caracteres especiais do CPF
+      const cleanedCPF = formData.cpf.replace(/\D/g, ''); 
 
-      // Verifica o status do usuário
       const userData = await getUserData(cleanedCPF);
 
       if (!userData.active) {
