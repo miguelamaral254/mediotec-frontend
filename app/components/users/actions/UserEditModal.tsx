@@ -1,14 +1,16 @@
 import Modal from 'react-modal';
-import { User } from '@/app/interfaces/User';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import InputMask from 'react-input-mask';
+import StudentLookup from './create-users/StudentLookup';
+import { Parent } from '@/app/interfaces/Parent';
+import { Student } from '@/app/interfaces/Student';
 
 interface UserEditModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  selectedUser: User | null;
-  onUpdateUser: (user: User) => Promise<void>;
+  selectedUser: Parent | null;
+  onUpdateUser: (user: Parent) => Promise<void>;
 }
 
 const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, selectedUser, onUpdateUser }) => {
@@ -18,6 +20,7 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
   const [address, setAddress] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [active, setActive] = useState<boolean>(false);
+  const [students, setStudents] = useState<Student[]>([]);
 
   useEffect(() => {
     if (isOpen && selectedUser) {
@@ -27,12 +30,25 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
       setAddress(selectedUser.address || '');
       setPhone(selectedUser.phone || '');
       setActive(selectedUser.active);
+      setStudents(selectedUser.students || []);
     }
   }, [isOpen, selectedUser]);
 
   const handleUpdate = async () => {
     if (selectedUser) {
-      const updatedUser = { ...selectedUser, name, email, birthDate, address, phone, active };
+      const updatedUser: Parent = {
+        ...selectedUser,
+        name,
+        email,
+        birthDate,
+        address,
+        phone,
+        active,
+        // Map students to their CPFs
+        studentCpfs: students.map(student => student.cpf),
+      };
+      console.log(updatedUser)
+
       const confirmUpdate = await Swal.fire({
         title: 'Confirmação',
         text: 'Você tem certeza que deseja atualizar o usuário?',
@@ -44,7 +60,7 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
 
       if (confirmUpdate.isConfirmed) {
         try {
-          await onUpdateUser(updatedUser); // Atualiza o usuário
+          await onUpdateUser(updatedUser);
           await Swal.fire({
             icon: 'success',
             title: 'Atualização bem-sucedida!',
@@ -61,6 +77,16 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
         }
       }
     }
+  };
+
+  const addStudent = (student: Student) => {
+    if (!students.some(s => s.cpf === student.cpf)) {
+      setStudents((prevStudents) => [...prevStudents, student]);
+    }
+  };
+
+  const removeStudent = (cpf: string) => {
+    setStudents((prevStudents) => prevStudents.filter((s) => s.cpf !== cpf));
   };
 
   return (
@@ -81,8 +107,9 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
         }
       }}
     >
-      <div className="p-6 w-full flex flex-col items-center"> {/* Ajuste para centralizar os itens */}
-        <h3 className="text-xl font-bold mb-4 text-center">Editar Usuário:</h3> {/* Alinhamento central */}
+      <div className="p-6 w-full flex flex-col items-center">
+        <h3 className="text-xl font-bold mb-4 text-center">Editar Usuário:</h3>
+
         {selectedUser && (
           <div className="w-full">
             <label className="block mb-2 text-left">Nome:</label>
@@ -130,7 +157,31 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
               <option value="Não">Não</option>
             </select>
 
-            <div className="flex justify-center mt-4"> {/* Container flexível para centralizar o botão */}
+            <label className="block mb-2 mt-4 text-left">Alunos:</label>
+            {students.map((student, index) => (
+              <div key={index} className="flex items-center mb-2">
+                <InputMask
+                  mask="999.999.999-99"
+                  value={student.cpf}
+                  className="border rounded-md p-2 w-full mr-2"
+                  readOnly
+                />
+                <span>{student.name}</span>
+                <button
+                  onClick={() => removeStudent(student.cpf)}
+                  className="bg-red-500 text-white rounded px-2 ml-2"
+                >
+                  Remover
+                </button>
+              </div>
+            ))}
+
+            <div className="mb-4">
+              <label className="block mb-1">Buscar CPF do Aluno:</label>
+              <StudentLookup setStudentData={(studentData) => addStudent(studentData)} />
+            </div>
+
+            <div className="flex justify-center mt-4">
               <button
                 onClick={handleUpdate}
                 className="bg-green-500 text-white rounded px-4 py-2"
@@ -140,7 +191,7 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
             </div>
           </div>
         )}
-        <div className="flex justify-center mt-4"> {/* Container flexível para centralizar o botão Fechar */}
+        <div className="flex justify-center mt-4">
           <button onClick={onRequestClose} className="bg-red-500 text-white rounded px-4 py-2">Fechar</button>
         </div>
       </div>

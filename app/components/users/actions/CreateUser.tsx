@@ -27,10 +27,18 @@ const CreateUser = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const cleanCpf = (cpf: string) => {
+    return cpf.replace(/[.-]/g, ''); // Remove os caracteres especiais
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const cleanedCpf = cleanCpf(formData.cpf); 
+
+    const userData = { ...formData, cpf: cleanedCpf }; 
     try {
-      await createUser(userType, formData);
+      await createUser(userType, userData);
       Swal.fire('Success', 'User created successfully!', 'success');
     } catch {
       Swal.fire('Error', 'An error occurred while creating the user.', 'error');
@@ -40,7 +48,7 @@ const CreateUser = () => {
   const addStudentCpf = (student: User) => {
     setFormData((prevState) => ({
       ...prevState,
-      studentCpfs: [...(prevState.studentCpfs || []), student.cpf], 
+      studentCpfs: [...(prevState.studentCpfs || []), student.cpf],
     }));
   };
 
