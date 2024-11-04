@@ -3,9 +3,7 @@ export interface Student {
   name: string;
   email: string;
   password?: string;
-  role: 'STUDENT';
   active: boolean;
-  createDate: string; 
   registration?: string;
   birthDate?: string;
   address?: string;

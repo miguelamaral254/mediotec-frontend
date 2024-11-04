@@ -37,7 +37,6 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
 
   const handleUpdate = async () => {
     if (selectedUser) {
-      // Cria um objeto atualizado do usuário
       const updatedUser: User = {
         ...selectedUser,
         name,
@@ -46,7 +45,7 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ isOpen, onRequestClose, s
         address,
         phone,
         active,
-        studentCpfs: students.map(student => student.cpf), // Mapeia os CPFs dos alunos
+        studentCpfs: students.map(student => student.cpf), 
       };
 
       const confirmUpdate = await Swal.fire({
