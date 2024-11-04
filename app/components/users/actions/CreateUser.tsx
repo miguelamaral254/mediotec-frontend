@@ -21,6 +21,7 @@ const CreateUser = () => {
     address: '',
     phone: '',
     studentCpfs: [],
+    students: [], 
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +29,7 @@ const CreateUser = () => {
   };
 
   const cleanCpf = (cpf: string) => {
-    return cpf.replace(/[.-]/g, ''); // Remove os caracteres especiais
+    return cpf.replace(/[.-]/g, ''); // Remove special characters
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
