@@ -2,11 +2,12 @@ import { User } from '@/app/interfaces/User';
 import React from 'react';
 import InputMask from 'react-input-mask';
 import StudentLookup from './StudentLookup';
+import { Student } from '@/app/interfaces/Student';
 
 interface ParentFieldsProps {
   formData: User; 
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setStudentData: (data: User) => void;
+  setStudentData: (data: Student) => void;
 }
 
 const ParentFields: React.FC<ParentFieldsProps> = ({ formData, handleChange, setStudentData }) => (
