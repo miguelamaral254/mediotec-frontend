@@ -1,5 +1,6 @@
 
 import { Student } from '@/app/interfaces/Student';
+import { User } from '@/app/interfaces/User';
 import { getStudentByCpf } from '@/app/services/userConsultService';
 
 import { formatCpf } from '@/app/utils/formatCpf ';
@@ -7,7 +8,7 @@ import React, { useState } from 'react';
 import InputMask from 'react-input-mask';
 
 interface StudentLookupProps {
-  setStudentData: (data: Student) => void;
+  setStudentData: (data: User) => void;
 }
 
 const StudentLookup: React.FC<StudentLookupProps> = ({ setStudentData }) => {
@@ -31,7 +32,7 @@ const StudentLookup: React.FC<StudentLookupProps> = ({ setStudentData }) => {
 
   const clearSelection = () => {
     setStudent(null);
-    setStudentData({} as Student);
+    setStudentData({} as User);
   };
 
   return (
