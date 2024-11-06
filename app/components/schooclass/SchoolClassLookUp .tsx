@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getAllClasses, updateClass } from '@/app/services/schoolClassService';
 import SchoolClassDetailModal from './SchoolClassDetailModal';
 import SchoolClassEditModal from './SchoolClassEditModal';
 import { FaEye, FaEdit } from 'react-icons/fa';
 import { SchoolClass } from '@/app/interfaces/SchoolClass';
+import { translateEnum } from '@/app/utils/translateEnum';
 
-const SchoolClassLookUp  = () => {
+const SchoolClassLookUp = () => {
   const [filter, setFilter] = useState<string>('');
   const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
   const [filteredClasses, setFilteredClasses] = useState<SchoolClass[]>([]);
@@ -63,7 +64,6 @@ const SchoolClassLookUp  = () => {
             schoolClass.id === updatedClass.id ? updatedClass : schoolClass
           )
         );
-        // Também atualiza allClasses para manter a consistência
         setAllClasses(prev =>
           prev.map(schoolClass =>
             schoolClass.id === updatedClass.id ? updatedClass : schoolClass
@@ -95,6 +95,10 @@ const SchoolClassLookUp  = () => {
           filteredClasses.map((schoolClass) => (
             <div key={schoolClass.id} className="p-4 border-b text-xl last:border-b-0 flex justify-between items-center">
               <span>{schoolClass.code}</span>
+              <div className="flex gap-2">
+                <h4>{translateEnum(schoolClass.year, 'year')}</h4>
+                <h4>{schoolClass.letter}</h4>
+              </div>
               <div className="flex flex-col gap-2">
                 <button
                   onClick={() => openDetailModal(schoolClass)}
@@ -125,10 +129,10 @@ const SchoolClassLookUp  = () => {
         onRequestClose={closeModals}
         selectedClass={selectedClass}
         onUpdateClass={onUpdateClass}
-        classId={selectedClass?.id || 0} // Garante que faça referência ao ID da classe selecionada
+        classId={selectedClass?.id || 0}
       />
     </div>
   );
 };
 
-export default SchoolClassLookUp ;
+export default SchoolClassLookUp;
