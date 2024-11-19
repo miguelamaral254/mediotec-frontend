@@ -18,8 +18,7 @@ const NotificationTab: React.FC<{ isMobile: boolean; onClose: () => void }> = ({
       try {
         const data = await notificationService.getNotificationsForUser(user.cpf);
         const sortedNotifications = data.sort(
-          (a: { timestamp: string | number | Date }, b: { timestamp: string | number | Date }) =>
-            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          (a: { timestamp: string | number | Date; }, b: { timestamp: string | number | Date; }) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
         setNotifications(sortedNotifications);
       } catch (err) {
@@ -50,27 +49,34 @@ const NotificationTab: React.FC<{ isMobile: boolean; onClose: () => void }> = ({
   return (
     <div
       className={`${
-        isMobile ? 'absolute top-16 right-0 border p-5 bg-gray-300 border-gray-200 w-80 rounded-md shadow-lg' : 'z-10 fixed right-0 top-0 h-full bg-gray-100 border border-l-black w-full md:w-2/3 lg:w-96 p-4 z-60'
+        isMobile
+          ? 'absolute top-0 right-0 border p-5 bg-gray-300 border-gray-200 w-80 h-96 rounded-md shadow-lg'
+          : 'z-10 fixed right-0 top-0 h-full bg-gray-100 border border-l-black w-full md:w-2/3 lg:w-96 p-4 z-60'
       }`}
     >
-      <h2 className="text-2xl font-semibold">Notificações</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold">Notificações</h2>
+       
+      </div>
       {loading ? (
-        <p className="text-gray-600">Carregando notificações...</p>
+        <p className="text-gray-600 mt-4">Carregando notificações...</p>
       ) : error ? (
-        <p className="text-red-600">{error}</p>
+        <p className="text-red-600 mt-4">{error}</p>
       ) : (
-        <div className="grid grid-cols-1 gap-3 mt-4">
+        <div className="mt-4 h-72 overflow-y-auto">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} onRead={handleReadNotification} />
+              <NotificationItem
+                key={notification.id}
+                notification={notification}
+                onRead={handleReadNotification}
+              />
             ))
           ) : (
             <p className="text-gray-600">Nenhuma notificação.</p>
           )}
         </div>
       )}
-      
-      
     </div>
   );
 };

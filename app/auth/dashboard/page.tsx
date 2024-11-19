@@ -14,21 +14,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Define mobile based on screen width
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -62,40 +48,24 @@ export default function Dashboard() {
   }
 
   return (
-    <div className=" ml-20 justify-end min-h-screen flex flex-col">
+    <div className="ml-20 justify-end min-h-screen flex flex-col">
       {user ? (
         <div className="flex flex-col lg:flex-row w-full flex-grow p-4">
           <div className="w-full lg:w-3/4 p-4">
             {user.role === 'ADMIN' && <AdminSection />}
             {user.role === 'PROFESSOR' && <ProfessorSection />}
           </div>
-          <div className=" w-full lg:w-1/4 p-2">
-            {!isMobile ? (
-              <NotificationTab isMobile={false} onClose={() => {}} />
-            ) : (
-              <>
-                <button
-                  className="fixed
-                  flex
-                  flex-col
-                  justify-center
-                  items-center 
-                  top-4 
-                  right-4 
-                    bg-[#4666af]
-                  text-white px-4 py-2 
-                  rounded-full
-                  h-10
-                  w-10
-                  z-50"
-                  onClick={() => setShowNotifications(!showNotifications)}
-                >
-                  {showNotifications ? <MdClose size={24} /> : <MdNotifications size={24} />}
-                </button>
-                {showNotifications && (
-                  <NotificationTab isMobile={true} onClose={() => setShowNotifications(false)} />
-                )}
-              </>
+          <div className="fixed top-4 right-4 z-50">
+            <button
+              className="flex flex-col justify-center items-center bg-[#4666af] text-white rounded-full h-10 w-10 shadow-md"
+              onClick={() => setShowNotifications(!showNotifications)}
+            >
+              {showNotifications ? <MdClose size={24} /> : <MdNotifications size={24} />}
+            </button>
+            {showNotifications && (
+              <div className="absolute top-12 right-0 z-40 w-80 bg-gray-100 shadow-lg rounded-md">
+                <NotificationTab isMobile={true} onClose={() => setShowNotifications(false)} />
+              </div>
             )}
           </div>
         </div>
