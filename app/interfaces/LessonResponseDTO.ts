@@ -13,5 +13,6 @@ export interface LessonResponseDTO {
     startTime: Schedule; 
     endTime: Schedule;   
     room: string;
+    createdAt: Date;
   }
   

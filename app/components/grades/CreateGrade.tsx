@@ -6,7 +6,6 @@ import { User } from '../../interfaces/User';
 import { Discipline } from '../../interfaces/Discipline';
 import { CreateGradeDTO } from '@/app/interfaces/CreateGradeDTO';
 
-// Enum para os tipos de avaliação
 const EvaluationType = {
   AV1: 'AV1',
   AV2: 'AV2',
@@ -35,7 +34,6 @@ const CreateGrade = () => {
       const studentData = await getStudentByCpf(cpf);
       setStudent(studentData);
 
-      // Obter as disciplinas associadas ao estudante
       const disciplinesData = await getDisciplinesByStudentCpf(cpf);
       setDisciplines(disciplinesData);
     } catch (err) {

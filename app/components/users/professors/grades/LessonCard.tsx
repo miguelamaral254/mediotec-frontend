@@ -26,7 +26,7 @@ const LessonCard: React.FC<LessonCardProps> = ({ lesson }) => {
     onClick={handleToggleStudents}
     className="mt-4 text-[#4666AF] font-medium hover:text-[#2f4c91] transition-colors underline"
   >
-    {showStudents ? 'Esconder Alunos' : 'Ver Alunos'}
+    {showStudents ? 'Esconder Alunos' : 'Gerenciar Alunos'}
   </button>
 
   {showStudents && (

@@ -3,7 +3,7 @@ import { Discipline } from '../../interfaces/Discipline';
 import { ResponseGrade } from '../../interfaces/ResponseGrade'; 
 import { getAssessmentsByStudentCpf } from '../../services/gradeService'; 
 import Swal from 'sweetalert2';
-import GradesOverview from './GradesOverview'; // Ajuste o caminho conforme necessário
+import GradesOverview from './GradesOverview'; 
 
 interface DisciplinesProps {
   disciplines: Discipline[];
@@ -16,29 +16,23 @@ const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, cpf }) => {
   const detailsRef = useRef<HTMLDivElement | null>(null);
 
   const handleDisciplineClick = async (discipline: Discipline) => {
-    // Toggle discipline selection
     setSelectedDiscipline((prev) => (prev && prev.id === discipline.id ? null : discipline));
 
-    // If no discipline or ID, return
     if (!discipline || !discipline.id) return;
 
-    // Clear grades before fetching new ones
     setResponseGrades([]);
 
     try {
-      // Fetch grades for the selected discipline and student CPF
       const ResponseGradesData = await getAssessmentsByStudentCpf(cpf, discipline.id);
       console.log('Dados de avaliações recebidos:', ResponseGradesData);
 
-      // Check if the response is an array and set the state
       if (Array.isArray(ResponseGradesData)) {
         setResponseGrades(ResponseGradesData);
       } else if (ResponseGradesData) {
-        // If not an array but not null, wrap in an array
         setResponseGrades([ResponseGradesData]);
       } else {
         console.log('Nenhuma nota encontrada para esta disciplina.');
-        setResponseGrades([]); // Clear data if no grades found
+        setResponseGrades([]); 
       }
     } catch (err) {
       console.error('Erro ao buscar as avaliações:', err);
@@ -91,7 +85,6 @@ const Disciplines: React.FC<DisciplinesProps> = ({ disciplines, cpf }) => {
           <div className="p-4 bg-white rounded-lg shadow-md">
             <h5 className="text-xl font-bold">{selectedDiscipline.name}</h5>
 
-            {/* Chama o GradesOverview aqui, passando as notas e a disciplina selecionada */}
             <GradesOverview
               discipline={selectedDiscipline}
               grades={ResponseGrades}

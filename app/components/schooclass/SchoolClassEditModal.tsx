@@ -181,7 +181,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
                 <input
                   type="text"
                   value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/[^\w]/g, ''))}
+                  onChange={(e) => setCode(e.target.value.replace(/[^\w-]/g, ''))}
                   placeholder="Class Code"
                   className="border rounded-md p-2 w-full text-gray-700"
                 />

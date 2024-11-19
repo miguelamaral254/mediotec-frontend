@@ -26,8 +26,16 @@ const LoginForm = () => {
 
     try {
       const cleanedCPF = formData.cpf.replace(/\D/g, ''); 
-
       const userData = await getUserData(cleanedCPF);
+
+      if (userData.role === 'STUDENT' || userData.role === 'PARENT') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Acesso negado',
+          text: 'Usuários com este perfil não podem acessar o sistema.',
+        });
+        return;
+      }
 
       if (!userData.active) {
         Swal.fire({
@@ -38,7 +46,6 @@ const LoginForm = () => {
         return; 
       }
 
-      
       const response = await login(cleanedCPF, formData.password);
       localStorage.setItem('token', response.token);
       localStorage.setItem('cpf', cleanedCPF);

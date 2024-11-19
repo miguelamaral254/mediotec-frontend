@@ -26,4 +26,5 @@ export interface ProfessorLessonResponse {
   startTime: Schedule; 
   endTime: Schedule; 
   room: string;
+  createdAt: Date;
 }

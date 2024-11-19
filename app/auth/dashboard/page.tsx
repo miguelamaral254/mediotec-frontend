@@ -6,8 +6,6 @@ import { useAuth } from '@/app/context/AuthContext';
 import { getUserData } from '@/app/services/authService';
 import { AdminSection } from '@/app/components/users/admin/AdminSection';
 import { ProfessorSection } from '@/app/components/users/professors/schedules/ProfessorSection';
-import { ParentSection } from '@/app/components/users/parents/ParentSection';
-import { StudentSection } from '@/app/components/users/students/StudentSection';
 import NotificationTab from '@/app/components/notifications/NotificationTab';
 import { MdClose, MdNotifications } from 'react-icons/md';
 
@@ -70,8 +68,6 @@ export default function Dashboard() {
           <div className="w-full lg:w-3/4 p-4">
             {user.role === 'ADMIN' && <AdminSection />}
             {user.role === 'PROFESSOR' && <ProfessorSection />}
-            {user.role === 'PARENT' && <ParentSection />}
-            {user.role === 'STUDENT' && <StudentSection />}
           </div>
           <div className=" w-full lg:w-1/4 p-2">
             {!isMobile ? (

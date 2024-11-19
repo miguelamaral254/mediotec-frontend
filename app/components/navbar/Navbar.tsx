@@ -10,7 +10,6 @@ import NavbarHeader from './NavbarHeader';
 import avatar from '../../../public/images/avatar.png';
 import AdminLinks from './AdminLinks';
 import ProfessorLinks from './ProfessorLinks';
-import StudentLinks from './StudentLinks';
 
 const Navbar: React.FC = () => {
   const { user, setUser } = useAuth();
@@ -86,7 +85,6 @@ const Navbar: React.FC = () => {
               </Link>
               {user.role === 'ADMIN' && <AdminLinks isNavbarOpen={isNavbarOpen} />}
               {user.role === 'PROFESSOR' && <ProfessorLinks isNavbarOpen={isNavbarOpen} />}
-              {user.role === 'STUDENT' && <StudentLinks isNavbarOpen={isNavbarOpen} />}
             </nav>
           </div>
           <div className="flex flex-col gap-2 p-4">
