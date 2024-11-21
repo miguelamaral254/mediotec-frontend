@@ -5,7 +5,6 @@ import AttendanceChart from './AttendanceChart';
 
 const AnalyticsDashboard = () => {
   const [isAttendanceChartOpen, setIsAttendanceChartOpen] = useState(true);
-  const [isPerformanceChartOpen, setIsPerformanceChartOpen] = useState(false);
 
   const currentYear = new Date().getFullYear();
 
