@@ -1,52 +1,78 @@
 import React from 'react';
 
 interface DetailModalProps {
-  data: { year: number; type: string; value: number };
+  data: { year: number; type: string; value: number; details: string[] };
   onClose: () => void;
 }
 
 const DetailModal: React.FC<DetailModalProps> = ({ data, onClose }) => {
-  // Mock de descrição de gastos
-  const spendingDetails = {
-    allocated: [
-      'Infraestrutura escolar (R$ 200.000)',
-      'Aquisição de materiais didáticos (R$ 100.000)',
-      'Treinamento de professores (R$ 50.000)',
-      'Manutenção de equipamentos (R$ 150.000)',
-    ],
-    spent: [
-      'Reformas e reparos (R$ 180.000)',
-      'Compra de livros e apostilas (R$ 90.000)',
-      'Workshops e capacitações (R$ 40.000)',
-      'Renovação de contratos de manutenção (R$ 110.000)',
-    ],
-  };
+  const isPositive = data.type.toLowerCase().includes('alocado');
 
-  // Seleção de descrição com base no tipo (Alocado ou Gasto)
-  const details =
-    data.type.toLowerCase() === 'alocado (r$)'
-      ? spendingDetails.allocated
-      : spendingDetails.spent;
+  const totalSpent = data.details
+    .map((detail) => {
+      const value = detail.match(/\(R\$\s*([\d.]+)/);
+      return value ? parseFloat(value[1].replace('.', '').replace(',', '.')) : 0;
+    })
+    .reduce((acc, curr) => acc + curr, 0);
+
+  const remainingBalance = data.value - totalSpent;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Detalhes do Orçamento</h2>
-        <p className="text-lg text-gray-700 mb-2">Ano: {data.year}</p>
-        <p className="text-lg text-gray-700 mb-2">Tipo: {data.type}</p>
-        <p className="text-lg text-gray-700 mb-4">Valor: R$ {data.value.toLocaleString('pt-BR')}</p>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">Descrição dos Gastos:</h3>
-        <ul className="list-disc pl-5 space-y-1 text-gray-700">
-          {details.map((detail, index) => (
-            <li key={index}>{detail}</li>
-          ))}
-        </ul>
+      <div className="relative bg-white p-8 rounded-lg shadow-xl max-w-lg w-full">
         <button
           onClick={onClose}
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-blue-600"
+          className="absolute top-4 right-4 bg-red-600 w-10 h-10 text-white rounded-md p-2 hover:bg-red-700 transition duration-300"
         >
-          Fechar
+          ✕
         </button>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Detalhes do Orçamento</h2>
+        <div className="border-b pb-4 mb-4">
+          <p className="text-lg text-gray-600 mb-2">
+            <span className="font-semibold text-gray-800">Ano:</span> {data.year}
+          </p>
+          <p className="text-lg text-gray-600 mb-2">
+            <span className="font-semibold text-gray-800">Tipo:</span> {data.type}
+          </p>
+          <p
+            className={`text-lg font-semibold mb-4 ${
+              isPositive ? 'text-green-600' : 'text-red-600'
+            }`}
+          >
+            <span className="font-bold">{isPositive ? 'Saldo Inicial:' : 'Despesa:'}</span> R$ {data.value.toLocaleString('pt-BR')}
+          </p>
+        </div>
+        <h3 className="text-xl font-semibold text-gray-800 mb-3">Descrição dos Gastos:</h3>
+        <ul className="space-y-2">
+          {data.details.map((detail, index) => {
+            const [description, value] = detail.split('(R$');
+            const formattedValue = value ? `R$ ${value.trim().replace(')', '')}` : null;
+
+            return (
+              <li
+                key={index}
+                className="flex justify-between items-center text-gray-700"
+              >
+                <span>{description.trim()}</span>
+                <span className="text-red-600 font-semibold">{formattedValue}</span>
+              </li>
+            );
+          })}
+        </ul>
+        <div className="mt-6 border-t pt-4">
+          <p className="flex justify-between items-center text-lg font-semibold text-gray-800">
+            <span>Total de Gastos:</span>
+            <span className="text-red-600">R$ {totalSpent.toLocaleString('pt-BR')}</span>
+          </p>
+          <p
+            className={`flex justify-between items-center text-lg font-semibold mt-2 ${
+              remainingBalance >= 0 ? 'text-green-600' : 'text-red-600'
+            }`}
+          >
+            <span>Saldo Restante:</span>
+            <span>R$ {remainingBalance.toLocaleString('pt-BR')}</span>
+          </p>
+        </div>
       </div>
     </div>
   );

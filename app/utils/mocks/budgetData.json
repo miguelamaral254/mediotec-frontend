@@ -1,0 +1,78 @@
+[
+  {
+    "year": 2024,
+    "allocated": 500000,
+    "spent": 420000,
+    "details": {
+      "allocated": [
+        "Infraestrutura escolar (R$ 200.000)",
+        "Aquisição de materiais didáticos (R$ 100.000)",
+        "Treinamento de professores (R$ 50.000)",
+        "Manutenção de equipamentos (R$ 150.000)"
+      ],
+      "spent": [
+        "Reformas e reparos (R$ 180.000)",
+        "Compra de livros e apostilas (R$ 90.000)",
+        "Workshops e capacitações (R$ 40.000)",
+        "Renovação de contratos de manutenção (R$ 110.000)"
+      ]
+    }
+  },
+  {
+    "year": 2023,
+    "allocated": 480000,
+    "spent": 390000,
+    "details": {
+      "allocated": [
+        "Infraestrutura escolar (R$ 180.000)",
+        "Aquisição de equipamentos (R$ 120.000)",
+        "Capacitação de professores (R$ 80.000)",
+        "Reforma de laboratórios (R$ 100.000)"
+      ],
+      "spent": [
+        "Reformas (R$ 150.000)",
+        "Compra de material escolar (R$ 120.000)",
+        "Treinamento técnico (R$ 60.000)",
+        "Serviços de manutenção (R$ 60.000)"
+      ]
+    }
+  },
+  {
+    "year": 2022,
+    "allocated": 470000,
+    "spent": 410000,
+    "details": {
+      "allocated": [
+        "Manutenção predial (R$ 200.000)",
+        "Aquisição de tecnologia (R$ 90.000)",
+        "Treinamento avançado (R$ 80.000)",
+        "Renovação de contratos de serviço (R$ 100.000)"
+      ],
+      "spent": [
+        "Projetos escolares (R$ 190.000)",
+        "Capacitação técnica (R$ 100.000)",
+        "Compra de materiais extras (R$ 60.000)",
+        "Custos administrativos (R$ 60.000)"
+      ]
+    }
+  },
+  {
+    "year": 2021,
+    "allocated": 450000,
+    "spent": 430000,
+    "details": {
+      "allocated": [
+        "Expansão de salas (R$ 220.000)",
+        "Novos equipamentos (R$ 80.000)",
+        "Treinamento geral (R$ 50.000)",
+        "Projetos de inovação (R$ 100.000)"
+      ],
+      "spent": [
+        "Custos de infraestrutura (R$ 200.000)",
+        "Compra de livros didáticos (R$ 100.000)",
+        "Workshops educacionais (R$ 50.000)",
+        "Custos operacionais (R$ 80.000)"
+      ]
+    }
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "studentPerformance": {
+    "1º Ano": [
+      { "subject": "Matemática", "average": 72, "passing": 85 },
+      { "subject": "Português", "average": 68, "passing": 80 },
+      { "subject": "Ciências", "average": 74, "passing": 90 }
+    ],
+    "2º Ano": [
+      { "subject": "Matemática", "average": 75, "passing": 88 },
+      { "subject": "Português", "average": 70, "passing": 82 },
+      { "subject": "Ciências", "average": 78, "passing": 85 }
+    ],
+    "3º Ano": [
+      { "subject": "Matemática", "average": 80, "passing": 90 },
+      { "subject": "Português", "average": 75, "passing": 85 },
+      { "subject": "Ciências", "average": 82, "passing": 92 }
+    ]
+  },
+  "attendance": {
+    "data": [92, 88, 85],
+    "labels": ["1º Ano", "2º Ano", "3º Ano"],
+    "details": {
+      "1º Ano": [
+        { "turma": "1ºA", "porcentagem": 93 },
+        { "turma": "1ºB", "porcentagem": 92 },
+        { "turma": "1ºC", "porcentagem": 91 },
+        { "turma": "1ºD", "porcentagem": 90 }
+      ],
+      "2º Ano": [
+        { "turma": "2ºA", "porcentagem": 89 },
+        { "turma": "2ºB", "porcentagem": 88 },
+        { "turma": "2ºC", "porcentagem": 87 }
+      ],
+      "3º Ano": [
+        { "turma": "3ºA", "porcentagem": 86 },
+        { "turma": "3ºB", "porcentagem": 85 },
+        { "turma": "3ºC", "porcentagem": 84 },
+        { "turma": "3ºD", "porcentagem": 83 }
+      ]
+    }
+  },
+  "dropoutRate": 4.5,
+  "teacherSatisfaction": 88
+}

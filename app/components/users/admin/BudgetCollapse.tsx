@@ -14,19 +14,21 @@ import {
   ChartEvent,
 } from 'chart.js';
 import DetailModal from './DetailModal';
+import budgetData from '@/app/utils/mocks/budgetData.json';
 
 ChartJS.register(LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const BudgetCollapse: React.FC<{ currentYear: number }> = ({ currentYear }) => {
-  const budgetsByYear = [
-    { year: currentYear, allocated: 500000, spent: 420000 },
-    { year: currentYear - 1, allocated: 480000, spent: 390000 },
-    { year: currentYear - 2, allocated: 470000, spent: 410000 },
-    { year: currentYear - 3, allocated: 450000, spent: 430000 },
-  ];
-
+const BudgetCollapse: React.FC = () => {
   const [openYears, setOpenYears] = useState<number[]>([]);
-  const [selectedData, setSelectedData] = useState<{ year: number; type: string; value: number } | null>(null);
+  const [selectedData, setSelectedData] = useState<{
+    year: number;
+    type: string;
+    value: number;
+    details: string[];
+  } | null>(null);
+
+  const sortedForChart = [...budgetData].sort((a, b) => a.year - b.year);
+  const sortedForCollapse = [...budgetData].sort((a, b) => b.year - a.year);
 
   const toggleYear = (year: number) => {
     if (openYears.includes(year)) {
@@ -37,11 +39,11 @@ const BudgetCollapse: React.FC<{ currentYear: number }> = ({ currentYear }) => {
   };
 
   const trendChartData = {
-    labels: budgetsByYear.map((budget) => budget.year.toString()),
+    labels: sortedForChart.map((budget) => budget.year.toString()),
     datasets: [
       {
         label: 'Alocado (R$)',
-        data: budgetsByYear.map((budget) => budget.allocated),
+        data: sortedForChart.map((budget) => budget.allocated),
         borderColor: '#4CAF50',
         backgroundColor: '#4CAF50',
         borderWidth: 2,
@@ -52,7 +54,7 @@ const BudgetCollapse: React.FC<{ currentYear: number }> = ({ currentYear }) => {
       },
       {
         label: 'Gasto (R$)',
-        data: budgetsByYear.map((budget) => budget.spent),
+        data: sortedForChart.map((budget) => budget.spent),
         borderColor: '#F44336',
         backgroundColor: '#F44336',
         borderWidth: 2,
@@ -72,13 +74,21 @@ const BudgetCollapse: React.FC<{ currentYear: number }> = ({ currentYear }) => {
     if (elements.length > 0) {
       const datasetIndex = elements[0].datasetIndex;
       const index = elements[0].index;
-  
-      // Garantir que `label` nunca seja undefined
+
       const type = chart.data.datasets[datasetIndex].label ?? 'Sem etiqueta';
-      const year = budgetsByYear[index].year;
+      const year = sortedForChart[index].year;
       const value = chart.data.datasets[datasetIndex].data[index] as number;
-  
-      setSelectedData({ year, type, value });
+
+      const budgetDetails = budgetData.find((item) => item.year === year);
+
+      if (budgetDetails) {
+        const details =
+          type.toLowerCase().includes('alocado')
+            ? budgetDetails.details.allocated
+            : budgetDetails.details.spent;
+
+        setSelectedData({ year, type, value, details });
+      }
     }
   };
 
@@ -93,15 +103,13 @@ const BudgetCollapse: React.FC<{ currentYear: number }> = ({ currentYear }) => {
           options={{
             onClick: handleChartClick,
             plugins: {
-              legend: {
-                display: true,
-              },
+              legend: { display: true },
             },
           }}
         />
       </div>
       <div>
-        {budgetsByYear.map((budget) => (
+        {sortedForCollapse.map((budget) => (
           <div key={budget.year} className="p-4 rounded-lg border mb-4">
             <button
               onClick={() => toggleYear(budget.year)}
@@ -112,20 +120,29 @@ const BudgetCollapse: React.FC<{ currentYear: number }> = ({ currentYear }) => {
             </button>
             {openYears.includes(budget.year) && (
               <div className="mt-4">
-                <p className="text-lg text-gray-700">
-                  Alocado: R$ {budget.allocated.toLocaleString('pt-BR')}
+                <p className="text-lg font-semibold">
+                  <span className="text-gray-700">Alocado:</span>{' '}
+                  <span className="text-green-600">R$ {budget.allocated.toLocaleString('pt-BR')}</span>
                 </p>
-                <p className="text-lg text-gray-700">
-                  Gasto: R$ {budget.spent.toLocaleString('pt-BR')}
+                <p className="text-lg font-semibold">
+                  <span className="text-gray-700">Gasto:</span>{' '}
+                  <span className="text-red-600">R$ {budget.spent.toLocaleString('pt-BR')}</span>
                 </p>
               </div>
             )}
           </div>
         ))}
       </div>
-
       {selectedData && (
-        <DetailModal data={selectedData} onClose={() => setSelectedData(null)} />
+        <DetailModal
+          data={{
+            year: selectedData.year,
+            type: selectedData.type,
+            value: selectedData.value,
+            details: selectedData.details,
+          }}
+          onClose={() => setSelectedData(null)}
+        />
       )}
     </div>
   );
