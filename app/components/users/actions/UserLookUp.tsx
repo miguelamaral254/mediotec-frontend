@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
-import { getParentByCpf, getProfessorByCpf, getStudentByCpf, getAllUsers, getCoordinationByCpf } from '@/app/services/userConsultService';
+import { getAllUsers, getUserByCpf } from '@/app/services/userConsultService';
 import { User } from '@/app/interfaces/User';
 import { FaPencilAlt, FaEye } from 'react-icons/fa';
 import { updateUser } from '@/app/services/updateUserService';
@@ -9,81 +9,52 @@ import UserEditModal from './UserEditModal';
 
 const UserLookUp = () => {
   const [cpf, setCpf] = useState('');
-  const [userType, setUserType] = useState('ALL');
-  const [userData, setUserData] = useState<User | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
-  const [filter, setFilter] = useState<string>('');
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState(1); // Página atual
-  const usersPerPage = 5; // Quantidade de usuários por página
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 5;
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const users = await getAllUsers();
         setAllUsers(users);
+        setFilteredUsers(users);
       } catch (error) {
-        console.error("Erro ao buscar todos os usuários:", error);
+        console.error('Erro ao buscar todos os usuários:', error);
       }
     };
 
     fetchUsers();
   }, []);
 
-  const handleConsult = async () => {
-    setError(null);
-    setUserData(null);
-    setShowResults(false);
-    const cleanedCpf = cpf.replace(/\D/g, '');
-
+  const handleCpfSearch = async () => {
+    if (!cpf) return;
     try {
-      let data: User | null;
-      switch (userType) {
-        case 'ADMIN':
-          data = await getCoordinationByCpf(cleanedCpf);
-          break;
-        case 'PARENT':
-          data = await getParentByCpf(cleanedCpf);
-          break;
-        case 'PROFESSOR':
-          data = await getProfessorByCpf(cleanedCpf);
-          break;
-        case 'STUDENT':
-          data = await getStudentByCpf(cleanedCpf);
-          break;
-        case 'ALL':
-          const allUsersData = await getAllUsers();
-          data = allUsersData.find((user: { cpf: string; }) => user.cpf.replace(/\D/g, '') === cleanedCpf) || null;
-          break;
-        default:
-          data = null;
+      const user = await getUserByCpf(cpf.replace(/\D/g, ''));
+      if (user) {
+        setFilteredUsers([user]);
+        setCurrentPage(1);
+      } else {
+        alert('Usuário não encontrado.');
       }
-
-      if (!data || (userType !== 'ALL' && data.role !== userType)) {
-        throw new Error('Usuário não encontrado ou não corresponde ao tipo selecionado.');
-      }
-
-      setUserData(data);
-      setShowResults(true);
-    } catch (err) {
-      setError('Erro ao buscar usuário: ' + (err instanceof Error ? err.message : ''));
+    } catch (error) {
+      alert('Erro ao consultar usuário por CPF: ' + (error instanceof Error ? error.message : ''));
     }
   };
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(e.target.value);
-    setCurrentPage(1); // Reinicia para a primeira página ao filtrar
+    const value = e.target.value.toLowerCase();
+    setFilteredUsers(
+      allUsers.filter((user) =>
+        user.name.toLowerCase().includes(value)
+      )
+    );
+    setCurrentPage(1);
   };
-
-  const filteredUsers = allUsers.filter((user) =>
-    user.name.toLowerCase().includes(filter.toLowerCase()) &&
-    (userType === 'ALL' || user.role === userType)
-  );
 
   const paginateUsers = () => {
     const startIndex = (currentPage - 1) * usersPerPage;
@@ -98,21 +69,6 @@ const UserLookUp = () => {
 
   const goToNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
-
-  const translateRole = (role: string | undefined) => {
-    switch (role) {
-      case 'COORDINATION':
-        return 'Coordenação';
-      case 'STUDENT':
-        return 'Aluno';
-      case 'PROFESSOR':
-        return 'Professor';
-      case 'PARENT':
-        return 'Pais';
-      default:
-        return role;
-    }
   };
 
   const openModal = (user: User) => {
@@ -138,175 +94,109 @@ const UserLookUp = () => {
   const handleUpdateUser = async (user: User) => {
     try {
       await updateUser(user.cpf, user);
-      closeEditModal();
       const users = await getAllUsers();
       setAllUsers(users);
+      setFilteredUsers(users);
+      closeEditModal();
     } catch (error) {
       alert('Erro ao atualizar usuário: ' + (error instanceof Error ? error.message : ''));
     }
   };
 
-  const closeResults = () => {
-    setShowResults(false);
-    setCpf('');
-  };
-
   return (
-    <div className="bg-gray-200 rounded-lg p-6 shadow-md w-full mx-auto mt-10">
+    <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-4xl mx-auto mt-10">
       <h2 className="text-2xl font-bold mb-4 text-center text-gray-700">Consultar Usuário</h2>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Selecione o Tipo de Usuário:</label>
-        <select
-          value={userType}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            setUserType(newValue);
-          }}
-          className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
-        >
-          <option value="ALL">Todos os usuários</option>
-          <option value="STUDENT">Aluno</option>
-          <option value="PROFESSOR">Professor</option>
-          <option value="PARENT">Pais</option>
-          <option value="ADMIN">Coordenação</option>
-        </select>
+        <label className="block text-sm font-medium text-gray-600">Consultar por CPF:</label>
+        <div className="flex gap-2 mt-2">
+          <InputMask
+            mask="999.999.999-99"
+            value={cpf}
+            onChange={(e) => setCpf(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md"
+          />
+          <button
+            onClick={handleCpfSearch}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          >
+            Buscar
+          </button>
+        </div>
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">CPF:</label>
-        <InputMask
-          mask="999.999.999-99"
-          value={cpf}
-          onChange={(e) => setCpf(e.target.value)}
+        <label className="block text-sm font-medium text-gray-600">Filtrar por Nome:</label>
+        <input
+          type="text"
+          placeholder="Digite o nome..."
+          onChange={handleFilterChange}
           className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
         />
       </div>
 
-      <button
-        onClick={handleConsult}
-        className={`bg-[#4666AF] hover:bg-blue-500 transition text-white rounded px-4 py-2 w-full ${
-          !cpf ? 'opacity-50 cursor-not-allowed' : ''
-        }`}
-        disabled={!cpf}
-      >
-        Consultar
-      </button>
-
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-
-      {showResults && userData && (
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold mb-2">Resultados:</h3>
-          <div className="bg-white p-4 rounded-lg shadow">
-            <p>
-              <strong>Nome:</strong> {userData.name}
-            </p>
-            <p>
-              <strong>CPF:</strong> {userData.cpf}
-            </p>
-            <p>
-              <strong>Email:</strong> {userData.email}
-            </p>
-            <p>
-              <strong>Role:</strong> {translateRole(userData.role)}
-            </p>
-            <p>
-              <strong>Ativo:</strong>
-              <span
-                className={`inline-block w-3 h-3 rounded-full ${
-                  userData.active ? 'bg-green-500' : 'bg-red-500'
-                }`}
-              />
-            </p>
-            <div className="flex flex-col mt-4">
-              <button
-                onClick={() => openModal(userData)}
-                className="text-blue-600 flex gap-1 justify-center align-middle items-center hover:underline mb-2"
-              >
-                <FaEye /> Ver Detalhes
-              </button>
-              <button
-                onClick={() => openEditModal(userData)}
-                className="text-yellow-600 flex gap-1 justify-center align-middle items-center hover:underline"
-              >
-                <FaPencilAlt /> Editar
-              </button>
-            </div>
-            <button
-              onClick={closeResults}
-              className="mt-4 bg-red-600 text-white rounded px-4 py-2 w-full"
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div className="mt-4">
-        <h3 className="text-lg font-semibold mb-2">Todos os Usuários:</h3>
-        <input
-          type="text"
-          placeholder="Filtrar por nome..."
-          value={filter}
-          onChange={handleFilterChange}
-          className="mb-2 border border-gray-300 rounded-md p-2 w-full"
-        />
-        <ul className="bg-white rounded-lg shadow">
-          {paginateUsers().map((user) => (
-            <li key={user.cpf} className="p-4 border-b last:border-b-0">
-              <div className="flex justify-between items-center">
-                <span>
-                  {user.name}
-                  <span
-                    className={`inline-block w-3 h-3 rounded-full ml-2 ${
-                      user.active ? 'bg-green-500' : 'bg-red-500'
-                    }`}
-                  />
-                </span>
-                <div className="flex gap-2 flex-col">
+      <div className="bg-white rounded-lg shadow">
+        {filteredUsers.length === 0 ? (
+          <p className="p-4 text-gray-500">Nenhum usuário encontrado.</p>
+        ) : (
+          <table className="table-auto w-full text-center">
+            <thead>
+              <tr>
+                <th className="border px-4 py-2">Usuário</th>
+                <th className="border px-4 py-2">CPF</th>
+                <th className="border px-4 py-2">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginateUsers().map((user) => (
+                <tr key={user.cpf}>
+                  <td className="border px-4 py-2">{user.name}</td>
+                  <td className="border px-4 py-2">{user.cpf}</td>
+                  <td className="border px-4 py-2">
+                  <div className="flex gap-2 flex-col justify-center items-center">
                   <button
-                    onClick={() => openModal(user)}
-                    className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition"
-                  >
-                    <FaEye /> Ver Detalhes
-                  </button>
-                  <button
-                    onClick={() => openEditModal(user)}
-                    className="text-[#DC3181] flex gap-1 justify-center items-center hover:underline"
-                  >
-                    <FaPencilAlt /> Editar
-                  </button>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+                        onClick={() => openModal(user)}
+                        className="text-blue-600 border-2 text-lg border-blue-500 rounded p-2 flex  gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition w-36 h-12"
+                      >
+                        <FaEye /> Detalhes
+                      </button>
+                      <button
+                        onClick={() => openEditModal(user)}
+                        className="text-[#DC3181] text-lg flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition w-36 h-12"
+                      >
+                        <FaPencilAlt /> Editar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
 
-        {/* Controles de paginação */}
-        <div className="flex justify-between items-center mt-4">
-          <button
-            onClick={goToPreviousPage}
-            disabled={currentPage === 1}
-            className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
-              currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            Anterior
-          </button>
-          <p className="text-gray-700">
-            Página {currentPage} de {totalPages}
-          </p>
-          <button
-            onClick={goToNextPage}
-            disabled={currentPage === totalPages}
-            className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
-              currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            Próxima
-          </button>
-        </div>
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={goToPreviousPage}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
+            currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+        >
+          Anterior
+        </button>
+        <p className="text-gray-700">
+          Página {currentPage} de {totalPages}
+        </p>
+        <button
+          onClick={goToNextPage}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
+            currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+        >
+          Próxima
+        </button>
       </div>
 
       <UserDetailModal

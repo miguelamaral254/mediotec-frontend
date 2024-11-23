@@ -13,7 +13,15 @@ export const getAllUsers = async () => {
     throw error;
   }
 };
-
+export const getUserByCpf = async (cpf: string) => {
+  try {
+    const response = await api.get(`/user/${cpf}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erro ao buscar usuário pelo CPF ${cpf}:`, error);
+    throw error;
+  }
+};
 export const getParentByCpf = async (cpf: string) => {
   try {
     const response = await api.get(`/parent/${cpf}`);
