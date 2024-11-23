@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/app/context/AuthContext';
 import NotificationItem from './NotificationItem';
@@ -5,10 +6,11 @@ import { notificationService } from '@/app/services/notificationService';
 import { Notification } from '@/app/interfaces/Notification';
 import { FaTimes } from 'react-icons/fa';
 
-const NotificationTab: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
-  isOpen,
-  onClose,
-}) => {
+const NotificationTab: React.FC<{
+  isOpen: boolean;
+  onClose: () => void;
+  setUnreadCount: (count: number) => void;
+}> = ({ isOpen, onClose, setUnreadCount }) => {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -24,8 +26,10 @@ const NotificationTab: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           (a: { timestamp: string | number | Date; }, b: { timestamp: string | number | Date; }) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
         setNotifications(sortedNotifications);
+        const unreadCount = sortedNotifications.filter((n: { read: unknown; }) => !n.read).length;
+        setUnreadCount(unreadCount);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        console.error(err);
         setError('Erro ao buscar notificações.');
       } finally {
         setLoading(false);
@@ -36,13 +40,13 @@ const NotificationTab: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const handleReadNotification = async (id: number) => {
     try {
       await notificationService.updateNotificationReadStatus({ id, read: true });
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((notification) =>
-          notification.id === id ? { ...notification, read: true } : notification
-        )
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, read: true } : n))
       );
-    } catch (error) {
-      console.error('Erro ao atualizar status de notificação:', error);
+      const unreadCount = notifications.filter((n) => n.id !== id && !n.read).length;
+      setUnreadCount(unreadCount);
+    } catch (err) {
+      console.error('Erro ao atualizar status de notificação:', err);
     }
   };
 

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0); // Estado para notificações não lidas
   const router = useRouter();
 
   useEffect(() => {
@@ -57,15 +58,27 @@ export default function Dashboard() {
           </div>
           <div className="fixed top-4 right-4 z-50">
             <button
-              className="flex justify-center items-center bg-[#4666af] text-white rounded-full h-10 w-10 shadow-md"
+              className="relative flex justify-center items-center bg-[#4666af] text-white rounded-full h-10 w-10 shadow-md"
               onClick={() => setShowNotifications(!showNotifications)}
             >
-              {showNotifications ? <MdClose size={24} /> : <MdNotifications size={24} />}
+              {showNotifications ? (
+                <MdClose size={24} />
+              ) : (
+                <>
+                  <MdNotifications size={24} />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold h-5 w-5 flex items-center justify-center rounded-full">
+                      {unreadCount}
+                    </span>
+                  )}
+                </>
+              )}
             </button>
           </div>
           <NotificationTab
             isOpen={showNotifications}
             onClose={() => setShowNotifications(false)}
+            setUnreadCount={setUnreadCount} // Passa a função para atualizar o contador
           />
         </div>
       ) : (
