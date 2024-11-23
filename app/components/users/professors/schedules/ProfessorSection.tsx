@@ -33,7 +33,7 @@ export const ProfessorSection = () => {
               <span>Minhas Aulas</span>
             </div>
             <div className="p-6 flex-grow flex flex-col justify-between">
-              <p className="text-gray-600 mb-4">Confira sua grade de aula.</p>
+              <p className="text-gray-600 mb-4">Confira sua grade de aulas.</p>
               <Link href="/auth/dashboard/professor/schedules">
                 <button className="w-full border-2 border-blue-500 text-blue-500 rounded-lg py-2 hover:bg-blue-500 hover:text-white transition duration-300">
                   Ver turmas
@@ -53,7 +53,7 @@ export const ProfessorSection = () => {
               </p>
               <Link href="/auth/dashboard/professor/grades">
                 <button className="w-full border-2 border-blue-500 text-blue-500 rounded-lg py-2 hover:bg-blue-500 hover:text-white transition duration-300">
-                  Ver conceitos
+                  Gerenciar conceitos
                 </button>
               </Link>
             </div>

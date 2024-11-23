@@ -16,7 +16,10 @@ const BulletinBoard: React.FC<{ cpf: string | undefined }> = ({ cpf }) => {
       try {
         const data = await notificationService.getNotificationsForUser(cpf);
         const sortedNotifications = data
-          .sort((a: { timestamp: string | number | Date; }, b: { timestamp: string | number | Date; }) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+          .sort(
+            (a: { timestamp: string | number | Date }, b: { timestamp: string | number | Date }) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          )
           .slice(0, 3);
         setNotifications(sortedNotifications);
       } catch (err) {
@@ -26,11 +29,11 @@ const BulletinBoard: React.FC<{ cpf: string | undefined }> = ({ cpf }) => {
         setLoading(false);
       }
     }
-  }, [cpf]); // `cpf` é a dependência necessária para garantir que a função seja atualizada quando `cpf` mudar.
+  }, [cpf]);
 
   useEffect(() => {
     fetchNotifications();
-  }, [fetchNotifications]); // `fetchNotifications` como dependência estabilizada pelo `useCallback`.
+  }, [fetchNotifications]);
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
@@ -52,12 +55,15 @@ const BulletinBoard: React.FC<{ cpf: string | undefined }> = ({ cpf }) => {
   return (
     <ul className="divide-y divide-gray-200 bg-white rounded-lg shadow-md border border-gray-300">
       {notifications.map((notification) => (
-        <li key={notification.id} className="flex items-start p-4 hover:bg-gray-50">
+        <li
+          key={notification.id}
+          className="flex flex-col sm:flex-row items-start sm:items-center p-4 hover:bg-gray-50 space-y-2 sm:space-y-0 sm:space-x-4"
+        >
           <div className="flex-grow">
-            <h3 className="text-lg font-bold text-gray-800">
+            <h3 className="text-lg font-bold text-gray-800 truncate">
               {notification.header || "Sem título"}
             </h3>
-            <p className="text-gray-600 text-sm mt-1">
+            <p className="text-gray-600 text-sm mt-1 truncate">
               {notification.message || "Sem detalhes disponíveis."}
             </p>
           </div>
