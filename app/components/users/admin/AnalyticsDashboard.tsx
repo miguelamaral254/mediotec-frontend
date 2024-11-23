@@ -5,7 +5,7 @@ import PerformanceChart from './PerformanceChart';
 import dashboardData from '@/app/utils/mocks/dashboardData.json';
 
 const AnalyticsDashboard = () => {
-  const [activeTab, setActiveTab] = useState<'attendance' | 'performance'>('attendance');
+  const [activeTab, setActiveTab] = useState<'attendance' | 'performance'>('performance');
 
   const attendanceData = dashboardData.attendance;
   const studentPerformance = dashboardData.studentPerformance;
@@ -35,14 +35,6 @@ const AnalyticsDashboard = () => {
         <div className="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2">
           <div className="flex justify-around mb-6">
             <button
-              onClick={() => setActiveTab('attendance')}
-              className={`p-4 transition font-semibold text-white rounded w-full mx-2 text-lg ${
-                activeTab === 'attendance' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-gray-300 hover:bg-gray-400'
-              }`}
-            >
-              Presença e Evasão
-            </button>
-            <button
               onClick={() => setActiveTab('performance')}
               className={`p-4 transition font-semibold text-white rounded w-full mx-2 text-lg ${
                 activeTab === 'performance' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-gray-300 hover:bg-gray-400'
@@ -50,11 +42,16 @@ const AnalyticsDashboard = () => {
             >
               Aproveitamento por Disciplinas
             </button>
+            <button
+              onClick={() => setActiveTab('attendance')}
+              className={`p-4 transition font-semibold text-white rounded w-full mx-2 text-lg ${
+                activeTab === 'attendance' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-gray-300 hover:bg-gray-400'
+              }`}
+            >
+              Presença e Evasão
+            </button>
           </div>
 
-          {activeTab === 'attendance' && (
-            <AttendanceChart attendanceData={attendanceData} />
-          )}
           {activeTab === 'performance' &&
             Object.entries(studentPerformance).map(([year, subjects]) => (
               <div key={year} className="mb-4">
@@ -66,6 +63,9 @@ const AnalyticsDashboard = () => {
                 />
               </div>
             ))}
+          {activeTab === 'attendance' && (
+            <AttendanceChart attendanceData={attendanceData} />
+          )}
         </div>
       </div>
     </div>

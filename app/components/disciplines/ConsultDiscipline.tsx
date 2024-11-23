@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { getAllDisciplines, updateDiscipline } from '@/app/services/disciplineService'; 
+import React, { useEffect, useState } from 'react';
+import { getAllDisciplines, updateDiscipline } from '@/app/services/disciplineService';
 import DisciplineDetailModal from './DisciplineDetailModal';
 import DisciplineEditModal from './DisciplineEditModal';
 import { FaEye, FaEdit } from 'react-icons/fa';
@@ -12,6 +12,8 @@ const ConsultDiscipline = () => {
   const [detailModalIsOpen, setDetailModalIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [selectedDiscipline, setSelectedDiscipline] = useState<Discipline | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const disciplinesPerPage = 5;
 
   useEffect(() => {
     const fetchDisciplines = async () => {
@@ -30,10 +32,26 @@ const ConsultDiscipline = () => {
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFilter(value);
-    const filtered = allDisciplines.filter(discipline =>
+    const filtered = allDisciplines.filter((discipline) =>
       discipline.name.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredDisciplines(filtered);
+    setCurrentPage(1);
+  };
+
+  const paginateDisciplines = () => {
+    const startIndex = (currentPage - 1) * disciplinesPerPage;
+    return filteredDisciplines.slice(startIndex, startIndex + disciplinesPerPage);
+  };
+
+  const totalPages = Math.ceil(filteredDisciplines.length / disciplinesPerPage);
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   const openDetailModal = (discipline: Discipline) => {
@@ -56,14 +74,14 @@ const ConsultDiscipline = () => {
     if (selectedDiscipline && selectedDiscipline.id !== undefined) {
       try {
         await updateDiscipline(selectedDiscipline.id.toString(), updatedDiscipline);
-        setFilteredDisciplines(prev =>
-          prev.map(discipline =>
+        setFilteredDisciplines((prev) =>
+          prev.map((discipline) =>
             discipline.id === updatedDiscipline.id ? updatedDiscipline : discipline
           )
         );
       } catch (error) {
         console.error("Erro ao atualizar disciplina:", error);
-        throw error; 
+        throw error;
       }
     } else {
       console.error("ID da disciplina não está definido");
@@ -87,8 +105,11 @@ const ConsultDiscipline = () => {
         {filteredDisciplines.length === 0 ? (
           <p className="p-4 text-gray-500">Nenhuma disciplina encontrada.</p>
         ) : (
-          filteredDisciplines.map((discipline) => (
-            <div key={discipline.id} className="p-4 border-b last:border-b-0 flex justify-between font-semibold text-[1.3rem] items-center">
+          paginateDisciplines().map((discipline) => (
+            <div
+              key={discipline.id}
+              className="p-4 border-b last:border-b-0 flex justify-between font-semibold text-[1.3rem] items-center"
+            >
               <span>{discipline.name}</span>
               <div className="flex flex-col gap-2">
                 <button
@@ -108,6 +129,32 @@ const ConsultDiscipline = () => {
           ))
         )}
       </div>
+
+      {filteredDisciplines.length > 0 && (
+        <div className="flex justify-between items-center mt-4">
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
+              currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            Anterior
+          </button>
+          <p className="text-gray-700">
+            Página {currentPage} de {totalPages}
+          </p>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
+              currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            Próxima
+          </button>
+        </div>
+      )}
 
       <DisciplineDetailModal
         isOpen={detailModalIsOpen}

@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { getAllClasses, updateClass } from '@/app/services/schoolClassService';
-import SchoolClassDetailModal from './SchoolClassDetailModal';
-import SchoolClassEditModal from './SchoolClassEditModal';
-import { FaEye, FaEdit } from 'react-icons/fa';
-import { SchoolClass } from '@/app/interfaces/SchoolClass';
-import { translateEnum } from '@/app/utils/translateEnum';
+import React, { useEffect, useState } from "react";
+import { getAllClasses, updateClass } from "@/app/services/schoolClassService";
+import SchoolClassDetailModal from "./SchoolClassDetailModal";
+import SchoolClassEditModal from "./SchoolClassEditModal";
+import { FaEye, FaEdit } from "react-icons/fa";
+import { SchoolClass } from "@/app/interfaces/SchoolClass";
+import { translateEnum } from "@/app/utils/translateEnum";
 
 const SchoolClassLookUp = () => {
-  const [filter, setFilter] = useState<string>('');
+  const [filter, setFilter] = useState<string>("");
+  const [yearFilter, setYearFilter] = useState<string>("");
   const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
   const [filteredClasses, setFilteredClasses] = useState<SchoolClass[]>([]);
   const [detailModalIsOpen, setDetailModalIsOpen] = useState<boolean>(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState<boolean>(false);
   const [selectedClass, setSelectedClass] = useState<SchoolClass | null>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const classesPerPage = 5;
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -20,7 +24,7 @@ const SchoolClassLookUp = () => {
         const classes = await getAllClasses();
         setAllClasses(classes);
         setFilteredClasses(classes);
-        console.log('Dados das classes:', classes);      } catch (error) {
+      } catch (error) {
         console.error("Error fetching classes:", error);
       }
     };
@@ -31,11 +35,50 @@ const SchoolClassLookUp = () => {
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFilter(value);
+    applyFilters(value, yearFilter);
+    setCurrentPage(1);
+  };
 
-    const filtered = allClasses.filter(schoolClass =>
-      schoolClass.code.toLowerCase().includes(value.toLowerCase())
-    );
+  const handleYearFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setYearFilter(value);
+    applyFilters(filter, value);
+    setCurrentPage(1);
+  };
+
+  const applyFilters = (textFilter: string, year: string) => {
+    let filtered = allClasses;
+
+    if (textFilter) {
+      filtered = filtered.filter((schoolClass) =>
+        schoolClass.code.toLowerCase().includes(textFilter.toLowerCase())
+      );
+    }
+
+    if (year) {
+      const selectedYear = parseInt(year);
+      filtered = filtered.filter(
+        (schoolClass) =>
+          new Date(schoolClass.date).getFullYear() === selectedYear
+      );
+    }
+
     setFilteredClasses(filtered);
+  };
+
+  const totalPages = Math.ceil(filteredClasses.length / classesPerPage);
+
+  const paginateClasses = () => {
+    const startIndex = (currentPage - 1) * classesPerPage;
+    return filteredClasses.slice(startIndex, startIndex + classesPerPage);
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   const openDetailModal = (schoolClass: SchoolClass) => {
@@ -58,14 +101,14 @@ const SchoolClassLookUp = () => {
     if (selectedClass?.id) {
       try {
         await updateClass(selectedClass.id, updatedClass);
-        
-        setFilteredClasses(prev =>
-          prev.map(schoolClass =>
+
+        setFilteredClasses((prev) =>
+          prev.map((schoolClass) =>
             schoolClass.id === updatedClass.id ? updatedClass : schoolClass
           )
         );
-        setAllClasses(prev =>
-          prev.map(schoolClass =>
+        setAllClasses((prev) =>
+          prev.map((schoolClass) =>
             schoolClass.id === updatedClass.id ? updatedClass : schoolClass
           )
         );
@@ -77,26 +120,53 @@ const SchoolClassLookUp = () => {
 
   return (
     <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">Consultar Classes</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">
+        Consultar Classes
+      </h2>
 
-      <input
-        type="text"
-        placeholder="Filtrar por código da classe..."
-        value={filter}
-        onChange={handleFilterChange}
-        className="mb-4 border border-gray-300 rounded-md p-2 w-full"
-      />
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Filtrar por código da classe..."
+          value={filter}
+          onChange={handleFilterChange}
+          className="mb-2 border border-gray-300 rounded-md p-2 w-full"
+        />
+        <select
+          value={yearFilter}
+          onChange={handleYearFilterChange}
+          className="border border-gray-300 rounded-md p-2 w-full"
+        >
+          <option value="">Todos os anos</option>
+          {Array.from(
+            new Set(
+              allClasses.map((schoolClass) =>
+                new Date(schoolClass.date).getFullYear()
+              )
+            )
+          )
+            .sort((a, b) => b - a)
+            .map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+        </select>
+      </div>
 
       <h3 className="text-lg font-semibold mb-2">Classes Disponíveis:</h3>
       <div className="bg-white rounded-lg shadow">
         {filteredClasses.length === 0 ? (
           <p className="p-4 text-gray-500">Nenhuma classe encontrada.</p>
         ) : (
-          filteredClasses.map((schoolClass) => (
-            <div key={schoolClass.id} className="p-4 border-b text-xl last:border-b-0 flex justify-between items-center">
+          paginateClasses().map((schoolClass) => (
+            <div
+              key={schoolClass.id}
+              className="p-4 border-b text-xl last:border-b-0 flex justify-between items-center"
+            >
               <span>{schoolClass.code}</span>
               <div className="flex gap-2">
-                <h4>{translateEnum(schoolClass.year, 'year')}</h4>
+                <h4>{translateEnum(schoolClass.year, "year")}</h4>
                 <h4>{schoolClass.letter}</h4>
               </div>
               <div className="flex flex-col gap-2">
@@ -117,6 +187,32 @@ const SchoolClassLookUp = () => {
           ))
         )}
       </div>
+
+      {filteredClasses.length > 0 && (
+        <div className="flex justify-between items-center mt-4">
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
+              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            Anterior
+          </button>
+          <p className="text-gray-700">
+            Página {currentPage} de {totalPages}
+          </p>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
+              currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            Próxima
+          </button>
+        </div>
+      )}
 
       <SchoolClassDetailModal
         isOpen={detailModalIsOpen}

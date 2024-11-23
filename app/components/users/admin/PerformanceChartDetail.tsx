@@ -68,7 +68,7 @@ const PerformanceChartDetail: React.FC<PerformanceChartDetailProps> = ({ subject
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+          className="absolute top-4 right-4 bg-red-500 text-white p-2 h-10  rounded-md hover:bg-red-600"
         >
           ✕
         </button>
@@ -77,11 +77,26 @@ const PerformanceChartDetail: React.FC<PerformanceChartDetailProps> = ({ subject
         </h2>
         <Bar data={data} options={options} />
         <div className="mt-6 text-gray-800">
-          <h3 className="text-lg font-semibold">Detalhes por Turma:</h3>
+          <h3 className="text-lg font-semibold">Tradução dos Dados:</h3>
+          <ul className="list-disc pl-6 mt-2">
+            <li>
+              <strong>Performance:</strong> Representa o percentual de desempenho geral da turma na disciplina.
+            </li>
+            <li>
+              <strong>Média da Turma:</strong> Indica a média geral das notas obtidas pelos alunos da turma.
+            </li>
+            <li>
+              <strong>Média de Aprovação:</strong> Percentual necessário para aprovação na disciplina.
+            </li>
+          </ul>
+          <h3 className="text-lg font-semibold mt-4">Detalhes por Turma:</h3>
           <ul className="list-disc pl-6 mt-2">
             {details.map((detail) => (
               <li key={detail.turma}>
-                <strong>Turma {detail.turma}:</strong> Performance: {detail.performance}%, Média da Turma: {detail.average}%, Média de Aprovação: {detail.passing}%
+                <strong>Turma {detail.turma}:</strong> 
+                Performance: {detail.performance}%, 
+                Média da Turma: {detail.average}%, 
+                Média de Aprovação: {detail.passing}%
               </li>
             ))}
           </ul>

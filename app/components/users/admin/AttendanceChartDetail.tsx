@@ -35,7 +35,7 @@ const AttendanceChartDetail: React.FC<AttendanceChartDetailProps> = ({ label, de
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+          className="absolute top-4 right-4 bg-red-500 text-white p-2 h-10 rounded-md hover:bg-red-600"
         >
           ✕
         </button>
