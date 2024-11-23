@@ -19,6 +19,9 @@ const UserLookUp = () => {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1); // Página atual
+  const usersPerPage = 5; // Quantidade de usuários por página
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -37,7 +40,7 @@ const UserLookUp = () => {
     setUserData(null);
     setShowResults(false);
     const cleanedCpf = cpf.replace(/\D/g, '');
-  
+
     try {
       let data: User | null;
       switch (userType) {
@@ -58,14 +61,13 @@ const UserLookUp = () => {
           data = allUsersData.find((user: { cpf: string; }) => user.cpf.replace(/\D/g, '') === cleanedCpf) || null;
           break;
         default:
-          data = await getAllUsers();
-          break;
+          data = null;
       }
-  
+
       if (!data || (userType !== 'ALL' && data.role !== userType)) {
-        throw new Error('Usuário não encontrado ou não corresponde ao tipo selecionado');
+        throw new Error('Usuário não encontrado ou não corresponde ao tipo selecionado.');
       }
-  
+
       setUserData(data);
       setShowResults(true);
     } catch (err) {
@@ -75,11 +77,28 @@ const UserLookUp = () => {
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value);
+    setCurrentPage(1); // Reinicia para a primeira página ao filtrar
   };
 
-  const filteredUsers = allUsers.filter(user =>
-    user.name.toLowerCase().includes(filter.toLowerCase()) && (userType === 'ALL' || user.role === userType)
+  const filteredUsers = allUsers.filter((user) =>
+    user.name.toLowerCase().includes(filter.toLowerCase()) &&
+    (userType === 'ALL' || user.role === userType)
   );
+
+  const paginateUsers = () => {
+    const startIndex = (currentPage - 1) * usersPerPage;
+    return filteredUsers.slice(startIndex, startIndex + usersPerPage);
+  };
+
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
   const translateRole = (role: string | undefined) => {
     switch (role) {
@@ -118,7 +137,6 @@ const UserLookUp = () => {
 
   const handleUpdateUser = async (user: User) => {
     try {
-      console.log(user)
       await updateUser(user.cpf, user);
       closeEditModal();
       const users = await getAllUsers();
@@ -165,7 +183,13 @@ const UserLookUp = () => {
         />
       </div>
 
-      <button onClick={handleConsult} className={`bg-[#4666AF] hover:bg-blue-500 transition text-white rounded px-4 py-2 w-full ${!cpf ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!cpf}>
+      <button
+        onClick={handleConsult}
+        className={`bg-[#4666AF] hover:bg-blue-500 transition text-white rounded px-4 py-2 w-full ${
+          !cpf ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
+        disabled={!cpf}
+      >
         Consultar
       </button>
 
@@ -175,22 +199,44 @@ const UserLookUp = () => {
         <div className="mt-4">
           <h3 className="text-lg font-semibold mb-2">Resultados:</h3>
           <div className="bg-white p-4 rounded-lg shadow">
-            <p><strong>Nome:</strong> {userData.name}</p>
-            <p><strong>CPF:</strong> {userData.cpf}</p>
-            <p><strong>Email:</strong> {userData.email}</p>
-            <p><strong>Role:</strong> {translateRole(userData.role)}</p>
-            <p><strong>Ativo:</strong>
-              <span className={`inline-block w-3 h-3 rounded-full ${userData.active ? 'bg-green-500' : 'bg-red-500'}`} />
+            <p>
+              <strong>Nome:</strong> {userData.name}
+            </p>
+            <p>
+              <strong>CPF:</strong> {userData.cpf}
+            </p>
+            <p>
+              <strong>Email:</strong> {userData.email}
+            </p>
+            <p>
+              <strong>Role:</strong> {translateRole(userData.role)}
+            </p>
+            <p>
+              <strong>Ativo:</strong>
+              <span
+                className={`inline-block w-3 h-3 rounded-full ${
+                  userData.active ? 'bg-green-500' : 'bg-red-500'
+                }`}
+              />
             </p>
             <div className="flex flex-col mt-4">
-              <button onClick={() => openModal(userData)} className="text-blue-600 flex gap-1 justify-center align-middle items-center hover:underline mb-2">
+              <button
+                onClick={() => openModal(userData)}
+                className="text-blue-600 flex gap-1 justify-center align-middle items-center hover:underline mb-2"
+              >
                 <FaEye /> Ver Detalhes
               </button>
-              <button onClick={() => openEditModal(userData)} className="text-yellow-600 flex gap-1 justify-center align-middle items-center hover:underline">
+              <button
+                onClick={() => openEditModal(userData)}
+                className="text-yellow-600 flex gap-1 justify-center align-middle items-center hover:underline"
+              >
                 <FaPencilAlt /> Editar
               </button>
             </div>
-            <button onClick={closeResults} className="mt-4 bg-red-600 text-white rounded px-4 py-2 w-full">
+            <button
+              onClick={closeResults}
+              className="mt-4 bg-red-600 text-white rounded px-4 py-2 w-full"
+            >
               Fechar
             </button>
           </div>
@@ -207,17 +253,28 @@ const UserLookUp = () => {
           className="mb-2 border border-gray-300 rounded-md p-2 w-full"
         />
         <ul className="bg-white rounded-lg shadow">
-          {filteredUsers.map((user) => (
+          {paginateUsers().map((user) => (
             <li key={user.cpf} className="p-4 border-b last:border-b-0">
               <div className="flex justify-between items-center">
-                <span>{user.name}  
-                  <span className={`inline-block w-3 h-3 rounded-full ml-2 ${user.active ? 'bg-green-500' : 'bg-red-500'}`} />
+                <span>
+                  {user.name}
+                  <span
+                    className={`inline-block w-3 h-3 rounded-full ml-2 ${
+                      user.active ? 'bg-green-500' : 'bg-red-500'
+                    }`}
+                  />
                 </span>
                 <div className="flex gap-2 flex-col">
-                  <button onClick={() => openModal(user)} className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition">
+                  <button
+                    onClick={() => openModal(user)}
+                    className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition"
+                  >
                     <FaEye /> Ver Detalhes
                   </button>
-                  <button onClick={() => openEditModal(user)} className="text-[#DC3181] flex gap-1 justify-center items-center hover:underline">
+                  <button
+                    onClick={() => openEditModal(user)}
+                    className="text-[#DC3181] flex gap-1 justify-center items-center hover:underline"
+                  >
                     <FaPencilAlt /> Editar
                   </button>
                 </div>
@@ -225,10 +282,44 @@ const UserLookUp = () => {
             </li>
           ))}
         </ul>
+
+        {/* Controles de paginação */}
+        <div className="flex justify-between items-center mt-4">
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
+              currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            Anterior
+          </button>
+          <p className="text-gray-700">
+            Página {currentPage} de {totalPages}
+          </p>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 ${
+              currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            Próxima
+          </button>
+        </div>
       </div>
 
-      <UserDetailModal isOpen={modalIsOpen} onRequestClose={closeModal} selectedUser={selectedUser} />
-      <UserEditModal isOpen={editModalIsOpen} onRequestClose={closeEditModal} selectedUser={selectedUser} onUpdateUser={handleUpdateUser} />
+      <UserDetailModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        selectedUser={selectedUser}
+      />
+      <UserEditModal
+        isOpen={editModalIsOpen}
+        onRequestClose={closeEditModal}
+        selectedUser={selectedUser}
+        onUpdateUser={handleUpdateUser}
+      />
     </div>
   );
 };

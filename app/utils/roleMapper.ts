@@ -1,4 +1,4 @@
-// utils/roleMapper.ts
+
 export const mapRoleToPortuguese = (role: string): string => {
     switch (role) {
       case 'STUDENT':

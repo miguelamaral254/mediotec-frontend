@@ -1,7 +1,7 @@
-// UserDetailModal.tsx
 import Modal from 'react-modal';
 import InputMask from 'react-input-mask';
 import { User } from '@/app/interfaces/User';
+import { mapRoleToPortuguese } from '@/app/utils/roleMapper';
 
 interface UserDetailModalProps {
   isOpen: boolean;
@@ -11,115 +11,109 @@ interface UserDetailModalProps {
 
 const UserDetailModal: React.FC<UserDetailModalProps> = ({ isOpen, onRequestClose, selectedUser }) => {
   const formatDate = (dateString: string) => {
+    if (!dateString) return 'Data inválida';
     const date = new Date(dateString);
-    return date.toLocaleDateString('pt-BR');
+    return isNaN(date.getTime()) ? 'Data inválida' : date.toLocaleDateString('pt-BR');
   };
 
   return (
-    <Modal 
-      isOpen={isOpen} 
-      onRequestClose={onRequestClose} 
-      ariaHideApp={false} 
-      style={{ 
-        content: { 
-          width: '90%',  
-          maxWidth: '500px', 
-          height: 'auto', 
-          margin: 'auto', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-        }
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      ariaHideApp={false}
+      style={{
+        content: {
+          width: '90%',
+          maxWidth: '500px',
+          height: 'auto',
+          margin: 'auto',
+          borderRadius: '10px',
+          padding: '20px',
+          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+          backgroundColor: '#ffffff',
+          position: 'relative',
+        },
       }}
     >
-      <div className="p-6 w-full flex flex-col items-center">
-        <h3 className="text-xl font-bold mb-4 text-center">Detalhes do Usuário:</h3>
+      <button
+        onClick={onRequestClose}
+        className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+      >
+        ✖
+      </button>
+      <div className="flex flex-col items-center">
+        <h3 className="text-2xl font-bold mb-6 text-center text-gray-800">Detalhes do Usuário</h3>
         {selectedUser && (
           <div className="w-full">
-            <div className="mb-2">
-              <strong>Nome:</strong>
-              <input
-                type="text"
-                value={selectedUser.name}
-                disabled
-                className="bg-gray-200 border rounded-md p-2 w-full mt-1"
-              />
-            </div>
-            <div className="mb-2">
-              <strong>CPF:</strong>
-              <InputMask 
-                mask="999.999.999-99" 
-                value={selectedUser.cpf || ''} 
-                disabled 
-                className="bg-gray-200 border-none rounded-md p-2 w-full mt-1" 
-              />
-            </div>
-            <div className="mb-2">
-              <strong>Email:</strong>
-              <input
-                type="email"
-                value={selectedUser.email}
-                disabled
-                className="bg-gray-200 border rounded-md p-2 w-full mt-1"
-              />
-            </div>
-            <div className="mb-2">
-              <strong>Role:</strong>
-              <input
-                type="text"
-                value={selectedUser.role}
-                disabled
-                className="bg-gray-200 border rounded-md p-2 w-full mt-1"
-              />
-            </div>
-            <div className="mb-2">
-              <strong>Ativo:</strong>
-              <span className={selectedUser.active ? 'text-green-500' : 'text-red-500'}>
-                {selectedUser.active ? ' Sim' : ' Não'}
-              </span>
-            </div>
-            <div className="mb-2">
-              <strong>Data de Nascimento:</strong>
-              <input
-                type="text"
-                value={formatDate(selectedUser.birthDate || '')}
-                disabled
-                className="bg-gray-200 border rounded-md p-2 w-full mt-1"
-              />
-            </div>
-            <div className="mb-2">
-              <strong>Endereço:</strong>
-              <input
-                type="text"
-                value={selectedUser.address}
-                disabled
-                className="bg-gray-200 border rounded-md p-2 w-full mt-1"
-              />
-            </div>
-            <div className="mb-2">
-              <strong>Telefone:</strong>
-              <InputMask 
-                mask="(99) 99999-9999" 
-                value={selectedUser.phone || ''} 
-                disabled 
-                className="bg-gray-200 border-none rounded-md p-2 w-full mt-1" 
-              />
-            </div>
-            {selectedUser.studentCpfs && (
-              <div className="mb-2">
-                <strong>CPF do Estudante:</strong>
-                <InputMask 
-                  mask="999.999.999-99" 
-                  value={selectedUser.studentCpfs || ''} 
-                  disabled 
-                  className="bg-gray-200 border-none rounded-md p-2 w-full mt-1" 
+            <div className="grid grid-cols-1 gap-4 mb-6">
+              <div>
+                <strong className="block text-gray-600">Nome:</strong>
+                <div className="border rounded-md p-2 bg-gray-100 text-gray-800">
+                  {selectedUser.name}
+                </div>
+              </div>
+              <div>
+                <strong className="block text-gray-600">CPF:</strong>
+                <InputMask
+                  mask="999.999.999-99"
+                  value={selectedUser.cpf || ''}
+                  disabled
+                  className="border-none rounded-md p-2 w-full bg-gray-100 text-gray-800"
                 />
               </div>
-            )}
+              <div> 
+                <strong className="block text-gray-600">Email:</strong>
+                <div className="border rounded-md p-2 bg-gray-100 text-gray-800">
+                  {selectedUser.email}
+                </div>
+              </div>
+              <div>
+                <strong className="block text-gray-600">Role:</strong>
+                <div className="border rounded-md p-2 bg-gray-100 text-gray-800">
+                  {mapRoleToPortuguese(selectedUser.role || 'Não especificado')}
+                </div>
+              </div>
+              <div>
+                <strong className="block text-gray-600">Ativo:</strong>
+                <div className={selectedUser.active ? 'text-green-600' : 'text-red-600'}>
+                  {selectedUser.active ? 'Sim' : 'Não'}
+                </div>
+              </div>
+              <div>
+                <strong className="block text-gray-600">Data de Nascimento:</strong>
+                <div className="border rounded-md p-2 bg-gray-100 text-gray-800">
+                  {formatDate(selectedUser.birthDate || '')}
+                </div>
+              </div>
+              <div>
+                <strong className="block text-gray-600">Endereço:</strong>
+                <div className="border rounded-md p-2 bg-gray-100 text-gray-800">
+                  {selectedUser.address}
+                </div>
+              </div>
+              <div>
+                <strong className="block text-gray-600">Telefone:</strong>
+                <InputMask
+                  mask="(99) 99999-9999"
+                  value={selectedUser.phone || ''}
+                  disabled
+                  className="border-none rounded-md p-2 w-full bg-gray-100 text-gray-800"
+                />
+              </div>
+              {selectedUser.studentCpfs && (
+                <div>
+                  <strong className="block text-gray-600">CPF do Estudante:</strong>
+                  <InputMask
+                    mask="999.999.999-99"
+                    value={selectedUser.studentCpfs || ''}
+                    disabled
+                    className="border-none rounded-md p-2 w-full bg-gray-100 text-gray-800"
+                  />
+                </div>
+              )}
+            </div>
           </div>
         )}
-        <button onClick={onRequestClose} className="mt-4 bg-red-500 text-white rounded px-4 py-2">Fechar</button>
       </div>
     </Modal>
   );
