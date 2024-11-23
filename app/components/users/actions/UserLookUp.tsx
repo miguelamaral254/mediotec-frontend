@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { getAllUsers, getUserByCpf } from '@/app/services/userConsultService';
 import { User } from '@/app/interfaces/User';
-import { FaPencilAlt, FaEye } from 'react-icons/fa';
+import { FaPencilAlt, FaEye, FaSearch } from 'react-icons/fa';
 import { updateUser } from '@/app/services/updateUserService';
 import UserDetailModal from './UserDetailModal';
 import UserEditModal from './UserEditModal';
+import { cleanCpf, formatCpf } from '@/app/utils/formatCpf ';
 
 const UserLookUp = () => {
   const [cpf, setCpf] = useState('');
@@ -14,6 +15,7 @@ const UserLookUp = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [filter, setFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
 
@@ -34,7 +36,7 @@ const UserLookUp = () => {
   const handleCpfSearch = async () => {
     if (!cpf) return;
     try {
-      const user = await getUserByCpf(cpf.replace(/\D/g, ''));
+      const user = await getUserByCpf(cleanCpf(cpf));
       if (user) {
         setFilteredUsers([user]);
         setCurrentPage(1);
@@ -48,11 +50,19 @@ const UserLookUp = () => {
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toLowerCase();
+    setFilter(value);
     setFilteredUsers(
       allUsers.filter((user) =>
         user.name.toLowerCase().includes(value)
       )
     );
+    setCurrentPage(1);
+  };
+
+  const handleClearFilters = () => {
+    setCpf('');
+    setFilter('');
+    setFilteredUsers(allUsers);
     setCurrentPage(1);
   };
 
@@ -118,9 +128,9 @@ const UserLookUp = () => {
           />
           <button
             onClick={handleCpfSearch}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-          >
-            Buscar
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition flex items-center gap-2"
+            >
+           Buscar <FaSearch /> 
           </button>
         </div>
       </div>
@@ -130,10 +140,22 @@ const UserLookUp = () => {
         <input
           type="text"
           placeholder="Digite o nome..."
+          value={filter}
           onChange={handleFilterChange}
           className="block w-full mt-1 p-2 border border-gray-300 rounded-md"
         />
       </div>
+
+      {(cpf || filter) && (
+        <div className="mb-4 text-center">
+          <button
+            onClick={handleClearFilters}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+          >
+            Limpar Filtros
+          </button>
+        </div>
+      )}
 
       <div className="bg-white rounded-lg shadow">
         {filteredUsers.length === 0 ? (
@@ -151,12 +173,12 @@ const UserLookUp = () => {
               {paginateUsers().map((user) => (
                 <tr key={user.cpf}>
                   <td className="border px-4 py-2">{user.name}</td>
-                  <td className="border px-4 py-2">{user.cpf}</td>
+                  <td className="border px-4 py-2">{formatCpf(user.cpf)}</td>
                   <td className="border px-4 py-2">
-                  <div className="flex gap-2 flex-col justify-center items-center">
-                  <button
+                    <div className="flex gap-2 flex-col justify-center items-center">
+                      <button
                         onClick={() => openModal(user)}
-                        className="text-blue-600 border-2 text-lg border-blue-500 rounded p-2 flex  gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition w-36 h-12"
+                        className="text-blue-600 border-2 text-lg border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition w-36 h-12"
                       >
                         <FaEye /> Detalhes
                       </button>
