@@ -3,16 +3,19 @@ import { useAuth } from '@/app/context/AuthContext';
 import NotificationItem from './NotificationItem';
 import { notificationService } from '@/app/services/notificationService';
 import { Notification } from '@/app/interfaces/Notification';
+import { FaTimes } from 'react-icons/fa';
 
-const NotificationTab: React.FC<{ isMobile: boolean; onClose: () => void }> = ({ isMobile }) => {
+const NotificationTab: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
+  isOpen,
+  onClose,
+}) => {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [fetched, setFetched] = useState<boolean>(false);
 
   const fetchNotifications = async () => {
-    if (user && user.cpf && !fetched) {
+    if (user?.cpf) {
       setLoading(true);
       setError(null);
       try {
@@ -22,11 +25,10 @@ const NotificationTab: React.FC<{ isMobile: boolean; onClose: () => void }> = ({
         );
         setNotifications(sortedNotifications);
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setError('Erro ao buscar notificações.');
       } finally {
         setLoading(false);
-        setFetched(true);
       }
     }
   };
@@ -35,7 +37,9 @@ const NotificationTab: React.FC<{ isMobile: boolean; onClose: () => void }> = ({
     try {
       await notificationService.updateNotificationReadStatus({ id, read: true });
       setNotifications((prevNotifications) =>
-        prevNotifications.map((notification) => (notification.id === id ? { ...notification, read: true } : notification))
+        prevNotifications.map((notification) =>
+          notification.id === id ? { ...notification, read: true } : notification
+        )
       );
     } catch (error) {
       console.error('Erro ao atualizar status de notificação:', error);
@@ -48,22 +52,31 @@ const NotificationTab: React.FC<{ isMobile: boolean; onClose: () => void }> = ({
 
   return (
     <div
-      className={`${
-        isMobile
-          ? 'absolute top-0 right-0 border p-5 bg-gray-300 border-gray-200 w-80 h-96 rounded-md shadow-lg'
-          : 'z-10 fixed right-0 top-0 h-full bg-gray-100 border border-l-black w-full md:w-2/3 lg:w-96 p-4 z-60'
-      }`}
+      className={`fixed top-0 right-0 bg-white shadow-lg border-l border-gray-300 transition-transform duration-700 ease-in-out ${
+        isOpen ? 'translate-y-0' : '-translate-y-full'
+      } z-50`}
+      style={{
+        width: '320px',
+        maxWidth: '90vw',
+        maxHeight: '80vh',
+        overflowY: 'auto',
+      }}
     >
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Notificações</h2>
-       
+      <div className="flex justify-between items-center p-4 bg-gray-200 border-b">
+        <h2 className="text-xl font-bold text-gray-700">Notificações</h2>
+        <button
+          onClick={onClose}
+          className="text-gray-500 hover:text-gray-700 p-2 rounded-full transition"
+        >
+          <FaTimes size={20} />
+        </button>
       </div>
       {loading ? (
-        <p className="text-gray-600 mt-4">Carregando notificações...</p>
+        <p className="text-gray-500 mt-4 text-center">Carregando notificações...</p>
       ) : error ? (
-        <p className="text-red-600 mt-4">{error}</p>
+        <p className="text-red-500 mt-4 text-center">{error}</p>
       ) : (
-        <div className="mt-4 h-72 overflow-y-auto">
+        <div className="p-4">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
               <NotificationItem
@@ -73,7 +86,9 @@ const NotificationTab: React.FC<{ isMobile: boolean; onClose: () => void }> = ({
               />
             ))
           ) : (
-            <p className="text-gray-600">Nenhuma notificação.</p>
+            <div className="flex items-center justify-center h-full text-gray-500">
+              <p>Nenhuma notificação.</p>
+            </div>
           )}
         </div>
       )}

@@ -57,17 +57,16 @@ export default function Dashboard() {
           </div>
           <div className="fixed top-4 right-4 z-50">
             <button
-              className="flex flex-col justify-center items-center bg-[#4666af] text-white rounded-full h-10 w-10 shadow-md"
+              className="flex justify-center items-center bg-[#4666af] text-white rounded-full h-10 w-10 shadow-md"
               onClick={() => setShowNotifications(!showNotifications)}
             >
               {showNotifications ? <MdClose size={24} /> : <MdNotifications size={24} />}
             </button>
-            {showNotifications && (
-              <div className="absolute top-12 right-0 z-40 w-80 bg-gray-100 shadow-lg rounded-md">
-                <NotificationTab isMobile={true} onClose={() => setShowNotifications(false)} />
-              </div>
-            )}
           </div>
+          <NotificationTab
+            isOpen={showNotifications}
+            onClose={() => setShowNotifications(false)}
+          />
         </div>
       ) : (
         <p className="text-center">Nenhum dado encontrado para este usuário.</p>
