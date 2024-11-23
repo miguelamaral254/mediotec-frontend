@@ -7,17 +7,9 @@ import dashboardData from '@/app/utils/mocks/dashboardData.json';
 const AnalyticsDashboard = () => {
   const [activeTab, setActiveTab] = useState<'attendance' | 'performance'>('attendance');
 
-  const attendanceData = {
-    labels: dashboardData.attendance.labels,
-    data: dashboardData.attendance.data,
-    details: dashboardData.attendance.details,
-  };
-
-  // Converte o objeto de anos em um único array de desempenho
-  const studentPerformance = Object.entries(dashboardData.studentPerformance).map(([year, subjects]) => ({
-    year,
-    subjects,
-  }));
+  const attendanceData = dashboardData.attendance;
+  const studentPerformance = dashboardData.studentPerformance;
+  const performanceDetails = dashboardData.performanceDetails;
 
   return (
     <div className="p-6 bg-gray-100 w-full min-h-screen">
@@ -64,10 +56,14 @@ const AnalyticsDashboard = () => {
             <AttendanceChart attendanceData={attendanceData} />
           )}
           {activeTab === 'performance' &&
-            studentPerformance.map(({ year, subjects }) => (
+            Object.entries(studentPerformance).map(([year, subjects]) => (
               <div key={year} className="mb-4">
                 <h2 className="text-xl font-bold text-gray-800 mb-4">{year}</h2>
-                <PerformanceChart studentPerformance={subjects} />
+                <PerformanceChart
+                  studentPerformance={subjects}
+                  performanceDetails={performanceDetails}
+                  year={year}
+                />
               </div>
             ))}
         </div>

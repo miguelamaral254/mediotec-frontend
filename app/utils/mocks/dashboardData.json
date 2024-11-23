@@ -3,17 +3,29 @@
     "1º Ano": [
       { "subject": "Matemática", "average": 72, "passing": 85 },
       { "subject": "Português", "average": 68, "passing": 80 },
-      { "subject": "Ciências", "average": 74, "passing": 90 }
+      { "subject": "Ciências", "average": 74, "passing": 90 },
+      { "subject": "História", "average": 70, "passing": 75 },
+      { "subject": "Geografia", "average": 65, "passing": 70 },
+      { "subject": "Física", "average": 78, "passing": 88 },
+      { "subject": "Química", "average": 69, "passing": 82 }
     ],
     "2º Ano": [
       { "subject": "Matemática", "average": 75, "passing": 88 },
       { "subject": "Português", "average": 70, "passing": 82 },
-      { "subject": "Ciências", "average": 78, "passing": 85 }
+      { "subject": "Ciências", "average": 78, "passing": 85 },
+      { "subject": "História", "average": 72, "passing": 78 },
+      { "subject": "Geografia", "average": 68, "passing": 74 },
+      { "subject": "Física", "average": 80, "passing": 90 },
+      { "subject": "Química", "average": 72, "passing": 85 }
     ],
     "3º Ano": [
       { "subject": "Matemática", "average": 80, "passing": 90 },
       { "subject": "Português", "average": 75, "passing": 85 },
-      { "subject": "Ciências", "average": 82, "passing": 92 }
+      { "subject": "Ciências", "average": 82, "passing": 92 },
+      { "subject": "História", "average": 78, "passing": 84 },
+      { "subject": "Geografia", "average": 74, "passing": 80 },
+      { "subject": "Física", "average": 85, "passing": 93 },
+      { "subject": "Química", "average": 78, "passing": 88 }
     ]
   },
   "attendance": {
@@ -36,6 +48,46 @@
         { "turma": "3ºB", "porcentagem": 85 },
         { "turma": "3ºC", "porcentagem": 84 },
         { "turma": "3ºD", "porcentagem": 83 }
+      ]
+    }
+  },
+  "performanceDetails": {
+    "Matemática": {
+      "1º Ano": [
+        { "turma": "1ºA", "performance": 88, "average": 72, "passing": 85 },
+        { "turma": "1ºB", "performance": 85, "average": 72, "passing": 85 },
+        { "turma": "1ºC", "performance": 82, "average": 72, "passing": 85 },
+        { "turma": "1ºD", "performance": 80, "average": 72, "passing": 85 }
+      ],
+      "2º Ano": [
+        { "turma": "2ºA", "performance": 90, "average": 75, "passing": 88 },
+        { "turma": "2ºB", "performance": 88, "average": 75, "passing": 88 },
+        { "turma": "2ºC", "performance": 85, "average": 75, "passing": 88 }
+      ],
+      "3º Ano": [
+        { "turma": "3ºA", "performance": 93, "average": 80, "passing": 90 },
+        { "turma": "3ºB", "performance": 91, "average": 80, "passing": 90 },
+        { "turma": "3ºC", "performance": 89, "average": 80, "passing": 90 },
+        { "turma": "3ºD", "performance": 87, "average": 80, "passing": 90 }
+      ]
+    },
+    "Português": {
+      "1º Ano": [
+        { "turma": "1ºA", "performance": 82, "average": 68, "passing": 80 },
+        { "turma": "1ºB", "performance": 80, "average": 68, "passing": 80 },
+        { "turma": "1ºC", "performance": 78, "average": 68, "passing": 80 },
+        { "turma": "1ºD", "performance": 75, "average": 68, "passing": 80 }
+      ],
+      "2º Ano": [
+        { "turma": "2ºA", "performance": 85, "average": 70, "passing": 82 },
+        { "turma": "2ºB", "performance": 82, "average": 70, "passing": 82 },
+        { "turma": "2ºC", "performance": 80, "average": 70, "passing": 82 }
+      ],
+      "3º Ano": [
+        { "turma": "3ºA", "performance": 87, "average": 75, "passing": 85 },
+        { "turma": "3ºB", "performance": 85, "average": 75, "passing": 85 },
+        { "turma": "3ºC", "performance": 83, "average": 75, "passing": 85 },
+        { "turma": "3ºD", "performance": 80, "average": 75, "passing": 85 }
       ]
     }
   },
