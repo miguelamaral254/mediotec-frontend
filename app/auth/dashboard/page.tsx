@@ -52,11 +52,9 @@ export default function Dashboard() {
     <div className="min-h-screen w-full pl-20 flex flex-col bg-gray-100">
       {user ? (
         <>
-          <div className="flex justify-between items-center bg-[#4666AF] p-4 text-white">
+          <div className="flex justify-between items-center bg-[#0056A3] p-4 text-white shadow-lg">
             <h1 className="text-2xl font-bold">
-              {user.role === "ADMIN"
-                ? "Painel do Administrador"
-                : "Painel do Professor"}
+              {user.role === "ADMIN" ? "" : "Painel do Professor"}
             </h1>
             <button
               className="relative flex justify-center items-center bg-white text-[#4666AF] rounded-full h-10 w-10 shadow-md"
@@ -82,7 +80,7 @@ export default function Dashboard() {
               {user.role === "PROFESSOR" && <ProfessorSection />}
             </div>
           </div>
-  
+
           <NotificationTab
             isOpen={showNotifications}
             onClose={() => setShowNotifications(false)}

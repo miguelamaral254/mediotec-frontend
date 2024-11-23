@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
       {user && (
        <div
        ref={sidebarRef}
-       className={`fixed top-0 left-0 h-full w-[20rem] text-white bg-[#0056A3] shadow-xl z-40 flex flex-col justify-between transform transition-transform duration-300 ${
+       className={`fixed top-0 left-0 h-full w-[20rem] text-white bg-[#0056A3]  z-40 flex flex-col justify-between transform transition-transform duration-300 ${
          isSidebarOpen ? 'translate-x-0' : '-translate-x-[18rem]'
        }`}
        onMouseEnter={handleMouseEnter}

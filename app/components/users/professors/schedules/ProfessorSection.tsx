@@ -8,15 +8,19 @@ export const ProfessorSection = () => {
   const { user } = useAuth();
 
   return (
-    <div className="bg-gray-100 w-full min-h-screen p-8 text-gray-800">
-      <div className="max-w-full mx-auto">
-        <h2 className="text-3xl font-bold mb-6 text-gray-800">Painel do Professor</h2>
-        <p className="mb-8 text-gray-600">
-          Bem-vindo à área do professor! Fique por dentro das novidades.
-        </p>
+    <div className="bg-gray-100 w-full min-h-screen px-4 py-6 flex justify-center">
+      <div className="bg-white rounded-lg shadow-lg border border-gray-300 w-full max-w-6xl p-6">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-extrabold text-[#4666AF] mb-4">
+            Painel do Professor
+          </h2>
+          <p className="text-lg text-gray-600">
+            Bem-vindo! Aqui você pode acompanhar todas as informações e ferramentas necessárias para o seu dia a dia acadêmico.
+          </p>
+        </div>
 
-        <div className="w-full mb-12">
-          <div className="bg-white rounded-lg shadow-lg border border-gray-300 overflow-hidden">
+        <div className="mb-12">
+          <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
             <div className="bg-blue-500 text-white px-6 py-4 font-semibold text-lg">
               🚨 Avisos Importantes
             </div>
@@ -26,14 +30,16 @@ export const ProfessorSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-          <div className="bg-white rounded-lg shadow-lg border border-gray-300 overflow-hidden flex flex-col">
-            <div className="bg-gray-100 px-6 py-4 font-semibold text-lg flex items-center space-x-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden flex flex-col">
+            <div className="bg-blue-500 text-white px-6 py-4 font-semibold text-lg">
               <span>🕒</span>
               <span>Minhas Aulas</span>
             </div>
             <div className="p-6 flex-grow flex flex-col justify-between">
-              <p className="text-gray-600 mb-4">Confira sua grade de aulas.</p>
+              <p className="text-gray-600 mb-4">
+                Consulte sua agenda e horários das turmas.
+              </p>
               <Link href="/auth/dashboard/professor/schedules">
                 <button className="w-full border-2 border-blue-500 text-blue-500 rounded-lg py-2 hover:bg-blue-500 hover:text-white transition duration-300">
                   Ver turmas
@@ -42,30 +48,32 @@ export const ProfessorSection = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg border border-gray-300 overflow-hidden flex flex-col">
-            <div className="bg-gray-100 px-6 py-4 font-semibold text-lg flex items-center space-x-3">
+          <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden flex flex-col">
+            <div className="bg-blue-500 text-white px-6 py-4 font-semibold text-lg">
               <span>📚</span>
               <span>Conceitos dos Alunos</span>
             </div>
             <div className="p-6 flex-grow flex flex-col justify-between">
               <p className="text-gray-600 mb-4">
-                Acompanhe o desempenho dos alunos em suas disciplinas.
+                Acompanhe as notas e desempenho dos seus alunos.
               </p>
               <Link href="/auth/dashboard/professor/grades">
                 <button className="w-full border-2 border-blue-500 text-blue-500 rounded-lg py-2 hover:bg-blue-500 hover:text-white transition duration-300">
-                  Gerenciar conceitos
+                  Ver conceitos
                 </button>
               </Link>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg border border-gray-300 overflow-hidden flex flex-col">
-            <div className="bg-gray-100 px-6 py-4 font-semibold text-lg flex items-center space-x-3">
+          <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden flex flex-col">
+            <div className="bg-blue-500 text-white px-6 py-4 font-semibold text-lg">
               <span>📖</span>
               <span>Plano de Aula</span>
             </div>
             <div className="p-6 flex-grow flex flex-col justify-between">
-              <p className="text-gray-600 mb-4">Organize e visualize seus planos de aula.</p>
+              <p className="text-gray-600 mb-4">
+                Crie, edite e acompanhe seus planos de aula.
+              </p>
               <Link href="/auth/dashboard/professor/lesson-plans">
                 <button className="w-full border-2 border-blue-500 text-blue-500 rounded-lg py-2 hover:bg-blue-500 hover:text-white transition duration-300">
                   Ver planos
