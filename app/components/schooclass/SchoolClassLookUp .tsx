@@ -20,7 +20,7 @@ const SchoolClassLookUp = () => {
         const classes = await getAllClasses();
         setAllClasses(classes);
         setFilteredClasses(classes);
-      } catch (error) {
+        console.log('Dados das classes:', classes);      } catch (error) {
         console.error("Error fetching classes:", error);
       }
     };

@@ -52,14 +52,14 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
       setStudents(schoolClassData.students || []);
       setShift(schoolClassData.shift);
       setTechnicalCourse(schoolClassData.technicalCourse);
-      setYear(schoolClassData.year); // This line remains unchanged
+      setYear(schoolClassData.year); 
       setLetter(schoolClassData.letter);
     } catch (error) {
       console.error("Error fetching class data:", error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Unable to load class data. Please try again later.',
+        text: 'Não foi possível carregar os dados da turma. Tente novamente mais tarde.',
       });
     } finally {
       setLoading(false);
@@ -68,8 +68,8 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
 
   const handleUpdate = async () => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you want to save changes to this class?',
+      title: 'Tem certeza?',
+      text: 'Deseja salvar as alterações desta turma?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -86,7 +86,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
           students,
           shift,
           technicalCourse,
-          year, // This line remains unchanged
+          year, 
           letter,
         };
 
@@ -95,7 +95,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: 'Class updated successfully!',
+          text: 'Turma atualizada com sucesso!',
         });
         onUpdateClass(updatedSchoolClass);
         onRequestClose();
@@ -104,7 +104,7 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Failed to update class. Please try again.',
+          text: 'Não foi possível atualizar a turma. Tente novamente.',
         });
       } finally {
         setLoading(false);
@@ -119,14 +119,14 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
       Swal.fire({
         icon: 'success',
         title: 'Success',
-        text: 'Student removed from the class!',
+        text: 'Aluno removido da turma!',
       });
     } catch (error) {
       console.error('Error removing student:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Failed to remove student from class. Please try again.',
+        text: 'Não foi possível remover o aluno da turma. Tente novamente.',
       });
     }
   };
@@ -138,14 +138,14 @@ const SchoolClassEditModal: React.FC<SchoolClassEditModalProps> = ({
       Swal.fire({
         icon: 'success',
         title: 'Success',
-        text: 'Student added to the class!',
+        text: 'Aluno adicionado à turma!',
       });
     } catch (error) {
       console.error('Error adding student:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Failed to add student. Please try again.',
+        text: 'Não foi possível adicionar o aluno. Tente novamente.',
       });
     }
   };
