@@ -1,10 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/app/context/AuthContext';
-import NotificationItem from './NotificationItem';
 import { notificationService } from '@/app/services/notificationService';
 import { Notification } from '@/app/interfaces/Notification';
 import { FaTimes } from 'react-icons/fa';
+import NotificationItem from './NotificationItem';
 
 const NotificationTab: React.FC<{
   isOpen: boolean;
@@ -28,8 +27,8 @@ const NotificationTab: React.FC<{
         setNotifications(sortedNotifications);
         const unreadCount = sortedNotifications.filter((n: { read: unknown; }) => !n.read).length;
         setUnreadCount(unreadCount);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
+        console.log(err)
         setError('Erro ao buscar notificações.');
       } finally {
         setLoading(false);
@@ -56,31 +55,35 @@ const NotificationTab: React.FC<{
 
   return (
     <div
-      className={`fixed top-0 right-0 bg-white shadow-lg border-l border-gray-300 transition-transform duration-700 ease-in-out ${
-        isOpen ? 'translate-y-0' : '-translate-y-full'
-      } z-50`}
+      className={`fixed top-0 right-0 bg-white shadow-lg transition-transform duration-500 ease-in-out z-50 ${
+        isOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}
       style={{
-        width: '320px',
+        width: '400px',
+        height: '100vh',
         maxWidth: '90vw',
-        maxHeight: '80vh',
         overflowY: 'auto',
       }}
     >
-      <div className="flex justify-between items-center p-4 bg-gray-200 border-b">
-        <h2 className="text-xl font-bold text-gray-700">Notificações</h2>
+      <div className="bg-blue-500 text-white py-4 px-6 flex justify-between items-center">
+        <h2 className="text-lg font-bold">Notificações</h2>
         <button
           onClick={onClose}
-          className="text-gray-500 hover:text-gray-700 p-2 rounded-full transition"
+          className="text-white hover:text-gray-200 transition"
         >
           <FaTimes size={20} />
         </button>
       </div>
       {loading ? (
-        <p className="text-gray-500 mt-4 text-center">Carregando notificações...</p>
+        <div className="flex justify-center items-center h-full">
+          <p className="text-gray-500">Carregando notificações...</p>
+        </div>
       ) : error ? (
-        <p className="text-red-500 mt-4 text-center">{error}</p>
+        <div className="flex justify-center items-center h-full">
+          <p className="text-red-500">{error}</p>
+        </div>
       ) : (
-        <div className="p-4">
+        <div className="p-4 space-y-4">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
               <NotificationItem

@@ -2,8 +2,7 @@
 
 import React, { useState } from "react";
 import { Notification } from "@/app/interfaces/Notification";
-import { FiMail } from "react-icons/fi";
-import { TbMailOpened } from "react-icons/tb";
+import { FaEnvelope, FaEnvelopeOpen } from "react-icons/fa";
 import NotificationModal from "./NotificationModal";
 
 interface NotificationItemProps {
@@ -24,53 +23,41 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     setIsModalOpen(true);
   };
 
-  const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffInHours = Math.abs(now.getTime() - date.getTime()) / (1000 * 3600);
-
-    if (diffInHours < 24) {
-      return date.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
-    } else {
-      return date.toLocaleDateString("pt-BR");
-    }
-  };
-
   return (
     <>
       <div
-        className={`flex items-center border-b justify-between w-full p-4 hover:bg-gray-100 cursor-pointer ${
-          notification.read ? "text-gray-500" : "text-black"
-        } border border-gray-800 rounded-xl`}
+        className={`p-4 border rounded-lg flex items-center justify-between ${
+          notification.read ? "bg-gray-100" : "bg-blue-50"
+        } hover:bg-gray-200 transition cursor-pointer`}
         onClick={handleClick}
-        aria-expanded={isModalOpen}
         aria-label={`Notificação: ${notification.message}`}
       >
-        <div
-          className={`flex items-center justify-center w-10 h-10 rounded-full border ${
-            notification.read ? "border-gray-500" : "border-blue-500"
-          } bg-white`}
-        >
-          {notification.read ? (
-            <TbMailOpened className="text-gray-500" size={20} />
-          ) : (
-            <FiMail className="text-blue-500" size={20} />
-          )}
+        {/* Ícone de status */}
+        <div className="flex items-center">
+          <div className="mr-4 text-blue-500">
+            {notification.read ? (
+              <FaEnvelopeOpen size={20} />
+            ) : (
+              <FaEnvelope size={20} />
+            )}
+          </div>
+
+          {/* Informações da notificação */}
+          <div>
+            <p className="font-semibold text-gray-800">
+              {notification.header || "Sem título"}
+            </p>
+            <p className="text-sm text-gray-600">
+              {notification.message || "Sem mensagem disponível."}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              {new Date(notification.timestamp).toLocaleString("pt-BR")}
+            </p>
+          </div>
         </div>
-        <div className="ml-4 flex-grow">
-          <h2 className="font-bold">{notification.header}</h2>
-          <h3 className="font-semibold">
-            {notification.read ? "Mensagem aberta" : "Nova mensagem"}
-          </h3>
-        </div>
-        <span className="text-white p-3 bg-[#4666AF] rounded-2xl text-sm">
-          {formatTimestamp(notification.timestamp)}
-        </span>
       </div>
+
+      {/* Modal para detalhes da notificação */}
       {isModalOpen && (
         <NotificationModal
           notification={notification}

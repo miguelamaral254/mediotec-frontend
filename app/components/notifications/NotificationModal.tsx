@@ -17,11 +17,11 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   const modalContent = (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-start justify-center">
       <div className="bg-white w-full max-w-5xl mt-16 rounded-lg shadow-lg relative flex flex-col">
-        <div className="flex justify-between items-center p-4 border-b">
-          <h2 className="text-xl font-bold text-gray-800">{notification.header}</h2>
+        <div className="bg-blue-500 text-white p-4 flex justify-between items-center w-full">
+          <h2 className="text-xl font-bold">{notification.header}</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 p-2 rounded-full transition"
+            className="text-white hover:text-gray-200 p-2 rounded-full transition"
           >
             <FaTimes size={20} />
           </button>
@@ -29,10 +29,10 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 
         <div className="p-4 bg-gray-50 border-b">
           <p className="text-sm text-gray-600">
-            <strong>Coordenação@Mediotec</strong>{" "} <span>&lt;Coordenacao@edu.pe.mediotec.br&gt;</span>
+            <strong>Coordenação@Mediotec</strong>{" "}
+            <span>&lt;Coordenacao@edu.pe.mediotec.br&gt;</span>
             <p>Para mim:</p>
-            </p>
-           
+          </p>
         </div>
 
         <div className="flex-grow p-6 overflow-y-auto">

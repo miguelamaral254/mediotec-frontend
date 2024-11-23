@@ -54,7 +54,7 @@ export default function Dashboard() {
         <>
           <div className="flex justify-between items-center bg-[#0056A3] p-4 text-white shadow-lg">
             <h1 className="text-2xl font-bold">
-              {user.role === "ADMIN" ? "" : "Painel do Professor"}
+              
             </h1>
             <button
               className="relative flex justify-center items-center bg-white text-[#4666AF] rounded-full h-10 w-10 shadow-md"
