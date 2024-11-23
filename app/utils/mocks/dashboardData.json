@@ -51,46 +51,142 @@
       ]
     }
   },
-  "performanceDetails": {
-    "Matemática": {
-      "1º Ano": [
-        { "turma": "1ºA", "performance": 88, "average": 72, "passing": 85 },
-        { "turma": "1ºB", "performance": 85, "average": 72, "passing": 85 },
-        { "turma": "1ºC", "performance": 82, "average": 72, "passing": 85 },
-        { "turma": "1ºD", "performance": 80, "average": 72, "passing": 85 }
-      ],
-      "2º Ano": [
-        { "turma": "2ºA", "performance": 90, "average": 75, "passing": 88 },
-        { "turma": "2ºB", "performance": 88, "average": 75, "passing": 88 },
-        { "turma": "2ºC", "performance": 85, "average": 75, "passing": 88 }
-      ],
-      "3º Ano": [
-        { "turma": "3ºA", "performance": 93, "average": 80, "passing": 90 },
-        { "turma": "3ºB", "performance": 91, "average": 80, "passing": 90 },
-        { "turma": "3ºC", "performance": 89, "average": 80, "passing": 90 },
-        { "turma": "3ºD", "performance": 87, "average": 80, "passing": 90 }
-      ]
-    },
-    "Português": {
-      "1º Ano": [
-        { "turma": "1ºA", "performance": 82, "average": 68, "passing": 80 },
-        { "turma": "1ºB", "performance": 80, "average": 68, "passing": 80 },
-        { "turma": "1ºC", "performance": 78, "average": 68, "passing": 80 },
-        { "turma": "1ºD", "performance": 75, "average": 68, "passing": 80 }
-      ],
-      "2º Ano": [
-        { "turma": "2ºA", "performance": 85, "average": 70, "passing": 82 },
-        { "turma": "2ºB", "performance": 82, "average": 70, "passing": 82 },
-        { "turma": "2ºC", "performance": 80, "average": 70, "passing": 82 }
-      ],
-      "3º Ano": [
-        { "turma": "3ºA", "performance": 87, "average": 75, "passing": 85 },
-        { "turma": "3ºB", "performance": 85, "average": 75, "passing": 85 },
-        { "turma": "3ºC", "performance": 83, "average": 75, "passing": 85 },
-        { "turma": "3ºD", "performance": 80, "average": 75, "passing": 85 }
-      ]
-    }
-  },
-  "dropoutRate": 4.5,
+  
+    "performanceDetails": {
+      "Matemática": {
+        "1º Ano": [
+          { "turma": "1ºA", "performance": 88, "average": 72, "passing": 85 },
+          { "turma": "1ºB", "performance": 85, "average": 72, "passing": 85 },
+          { "turma": "1ºC", "performance": 82, "average": 72, "passing": 85 },
+          { "turma": "1ºD", "performance": 80, "average": 72, "passing": 85 }
+        ],
+        "2º Ano": [
+          { "turma": "2ºA", "performance": 90, "average": 75, "passing": 88 },
+          { "turma": "2ºB", "performance": 88, "average": 75, "passing": 88 },
+          { "turma": "2ºC", "performance": 85, "average": 75, "passing": 88 }
+        ],
+        "3º Ano": [
+          { "turma": "3ºA", "performance": 93, "average": 80, "passing": 90 },
+          { "turma": "3ºB", "performance": 91, "average": 80, "passing": 90 },
+          { "turma": "3ºC", "performance": 89, "average": 80, "passing": 90 },
+          { "turma": "3ºD", "performance": 87, "average": 80, "passing": 90 }
+        ]
+      },
+      "Português": {
+        "1º Ano": [
+          { "turma": "1ºA", "performance": 82, "average": 68, "passing": 80 },
+          { "turma": "1ºB", "performance": 80, "average": 68, "passing": 80 },
+          { "turma": "1ºC", "performance": 78, "average": 68, "passing": 80 },
+          { "turma": "1ºD", "performance": 75, "average": 68, "passing": 80 }
+        ],
+        "2º Ano": [
+          { "turma": "2ºA", "performance": 85, "average": 70, "passing": 82 },
+          { "turma": "2ºB", "performance": 82, "average": 70, "passing": 82 },
+          { "turma": "2ºC", "performance": 80, "average": 70, "passing": 82 }
+        ],
+        "3º Ano": [
+          { "turma": "3ºA", "performance": 87, "average": 75, "passing": 85 },
+          { "turma": "3ºB", "performance": 85, "average": 75, "passing": 85 },
+          { "turma": "3ºC", "performance": 83, "average": 75, "passing": 85 },
+          { "turma": "3ºD", "performance": 80, "average": 75, "passing": 85 }
+        ]
+      },
+      "Ciências": {
+        "1º Ano": [
+          { "turma": "1ºA", "performance": 90, "average": 74, "passing": 90 },
+          { "turma": "1ºB", "performance": 88, "average": 74, "passing": 90 },
+          { "turma": "1ºC", "performance": 86, "average": 74, "passing": 90 },
+          { "turma": "1ºD", "performance": 84, "average": 74, "passing": 90 }
+        ],
+        "2º Ano": [
+          { "turma": "2ºA", "performance": 92, "average": 78, "passing": 85 },
+          { "turma": "2ºB", "performance": 90, "average": 78, "passing": 85 },
+          { "turma": "2ºC", "performance": 88, "average": 78, "passing": 85 }
+        ],
+        "3º Ano": [
+          { "turma": "3ºA", "performance": 95, "average": 82, "passing": 92 },
+          { "turma": "3ºB", "performance": 93, "average": 82, "passing": 92 },
+          { "turma": "3ºC", "performance": 90, "average": 82, "passing": 92 },
+          { "turma": "3ºD", "performance": 88, "average": 82, "passing": 92 }
+        ]
+      },
+      "História": {
+        "1º Ano": [
+          { "turma": "1ºA", "performance": 75, "average": 70, "passing": 75 },
+          { "turma": "1ºB", "performance": 73, "average": 70, "passing": 75 },
+          { "turma": "1ºC", "performance": 70, "average": 70, "passing": 75 },
+          { "turma": "1ºD", "performance": 68, "average": 70, "passing": 75 }
+        ],
+        "2º Ano": [
+          { "turma": "2ºA", "performance": 78, "average": 72, "passing": 78 },
+          { "turma": "2ºB", "performance": 76, "average": 72, "passing": 78 },
+          { "turma": "2ºC", "performance": 74, "average": 72, "passing": 78 }
+        ],
+        "3º Ano": [
+          { "turma": "3ºA", "performance": 84, "average": 78, "passing": 84 },
+          { "turma": "3ºB", "performance": 82, "average": 78, "passing": 84 },
+          { "turma": "3ºC", "performance": 80, "average": 78, "passing": 84 },
+          { "turma": "3ºD", "performance": 78, "average": 78, "passing": 84 }
+        ]
+      },
+      "Geografia": {
+        "1º Ano": [
+          { "turma": "1ºA", "performance": 70, "average": 65, "passing": 70 },
+          { "turma": "1ºB", "performance": 68, "average": 65, "passing": 70 },
+          { "turma": "1ºC", "performance": 65, "average": 65, "passing": 70 },
+          { "turma": "1ºD", "performance": 62, "average": 65, "passing": 70 }
+        ],
+        "2º Ano": [
+          { "turma": "2ºA", "performance": 74, "average": 68, "passing": 74 },
+          { "turma": "2ºB", "performance": 72, "average": 68, "passing": 74 },
+          { "turma": "2ºC", "performance": 70, "average": 68, "passing": 74 }
+        ],
+        "3º Ano": [
+          { "turma": "3ºA", "performance": 80, "average": 74, "passing": 80 },
+          { "turma": "3ºB", "performance": 78, "average": 74, "passing": 80 },
+          { "turma": "3ºC", "performance": 76, "average": 74, "passing": 80 },
+          { "turma": "3ºD", "performance": 74, "average": 74, "passing": 80 }
+        ]
+      },
+        "Física": {
+          "1º Ano": [
+            { "turma": "1ºA", "performance": 88, "average": 78, "passing": 88 },
+            { "turma": "1ºB", "performance": 85, "average": 78, "passing": 88 },
+            { "turma": "1ºC", "performance": 83, "average": 78, "passing": 88 },
+            { "turma": "1ºD", "performance": 81, "average": 78, "passing": 88 }
+          ],
+          "2º Ano": [
+            { "turma": "2ºA", "performance": 90, "average": 80, "passing": 90 },
+            { "turma": "2ºB", "performance": 88, "average": 80, "passing": 90 },
+            { "turma": "2ºC", "performance": 86, "average": 80, "passing": 90 }
+          ],
+          "3º Ano": [
+            { "turma": "3ºA", "performance": 93, "average": 85, "passing": 93 },
+            { "turma": "3ºB", "performance": 91, "average": 85, "passing": 93 },
+            { "turma": "3ºC", "performance": 89, "average": 85, "passing": 93 },
+            { "turma": "3ºD", "performance": 87, "average": 85, "passing": 93 }
+          ]
+        },
+        "Química": {
+          "1º Ano": [
+            { "turma": "1ºA", "performance": 82, "average": 69, "passing": 82 },
+            { "turma": "1ºB", "performance": 80, "average": 69, "passing": 82 },
+            { "turma": "1ºC", "performance": 78, "average": 69, "passing": 82 },
+            { "turma": "1ºD", "performance": 76, "average": 69, "passing": 82 }
+          ],
+          "2º Ano": [
+            { "turma": "2ºA", "performance": 85, "average": 72, "passing": 85 },
+            { "turma": "2ºB", "performance": 83, "average": 72, "passing": 85 },
+            { "turma": "2ºC", "performance": 80, "average": 72, "passing": 85 }
+          ],
+          "3º Ano": [
+            { "turma": "3ºA", "performance": 88, "average": 78, "passing": 88 },
+            { "turma": "3ºB", "performance": 86, "average": 78, "passing": 88 },
+            { "turma": "3ºC", "performance": 84, "average": 78, "passing": 88 },
+            { "turma": "3ºD", "performance": 82, "average": 78, "passing": 88 }
+          ]
+        }
+      },
+   "dropoutRate": 4.5,
   "teacherSatisfaction": 88
 }
