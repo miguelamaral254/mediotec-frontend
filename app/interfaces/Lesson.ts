@@ -38,5 +38,5 @@ export interface Lesson {
   startTime: Schedule; 
   endTime: Schedule;   
   room: string;
-  createdAt: Date;
+  createdAt?: Date;
 }
