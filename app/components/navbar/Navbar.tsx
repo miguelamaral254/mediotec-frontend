@@ -52,7 +52,6 @@ const Navbar: React.FC = () => {
     }, 200);
   };
 
-  // Função para abrir a navbar ao tocar em dispositivos móveis
   const handleTouch = () => {
     setIsSidebarOpen(true);
     setIsNavbarOpen(true);
@@ -61,59 +60,85 @@ const Navbar: React.FC = () => {
   return (
     <>
       {user && (
-        <div
-          ref={sidebarRef}
-          className={`fixed top-0 left-0 h-full w-[20rem] text-white bg-[#1D1D1D] shadow-xl z-40 flex flex-col justify-between transform transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[18rem]'}`}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div>
-            <div className="flex justify-center mt-12 mb-8">
-              <Image
-                src={avatar}
-                alt="Imagem Circular"
-                width={100}
-                height={100}
-                className="rounded-full bg-white"
-              />
-            </div>
-            <NavbarHeader isNavbarOpen={isNavbarOpen} />
-            <nav className="flex flex-col gap-1 p-2 text-xl font-semibold text-white">
-              <Link href="/auth/dashboard" className="flex items-center p-3 rounded-lg hover:bg-[#4666AF]">
-                <FaHome className="mr-2" />
-                Home
-              </Link>
-              {user.role === 'ADMIN' && <AdminLinks isNavbarOpen={isNavbarOpen} />}
-              {user.role === 'PROFESSOR' && <ProfessorLinks isNavbarOpen={isNavbarOpen} />}
-            </nav>
-          </div>
-          <div className="flex flex-col gap-2 p-4">
-            <Link href="/auth/dashboard/settings" className="flex text-xl font-semibold items-center p-3 rounded-lg hover:bg-[#4666AF]">
-              <FaCog className="mr-2" />
-              Configurações
-            </Link>
-            <button onClick={handleLogout} className="flex items-center text-xl font-semibold p-3 rounded-lg hover:bg-[#4666AF]">
-              <FaSignOutAlt className="mr-2" />
-              Sair
-            </button>
-          </div>
-        </div>
-      )}
+       <div
+       ref={sidebarRef}
+       className={`fixed top-0 left-0 h-full w-[20rem] text-white bg-[#0056A3] shadow-xl z-40 flex flex-col justify-between transform transition-transform duration-300 ${
+         isSidebarOpen ? 'translate-x-0' : '-translate-x-[18rem]'
+       }`}
+       onMouseEnter={handleMouseEnter}
+       onMouseLeave={handleMouseLeave}
+     >
+       <div className="flex-grow">
+         <div className="flex justify-center mt-12 mb-8">
+           <Image
+             src={avatar}
+             alt="Imagem Circular"
+             width={100}
+             height={100}
+             className="rounded-full bg-white"
+           />
+         </div>
+         <NavbarHeader isNavbarOpen={isNavbarOpen} />
+         <nav className="flex flex-col gap-1 p-2 text-xl font-semibold text-white w-full">
+           <Link
+             href="/auth/dashboard"
+             className="flex items-center w-full p-3 rounded-lg hover:bg-[#0B66C3] transition"
+           >
+             <FaHome className="mr-2" />
+             Home
+           </Link>
+           {user.role === 'ADMIN' && (
+             <div className="w-full">
+               <AdminLinks isNavbarOpen={isNavbarOpen} />
+             </div>
+           )}
+           {user.role === 'PROFESSOR' && (
+             <div className="w-full">
+               <ProfessorLinks isNavbarOpen={isNavbarOpen} />
+             </div>
+           )}
+         </nav>
+       </div>
+       <div className="flex flex-col gap-2 p-4">
+         <Link
+           href="/auth/dashboard/settings"
+           className="flex text-xl font-semibold items-center w-full p-3 rounded-lg hover:bg-[#0B66C3] transition"
+         >
+           <FaCog className="mr-2" />
+           Configurações
+         </Link>
+         <button
+           onClick={handleLogout}
+           className="flex items-center text-xl font-semibold w-full p-3 rounded-lg hover:bg-[#0B66C3] transition"
+         >
+           <FaSignOutAlt className="mr-2" />
+           Sair
+         </button>
+       </div>
+     </div>      )}
 
-      {/* Ícones visíveis quando a sidebar está fechada */}
       {!isSidebarOpen && user && (
-        <div 
-          className="fixed left-0 top-0 h-full w-20 flex flex-col items-center justify-center space-y-4 bg-[#1D1D1D] shadow-xl z-30" 
-          onMouseEnter={handleMouseEnter} // Adicionado para abrir a navbar ao passar o mouse
-          onClick={handleTouch} // Adicionado para abrir a navbar ao tocar
+        <div
+          className="fixed left-0 top-0 h-full w-20 flex flex-col items-center justify-center space-y-4 bg-[#0056A3] shadow-xl z-30"
+          onMouseEnter={handleMouseEnter}
+          onClick={handleTouch}
         >
-          <Link href="/auth/dashboard" className="text-white hover:bg-[#4666AF] p-2 rounded">
+          <Link
+            href="/auth/dashboard"
+            className="text-white hover:bg-[#0B66C3] p-2 rounded transition"
+          >
             <FaHome />
           </Link>
-          <Link href="/auth/dashboard/settings" className="text-white hover:bg-[#4666AF] p-2 rounded">
+          <Link
+            href="/auth/dashboard/settings"
+            className="text-white hover:bg-[#0B66C3] p-2 rounded transition"
+          >
             <FaCog />
           </Link>
-          <button onClick={handleLogout} className="text-white hover:bg-[#4666AF] p-2 rounded">
+          <button
+            onClick={handleLogout}
+            className="text-white hover:bg-[#0B66C3] p-2 rounded transition"
+          >
             <FaSignOutAlt />
           </button>
         </div>
