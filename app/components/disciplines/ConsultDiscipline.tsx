@@ -89,7 +89,7 @@ const ConsultDiscipline = () => {
   };
 
   return (
-    <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
+    <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-4xl mx-auto mt-10">
       <h2 className="text-2xl mb-4 text-center font-bold text-gray-700">Consultar Disciplinas</h2>
 
       <input
@@ -105,28 +105,37 @@ const ConsultDiscipline = () => {
         {filteredDisciplines.length === 0 ? (
           <p className="p-4 text-gray-500">Nenhuma disciplina encontrada.</p>
         ) : (
-          paginateDisciplines().map((discipline) => (
-            <div
-              key={discipline.id}
-              className="p-4 border-b last:border-b-0 flex justify-between font-semibold text-[1.3rem] items-center"
-            >
-              <span>{discipline.name}</span>
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => openDetailModal(discipline)}
-                  className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition"
-                >
-                  <FaEye /> Ver Detalhes
-                </button>
-                <button
-                  onClick={() => openEditModal(discipline)}
-                  className="text-[#DC3181] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition"
-                >
-                  <FaEdit /> Editar
-                </button>
-              </div>
-            </div>
-          ))
+          <table className="table-auto w-full text-center">
+            <thead>
+              <tr>
+                <th className="border px-4 py-2">Nome</th>
+                <th className="border px-4 py-2">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginateDisciplines().map((discipline) => (
+                <tr key={discipline.id}>
+                  <td className="border px-4 py-2">{discipline.name}</td>
+                  <td className="border px-4 py-2">
+                  <div className="flex gap-2 flex-col justify-center items-center">
+                  <button
+                        onClick={() => openDetailModal(discipline)}
+                        className="text-blue-600 border-2 text-lg border-blue-500 rounded p-2 flex  gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition w-36 h-12"
+                      >
+                        <FaEye /> Detalhes
+                      </button>
+                      <button
+                        onClick={() => openEditModal(discipline)}
+                        className="text-[#DC3181] text-lg flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition w-36 h-12"
+                      >
+                        <FaEdit /> Editar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
 

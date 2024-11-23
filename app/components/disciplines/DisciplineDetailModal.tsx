@@ -1,53 +1,67 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { Discipline } from '../../interfaces/Discipline'; // Importe a interface Discipline
+import { Discipline } from '../../interfaces/Discipline';
 
-// Definindo o estilo do modal
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    transform: 'translate(-50%, -50%)',
-    width: '80%', // Largura do modal
-    maxWidth: '500px', // Largura máxima do modal
-  },
-};
-
-// Define o modal de detalhes da disciplina
-const DisciplineDetailModal = ({ isOpen, onRequestClose, selectedDiscipline }: { 
-  isOpen: boolean; 
-  onRequestClose: () => void; 
-  selectedDiscipline: Discipline | null; 
+const DisciplineDetailModal = ({
+  isOpen,
+  onRequestClose,
+  selectedDiscipline,
+}: {
+  isOpen: boolean;
+  onRequestClose: () => void;
+  selectedDiscipline: Discipline | null;
 }) => {
-  if (!selectedDiscipline) return null; // Retorna null se não houver disciplina selecionada
+  if (!selectedDiscipline) return null;
 
   return (
-    <Modal 
-      isOpen={isOpen} 
-      onRequestClose={onRequestClose} 
-      style={customStyles} 
-      ariaHideApp={false} // Desabilitar acessibilidade para evitar erros no modo de desenvolvimento
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      ariaHideApp={false}
+      style={{
+        content: {
+          width: '90%',
+          maxWidth: '500px',
+          height: 'auto',
+          maxHeight: '70%', // Limita a altura do modal
+          overflowY: 'auto', // Permite rolagem caso necessário
+          margin: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+      }}
     >
-      <h2 className="text-2xl font-semibold mb-4">Detalhes da Disciplina</h2>
-      <div>
-        <p>
-          <strong>Nome:</strong> {selectedDiscipline.name}
-        </p>
-        <p>
-          <strong>Carga Horária:</strong> {selectedDiscipline.workload}
-        </p>
-        <p>
-          <strong>Descrição:</strong> {selectedDiscipline.description}
-        </p>
-      </div>
       <button
         onClick={onRequestClose}
-        className="mt-4 bg-gray-500 hover:bg-gray-600 text-white p-2 rounded-md"
+        className="absolute top-4 right-4 bg-red-500 text-white rounded-md w-8 h-8 flex items-center justify-center hover:bg-red-600 transition"
       >
-        Fechar
+        ✕
       </button>
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+        Detalhes da Disciplina
+      </h2>
+      <div className="grid grid-cols-1 gap-4 w-full">
+        <div>
+          <strong className="block text-gray-600">Nome:</strong>
+          <div className="border rounded-md p-2 bg-gray-100 text-gray-800">
+            {selectedDiscipline.name}
+          </div>
+        </div>
+        <div>
+          <strong className="block text-gray-600">Carga Horária:</strong>
+          <div className="border rounded-md p-2 bg-gray-100 text-gray-800">
+            {selectedDiscipline.workload}
+          </div>
+        </div>
+        <div>
+          <strong className="block text-gray-600">Descrição:</strong>
+          <div className="border rounded-md p-2 bg-gray-100 text-gray-800">
+            {selectedDiscipline.description || 'Não especificado'}
+          </div>
+        </div>
+      </div>
     </Modal>
   );
 };

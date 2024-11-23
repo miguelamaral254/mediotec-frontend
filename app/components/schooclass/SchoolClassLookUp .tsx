@@ -119,7 +119,7 @@ const SchoolClassLookUp = () => {
   };
 
   return (
-    <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-lg mx-auto mt-10">
+    <div className="bg-gray-200 rounded-lg p-6 shadow-md max-w-4xl mx-auto mt-10">
       <h2 className="text-2xl font-semibold mb-4 text-center text-gray-700">
         Consultar Classes
       </h2>
@@ -159,32 +159,43 @@ const SchoolClassLookUp = () => {
         {filteredClasses.length === 0 ? (
           <p className="p-4 text-gray-500">Nenhuma classe encontrada.</p>
         ) : (
-          paginateClasses().map((schoolClass) => (
-            <div
-              key={schoolClass.id}
-              className="p-4 border-b text-xl last:border-b-0 flex justify-between items-center"
-            >
-              <span>{schoolClass.code}</span>
-              <div className="flex gap-2">
-                <h4>{translateEnum(schoolClass.year, "year")}</h4>
-                <h4>{schoolClass.letter}</h4>
-              </div>
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => openDetailModal(schoolClass)}
-                  className="text-blue-600 border-2 border-blue-500 rounded p-2 flex gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition"
-                >
-                  <FaEye /> Ver Detalhes
-                </button>
-                <button
-                  onClick={() => openEditModal(schoolClass)}
-                  className="text-[#DC3181] flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition"
-                >
-                  <FaEdit /> Editar
-                </button>
-              </div>
-            </div>
-          ))
+          <table className="table-auto w-full text-center">
+            <thead>
+              <tr>
+                <th className="border px-4 py-2">Código</th>
+                <th className="border px-4 py-2">Grau</th>
+                <th className="border px-4 py-2">Turma</th>
+                <th className="border px-4 py-2">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginateClasses().map((schoolClass) => (
+                <tr key={schoolClass.id}>
+                  <td className="border px-4 py-2">{schoolClass.code}</td>
+                  <td className="border px-4 py-2">
+                    {translateEnum(schoolClass.year, "year")}
+                  </td>
+                  <td className="border px-4 py-2">{schoolClass.letter}</td>
+                  <td className="border px-4 py-2">
+                    <div className="flex gap-2 flex-col justify-center items-center">
+                      <button
+                        onClick={() => openDetailModal(schoolClass)}
+                        className="text-blue-600 border-2 text-lg border-blue-500 rounded p-2 flex  gap-1 justify-center items-center hover:bg-[#4666AF] hover:text-white transition w-36 h-12"
+                      >
+                        <FaEye /> Detalhes
+                      </button>
+                      <button
+                        onClick={() => openEditModal(schoolClass)}
+                        className="text-[#DC3181] text-lg flex gap-1 border-2 border-purple-500 rounded justify-center items-center hover:bg-[#DC3181] hover:text-white transition w-36 h-12"
+                        >
+                        <FaEdit /> Editar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
 
