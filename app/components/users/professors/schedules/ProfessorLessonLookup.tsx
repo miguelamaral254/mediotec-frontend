@@ -39,19 +39,23 @@ const ProfessorLessonLookup = () => {
       fetchProfessors();
     } else if (user?.role === 'PROFESSOR') {
       setCpf(user.cpf);
-      fetchLessons(user.cpf); 
+      fetchLessons(user.cpf);
     }
   }, [user]);
 
-  // Fetch lessons when the professor's CPF changes
   const fetchLessons = async (selectedCpf: string) => {
     setError(null);
-    setLessons([]);  
-    setIsModalOpen(true); 
+    setLessons([]);
+    setIsModalOpen(true);
 
     try {
       const lessonsData = await getLessonsByProfessorCpf(selectedCpf);
-      setLessons(lessonsData);
+      const currentYear = new Date().getFullYear();
+      const filteredLessons = lessonsData.filter((lesson) => {
+        const lessonYear = new Date(lesson.createdAt).getFullYear();
+        return lessonYear === currentYear;
+      });
+      setLessons(filteredLessons);
     } catch (err) {
       console.error(err);
       setError('Erro ao buscar lições. Verifique o CPF e tente novamente.');
@@ -64,7 +68,7 @@ const ProfessorLessonLookup = () => {
   };
 
   useEffect(() => {
-    const filtered = professors.filter(prof =>
+    const filtered = professors.filter((prof) =>
       prof.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProfessors(filtered);
@@ -72,7 +76,7 @@ const ProfessorLessonLookup = () => {
 
   const handleSearch = (selectedCpf: string) => {
     setCpf(selectedCpf);
-    fetchLessons(selectedCpf); 
+    fetchLessons(selectedCpf);
   };
 
   const handleCloseModal = () => {
@@ -83,7 +87,6 @@ const ProfessorLessonLookup = () => {
     <div className="bg-white shadow-xl rounded-lg px-14 w-full ml-12 mr-12 py-32 mx-auto mt-10 p-10">
       <h2 className="text-4xl font-semibold mb-8 text-center text-gray-700">Grade de horário do Professor</h2>
       {user?.role === 'ADMIN' && (
-        
         <div className="mb-4 bg-gray-200 rounded-lg p-6">
           <label className="block text-xl mb-4 font-medium text-gray-700">Filtrar por Nome do Professor:</label>
           <input
@@ -111,14 +114,14 @@ const ProfessorLessonLookup = () => {
         <div className="mb-4">
           <Link href="/auth/dashboard" className="flex w-20 items-center p-3 bg-[#4666AF] rounded-lg hover:bg-blue-500">
             <FaHome className="mr-2" />
-              Home
+            Home
           </Link>
         </div>
       )}
 
       <LessonList lessons={lessons} isOpen={isModalOpen} onRequestClose={handleCloseModal} userRole={user?.role ?? ''} />
-      
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>} 
+
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
     </div>
   );
 };
