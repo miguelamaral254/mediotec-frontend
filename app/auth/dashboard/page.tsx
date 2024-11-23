@@ -1,28 +1,28 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/app/context/AuthContext';
-import { getUserData } from '@/app/services/authService';
-import { AdminSection } from '@/app/components/users/admin/AdminSection';
-import { ProfessorSection } from '@/app/components/users/professors/schedules/ProfessorSection';
-import NotificationTab from '@/app/components/notifications/NotificationTab';
-import { MdClose, MdNotifications } from 'react-icons/md';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
+import { getUserData } from "@/app/services/authService";
+import { AdminSection } from "@/app/components/users/admin/AdminSection";
+import { ProfessorSection } from "@/app/components/users/professors/schedules/ProfessorSection";
+import NotificationTab from "@/app/components/notifications/NotificationTab";
+import { MdClose, MdNotifications } from "react-icons/md";
 
 export default function Dashboard() {
   const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0); // Estado para notificações não lidas
+  const [unreadCount, setUnreadCount] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      const cpf = localStorage.getItem('cpf');
+      const token = localStorage.getItem("token");
+      const cpf = localStorage.getItem("cpf");
       if (!token || !cpf) {
-        router.push('/auth/login');
+        router.push("/auth/login");
         return;
       }
 
@@ -32,7 +32,7 @@ export default function Dashboard() {
         setLoading(false);
       } catch (err) {
         console.log(err);
-        setError('Erro ao carregar dados do usuário.');
+        setError("Erro ao carregar dados do usuário.");
         setLoading(false);
       }
     };
@@ -41,24 +41,25 @@ export default function Dashboard() {
   }, [router, setUser]);
 
   if (loading) {
-    return <div className="text-center text-lg">Carregando...</div>;
+    return <div className="text-center text-lg mt-20">Carregando...</div>;
   }
 
   if (error) {
-    return <div className="text-red-500 text-center">{error}</div>;
+    return <div className="text-red-500 text-center mt-20">{error}</div>;
   }
 
   return (
-    <div className="ml-20 justify-end min-h-screen flex flex-col">
+    <div className="min-h-screen w-full pl-20 flex flex-col bg-gray-100">
       {user ? (
-        <div className="flex flex-col lg:flex-row w-full flex-grow p-4">
-          <div className="w-full lg:w-3/4 p-4">
-            {user.role === 'ADMIN' && <AdminSection />}
-            {user.role === 'PROFESSOR' && <ProfessorSection />}
-          </div>
-          <div className="fixed top-4 right-4 z-50">
+        <>
+          <div className="flex justify-between items-center bg-[#4666AF] p-4 text-white">
+            <h1 className="text-2xl font-bold">
+              {user.role === "ADMIN"
+                ? "Painel do Administrador"
+                : "Painel do Professor"}
+            </h1>
             <button
-              className="relative flex justify-center items-center bg-[#4666af] text-white rounded-full h-10 w-10 shadow-md"
+              className="relative flex justify-center items-center bg-white text-[#4666AF] rounded-full h-10 w-10 shadow-md"
               onClick={() => setShowNotifications(!showNotifications)}
             >
               {showNotifications ? (
@@ -75,14 +76,23 @@ export default function Dashboard() {
               )}
             </button>
           </div>
+          <div className="flex justify-center items-center w-full flex-grow bg-gray-100">
+            <div className="w-full max-w-6xl">
+              {user.role === "ADMIN" && <AdminSection />}
+              {user.role === "PROFESSOR" && <ProfessorSection />}
+            </div>
+          </div>
+  
           <NotificationTab
             isOpen={showNotifications}
             onClose={() => setShowNotifications(false)}
             setUnreadCount={setUnreadCount}
           />
-        </div>
+        </>
       ) : (
-        <p className="text-center">Nenhum dado encontrado para este usuário.</p>
+        <p className="text-center mt-20">
+          Nenhum dado encontrado para este usuário.
+        </p>
       )}
     </div>
   );
