@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { notificationService } from "@/app/services/notificationService";
 import { Notification } from "@/app/interfaces/Notification";
 
@@ -9,7 +9,7 @@ const BulletinBoard: React.FC<{ cpf: string | undefined }> = ({ cpf }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     if (cpf) {
       setLoading(true);
       setError(null);
@@ -26,16 +26,16 @@ const BulletinBoard: React.FC<{ cpf: string | undefined }> = ({ cpf }) => {
         setLoading(false);
       }
     }
-  };
+  }, [cpf]); // `cpf` é a dependência necessária para garantir que a função seja atualizada quando `cpf` mudar.
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]); // `fetchNotifications` como dependência estabilizada pelo `useCallback`.
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString("pt-BR", options);
   };
-
-  useEffect(() => {
-    fetchNotifications();
-  }, [cpf]);
 
   if (loading) {
     return <p className="text-gray-600">Carregando avisos...</p>;
@@ -50,21 +50,23 @@ const BulletinBoard: React.FC<{ cpf: string | undefined }> = ({ cpf }) => {
   }
 
   return (
-    <div className="space-y-8 mx-auto w-full">
+    <ul className="divide-y divide-gray-200 bg-white rounded-lg shadow-md border border-gray-300">
       {notifications.map((notification) => (
-        <div
-          key={notification.id}
-          className="flex items-center justify-between p-8 bg-white border-l-6 border-blue-500 rounded-lg shadow-xl w-full"
-        >
-          <h3 className="text-2xl font-bold text-blue-700">
-            {notification.header || "Sem título"}
-          </h3>
-          <span className="text-lg text-gray-500">
+        <li key={notification.id} className="flex items-start p-4 hover:bg-gray-50">
+          <div className="flex-grow">
+            <h3 className="text-lg font-bold text-gray-800">
+              {notification.header || "Sem título"}
+            </h3>
+            <p className="text-gray-600 text-sm mt-1">
+              {notification.message || "Sem detalhes disponíveis."}
+            </p>
+          </div>
+          <div className="text-sm text-gray-500 whitespace-nowrap">
             {formatDate(notification.timestamp)}
-          </span>
-        </div>
+          </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };
 
