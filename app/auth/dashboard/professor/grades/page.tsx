@@ -1,15 +1,15 @@
 'use client';
 
 import ProfessorPage from "@/app/components/users/professors/grades/ProfessorPage";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const Grades = () => {
   const [cpf, setCpf] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedCpf = localStorage.getItem('cpf');
+    const storedCpf = localStorage.getItem("cpf");
     if (storedCpf) {
-      setCpf(storedCpf); 
+      setCpf(storedCpf);
     }
   }, []);
 

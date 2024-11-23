@@ -1,42 +1,48 @@
-import { useState } from 'react';
-import StudentsList from './StudentsList';
-
-import { LessonResponseDTO } from '@/app/interfaces/LessonResponseDTO';
+import { useState } from "react";
+import ManageStudentsModal from "./ManageStudentsModal";
+import { LessonResponseDTO } from "@/app/interfaces/LessonResponseDTO";
 
 interface LessonCardProps {
   lesson: LessonResponseDTO;
 }
 
 const LessonCard: React.FC<LessonCardProps> = ({ lesson }) => {
-  const [showStudents, setShowStudents] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleToggleStudents = () => {
-    setShowStudents(!showStudents);
+  const handleToggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
-  console.log('Dados da lição:', lesson);
-
   return (
-<div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow transitioncursor-pointer transform hover:-translate-y-1 transition-transform ease-in-out">
-  <h2 className="text-2xl font-bold text-gray-800 mb-2">{lesson.name}</h2>
-  <p className="text-gray-600">📚 <span className="font-medium">Disciplina:</span> {lesson.discipline.name}</p>
-  <p className="text-gray-600">🏫 <span className="font-medium">Turma:</span> {lesson.schoolClass.code}</p>
-  
-  <button
-    onClick={handleToggleStudents}
-    className="mt-4 text-[#4666AF] font-medium hover:text-[#2f4c91] transition-colors underline"
-  >
-    {showStudents ? 'Esconder Alunos' : 'Gerenciar Alunos'}
-  </button>
+    <>
+      <div className="bg-white rounded-lg shadow-lg border border-gray-300 overflow-hidden flex flex-col">
+        <div className="bg-gray-100 px-6 py-4 font-semibold text-lg flex items-center space-x-3">
+          <span>📚</span>
+          <span>{lesson.name}</span>
+        </div>
+        <div className="p-6 flex-grow flex flex-col justify-between">
+          <p className="text-gray-600 mb-2">
+            🏫 <span className="font-medium">Turma:</span> {lesson.schoolClass.code}
+          </p>
+          <p className="text-gray-600">
+            📘 <span className="font-medium">Disciplina:</span> {lesson.discipline.name}
+          </p>
+          <button
+            onClick={handleToggleModal}
+            className="mt-6 w-full border-2 border-blue-500 text-blue-500 rounded-lg py-2 hover:bg-blue-500 hover:text-white transition duration-300"
+          >
+            Gerenciar Alunos
+          </button>
+        </div>
+      </div>
 
-  {showStudents && (
-    <div className="mt-4">
-      <StudentsList schoolClassId={lesson.schoolClass.id} disciplineId={lesson.discipline.id} />
-    </div>
-  )}
-</div>
-
-
+      <ManageStudentsModal
+        isOpen={isModalOpen}
+        onClose={handleToggleModal}
+        schoolClassId={lesson.schoolClass.id}
+        disciplineId={lesson.discipline.id}
+      />
+    </>
   );
 };
 

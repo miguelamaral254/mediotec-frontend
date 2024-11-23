@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { getAssessmentsByStudentCpf } from '@/app/services/gradeService';
-import { ResponseGrade } from '@/app/interfaces/ResponseGrade';
-import { Concept, fromScore, calculateFinalAverageAndSituation } from '@/app/utils/concept';
-import AssignGradeToStudent from './AssignGradeToStudent'; 
+import React, { useEffect, useState } from "react";
+import { getAssessmentsByStudentCpf, createGrades } from "@/app/services/gradeService";
+import { ResponseGrade } from "@/app/interfaces/ResponseGrade";
+import { Concept, fromScore, calculateFinalAverageAndSituation } from "@/app/utils/concept";
+import Swal from "sweetalert2";
 
 interface StudentGradesModalProps {
-  studentCpf: string;  
-  disciplineId: number; 
-  onClose: () => void; 
+  studentCpf: string;
+  disciplineId: number;
+  onClose: () => void; // Usaremos onClose no botão de fechamento
 }
 
 const StudentGradesModal: React.FC<StudentGradesModalProps> = ({ studentCpf, disciplineId }) => {
   const [grades, setGrades] = useState<ResponseGrade[]>([]);
+  const [editedGrades, setEditedGrades] = useState<Map<string, number>>(new Map());
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [showAssignGradeModal, setShowAssignGradeModal] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchGrades = async () => {
@@ -22,8 +22,8 @@ const StudentGradesModal: React.FC<StudentGradesModalProps> = ({ studentCpf, dis
         const gradesData = await getAssessmentsByStudentCpf(studentCpf, disciplineId);
         setGrades(gradesData);
       } catch (error) {
-        setError('Erro ao buscar notas do aluno');
-        console.error('Erro ao buscar notas:', error);
+        setError("Erro ao buscar notas do aluno");
+        console.error("Erro ao buscar notas:", error);
       } finally {
         setLoading(false);
       }
@@ -32,93 +32,113 @@ const StudentGradesModal: React.FC<StudentGradesModalProps> = ({ studentCpf, dis
     fetchGrades();
   }, [studentCpf, disciplineId]);
 
-  const handleAssignGradeModalToggle = () => {
-    setShowAssignGradeModal(!showAssignGradeModal);
+  const handleGradeChange = (evaluationType: string, value: string) => {
+    const numericValue = value === "" ? 0 : Number(value);
+    setEditedGrades((prev) => new Map(prev).set(evaluationType, numericValue));
   };
 
-  if (loading) return <p>Carregando notas...</p>;
-  if (error) return <p>{error}</p>;
-  if (grades.length === 0) return <p>Nenhuma nota encontrada.
-    <AssignGradeToStudent studentCpf={studentCpf} disciplineId={disciplineId} />
-  </p>;
+  const handleSave = async () => {
+    const updates = Array.from(editedGrades.entries()).map(([evaluationType, evaluation]) => ({
+      studentCpf,
+      disciplineId,
+      evaluationType,
+      evaluation,
+      evaluationDate: new Date().toISOString(),
+    }));
+
+    try {
+      for (const update of updates) {
+        await createGrades(update);
+      }
+      Swal.fire("Sucesso", "Notas salvas com sucesso!", "success");
+      setEditedGrades(new Map()); // Clear edited grades after saving
+      const updatedGrades = await getAssessmentsByStudentCpf(studentCpf, disciplineId);
+      setGrades(updatedGrades);
+    } catch (error) {
+      console.error("Erro ao salvar notas:", error);
+      Swal.fire("Erro", "Houve um problema ao salvar as notas.", "error");
+    }
+  };
+
+  const handleClearChanges = () => {
+    setEditedGrades(new Map());
+  };
+
+  if (loading) return <p className="text-gray-600">Carregando notas...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   const { average, finalAverage, situation } = calculateFinalAverageAndSituation(grades);
-  
-  const av1 = grades.find((grade) => grade.evaluationType === 'AV1')?.evaluation;
-  const av2 = grades.find((grade) => grade.evaluationType === 'AV2')?.evaluation;
-  const av3 = grades.find((grade) => grade.evaluationType === 'AV3')?.evaluation;
-  const av4 = grades.find((grade) => grade.evaluationType === 'AV4')?.evaluation;
-  const recovery = grades.find((grade) => grade.evaluationType === 'RECOVERY')?.evaluation;
+
+  const renderEditableCell = (evaluationType: string, value?: number) => {
+    const isEdited = editedGrades.has(evaluationType);
+    return (
+      <input
+        type="number"
+        min="0"
+        max="10"
+        value={isEdited ? editedGrades.get(evaluationType) : value ?? ""}
+        onChange={(e) => handleGradeChange(evaluationType, e.target.value)}
+        className={`w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          isEdited ? "text-green-600 font-semibold" : "text-gray-900"
+        }`}
+      />
+    );
+  };
 
   return (
-    <div className="overflow-x-auto">
-      <h3 className="text-lg font-semibold mb-2">Notas do Aluno</h3>
-      <table className="table-auto w-full border-collapse border border-gray-200 mt-4">
-        <thead>
-          <tr className="bg-gray-100 text-left">
+    <div className="bg-white rounded-lg shadow-lg border border-gray-300 p-6 max-w-2xl mx-auto">
+      <h3 className="text-2xl font-semibold text-gray-800 mb-4">Notas do Aluno</h3>
+      <table className="w-full border-collapse border border-gray-200 text-left">
+        <thead className="bg-gray-100">
+          <tr>
             <th className="border border-gray-300 px-4 py-2">Tipo de Avaliação</th>
             <th className="border border-gray-300 px-4 py-2">Conceito</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">AV1</td>
-            <td className="border border-gray-300 px-4 py-2">{av1 !== undefined ? fromScore(Number(av1)) : ''}</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">AV2</td>
-            <td className="border border-gray-300 px-4 py-2">{av2 !== undefined ? fromScore(Number(av2)) : ''}</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">AV3</td>
-            <td className="border border-gray-300 px-4 py-2">{av3 !== undefined ? fromScore(Number(av3)) : ''}</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">AV4</td>
-            <td className="border border-gray-300 px-4 py-2">{av4 !== undefined ? fromScore(Number(av4)) : ''}</td>
-          </tr>
+          {["AV1", "AV2", "AV3", "AV4", "RECOVERY"].map((type) => (
+            <tr key={type}>
+              <td className="border border-gray-300 px-4 py-2">{type}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                {renderEditableCell(type, grades.find((g) => g.evaluationType === type)?.evaluation)}
+              </td>
+            </tr>
+          ))}
           <tr>
             <td className="border border-gray-300 px-4 py-2">Média</td>
-            <td className="border border-gray-300 px-4 py-2">{average !== null ? fromScore(average) : ''}</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Recuperação</td>
-            <td className="border border-gray-300 px-4 py-2">{recovery !== undefined ? fromScore(Number(recovery)) : ''}</td>
+            <td className="border border-gray-300 px-4 py-2">{average !== null ? fromScore(average) : "—"}</td>
           </tr>
           <tr>
             <td className="border border-gray-300 px-4 py-2">Média Final</td>
-            <td className="border border-gray-300 px-4 py-2">{finalAverage !== null ? fromScore(finalAverage) : ''}</td>
+            <td className="border border-gray-300 px-4 py-2">{finalAverage !== null ? fromScore(finalAverage) : "—"}</td>
           </tr>
           <tr>
             <td className="border border-gray-300 px-4 py-2">Situação</td>
-            <td className={`border border-gray-300 px-4 py-2 ${situation ? (situation === Concept.A ? 'text-green-600' : 'text-red-600') : ''}`}>
-              {situation !== null ? situation : ''}
+            <td
+              className={`border border-gray-300 px-4 py-2 ${
+                situation === Concept.A ? "text-green-600" : situation ? "text-red-600" : ""
+              }`}
+            >
+              {situation || "—"}
             </td>
           </tr>
         </tbody>
       </table>
-      <div className="mt-4 flex justify-between">
+      <div className="mt-6 flex justify-between">
+       
         <button
-          onClick={handleAssignGradeModalToggle}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={handleSave}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
         >
-          Atribuir Nota
+          Salvar Alterações
+        </button>
+        <button
+          onClick={handleClearChanges}
+          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+        >
+          Limpar 
         </button>
       </div>
-
-      {showAssignGradeModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 w-96">
-            <AssignGradeToStudent studentCpf={studentCpf} disciplineId={disciplineId} />
-            <button
-              onClick={handleAssignGradeModalToggle}
-              className="mt-4 px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
