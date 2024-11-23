@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { FiMail } from 'react-icons/fi';
-import NotificationForm from '../../notifications/NotificationForm';
-import AnalyticsDashboard from './AnalyticsDashboard';
+import React, { useState } from "react";
+import { FiMail } from "react-icons/fi";
+import NotificationForm from "../../notifications/NotificationForm";
+import AnalyticsDashboard from "./AnalyticsDashboard";
 
 export const AdminSection = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -19,17 +19,16 @@ export const AdminSection = () => {
         </div>
 
         <div
-          className={`fixed inset-y-0 left-0 z-40 w-96 bg-white shadow-lg transform transition-transform duration-500 ease-in-out ${
-            isDrawerOpen ? 'translate-x-0' : '-translate-x-full'
+          className={`fixed inset-y-0 right-0 z-40 w-96 bg-white shadow-lg transform transition-transform duration-500 ease-in-out ${
+            isDrawerOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           {isDrawerOpen && (
-            <div className="h-full">
+            <div className="h-full w-full">
               <NotificationForm setIsDrawerOpen={setIsDrawerOpen} />
             </div>
           )}
         </div>
-
         <div className="mb-8 text-center">
           <h2 className="text-4xl font-extrabold text-[#4666AF] mb-4">
             Painel do Administrador
