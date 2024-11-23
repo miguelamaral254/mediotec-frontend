@@ -36,17 +36,17 @@ export function calculateFinalAverageAndSituation(grades: ResponseGrade[]): { av
         const gradesAverage = total / 4;
         average = Number(gradesAverage.toFixed(2));
 
-        const recoveryScore = recovery !== undefined ? Number(recovery) : 0;
+        const recoveryScore = recovery !== undefined ? Number(recovery) : null;
 
-        if (gradesAverage > 7) {
-            finalAverage = gradesAverage;
+        if (gradesAverage >= 7 || (recoveryScore !== null && gradesAverage >= 5)) {
+            finalAverage = gradesAverage >= 7 ? gradesAverage : (gradesAverage + Number(recoveryScore)) / 2;
             situation = fromScore(finalAverage);
-        } else if (recoveryScore > 0) {
+        } else if (recoveryScore !== null) {
             finalAverage = (gradesAverage + recoveryScore) / 2;
             situation = fromScore(finalAverage);
         } else {
-            finalAverage = null;
-            situation = null;
+            finalAverage = gradesAverage;
+            situation = fromScore(finalAverage);
         }
     }
 

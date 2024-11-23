@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 interface StudentGradesModalProps {
   studentCpf: string;
   disciplineId: number;
-  onClose: () => void; // Usaremos onClose no botão de fechamento
 }
 
 const StudentGradesModal: React.FC<StudentGradesModalProps> = ({ studentCpf, disciplineId }) => {
@@ -51,7 +50,7 @@ const StudentGradesModal: React.FC<StudentGradesModalProps> = ({ studentCpf, dis
         await createGrades(update);
       }
       Swal.fire("Sucesso", "Notas salvas com sucesso!", "success");
-      setEditedGrades(new Map()); // Clear edited grades after saving
+      setEditedGrades(new Map());
       const updatedGrades = await getAssessmentsByStudentCpf(studentCpf, disciplineId);
       setGrades(updatedGrades);
     } catch (error) {
@@ -85,59 +84,82 @@ const StudentGradesModal: React.FC<StudentGradesModalProps> = ({ studentCpf, dis
     );
   };
 
+  const renderConceptCell = (evaluationType: string, value?: number) => {
+    const updatedValue = editedGrades.has(evaluationType)
+      ? editedGrades.get(evaluationType)
+      : value;
+    const concept = updatedValue !== undefined ? fromScore(updatedValue) : "—";
+    const textColor = updatedValue !== undefined && updatedValue >= 7 ? "text-green-600" : "text-red-600";
+
+    return <span className={`font-semibold ${textColor} text-center`}>{concept}</span>;
+  };
+
+  const renderSituationCell = (situation: string | null) => {
+    const isApproved = situation === Concept.A || situation === Concept.B;
+    const textColor = isApproved ? "text-green-600" : "text-red-600";
+    const statusText = isApproved ? "APROVADO" : "REPROVADO";
+
+    return <span className={`font-semibold ${textColor} text-center`}>{statusText}</span>;
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-gray-300 p-6 max-w-2xl mx-auto">
-      <h3 className="text-2xl font-semibold text-gray-800 mb-4">Notas do Aluno</h3>
-      <table className="w-full border-collapse border border-gray-200 text-left">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="border border-gray-300 px-4 py-2">Tipo de Avaliação</th>
-            <th className="border border-gray-300 px-4 py-2">Conceito</th>
-          </tr>
-        </thead>
-        <tbody>
-          {["AV1", "AV2", "AV3", "AV4", "RECOVERY"].map((type) => (
-            <tr key={type}>
-              <td className="border border-gray-300 px-4 py-2">{type}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                {renderEditableCell(type, grades.find((g) => g.evaluationType === type)?.evaluation)}
-              </td>
+    <div className="bg-white rounded-lg shadow-lg border border-gray-300 max-w-2xl mx-auto">
+    
+      <div className="p-6">
+        <table className="w-full border-collapse border border-gray-200 text-left">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border border-gray-300 px-4 py-2">Tipo de Avaliação</th>
+              <th className="border border-gray-300 px-4 py-2">Nota</th>
+              <th className="border border-gray-300 px-4 py-2 text-center">Conceito</th>
             </tr>
-          ))}
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Média</td>
-            <td className="border border-gray-300 px-4 py-2">{average !== null ? fromScore(average) : "—"}</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Média Final</td>
-            <td className="border border-gray-300 px-4 py-2">{finalAverage !== null ? fromScore(finalAverage) : "—"}</td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 px-4 py-2">Situação</td>
-            <td
-              className={`border border-gray-300 px-4 py-2 ${
-                situation === Concept.A ? "text-green-600" : situation ? "text-red-600" : ""
-              }`}
-            >
-              {situation || "—"}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div className="mt-6 flex justify-between">
-       
-        <button
-          onClick={handleSave}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-        >
-          Salvar Alterações
-        </button>
-        <button
-          onClick={handleClearChanges}
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
-        >
-          Limpar 
-        </button>
+          </thead>
+          <tbody>
+            {["AV1", "AV2", "AV3", "AV4", "RECOVERY"].map((type) => (
+              <tr key={type}>
+                <td className="border border-gray-300 px-4 py-2">{type}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {renderEditableCell(type, grades.find((g) => g.evaluationType === type)?.evaluation)}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 text-center">
+                  {renderConceptCell(type, grades.find((g) => g.evaluationType === type)?.evaluation)}
+                </td>
+              </tr>
+            ))}
+            <tr>
+              <td className="border border-gray-300 px-4 py-2">Média</td>
+              <td className="border border-gray-300 px-4 py-2">{average !== null ? fromScore(average) : "—"}</td>
+              <td className="border border-gray-300 px-4 py-2 text-center">—</td>
+            </tr>
+            <tr>
+              <td className="border border-gray-300 px-4 py-2">Média Final</td>
+              <td className="border border-gray-300 px-4 py-2">{finalAverage !== null ? fromScore(finalAverage) : "—"}</td>
+              <td className="border border-gray-300 px-4 py-2 text-center">—</td>
+            </tr>
+            {finalAverage !== null && (
+              <tr>
+                <td className="border border-gray-300 px-4 py-2">Situação</td>
+                <td className="border border-gray-300 px-4 py-2" colSpan={2}>
+                  {renderSituationCell(situation)}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        <div className="mt-6 flex justify-between">
+          <button
+            onClick={handleSave}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+          >
+            Salvar Alterações
+          </button>
+          <button
+            onClick={handleClearChanges}
+            className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+          >
+            Limpar
+          </button>
+        </div>
       </div>
     </div>
   );
