@@ -78,7 +78,7 @@ export default function Dashboard() {
           <NotificationTab
             isOpen={showNotifications}
             onClose={() => setShowNotifications(false)}
-            setUnreadCount={setUnreadCount} // Passa a função para atualizar o contador
+            setUnreadCount={setUnreadCount}
           />
         </div>
       ) : (
